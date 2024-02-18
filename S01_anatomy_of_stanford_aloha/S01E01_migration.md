@@ -33,8 +33,17 @@ SO1E01, 2024.02.18
 
 1. Following [ROS2/Humble official website](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html), to install ROS2/Humble.
 
-2. To verify the success of installation, and learn ROS2 quickly, following chapters of ROS2 tutorials are helpful, 
+2. To verify the success of installation, and to learn ROS2 quickly, following chapters of ROS2 tutorials are helpful, 
 
-    * [Configuring environment](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Configuring-ROS2-Environment.html#configuring-environment), many problems we may encounter later on are caused by environment configurations. 
+    * [Configuring environment](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Configuring-ROS2-Environment.html#configuring-environment), 
+  
+        If environmental settings are not configured correctly, we may encounter many problems later on. Therefore, it is worthy to spend some time to get familiar with ROS2 environment configurations.  
 
-    * 
+    * Understanding [nodes](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html), [topics](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html), [services](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.html), [actions](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html) are essential.
+
+    * [Launching nodes](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Launching-Multiple-Nodes/Launching-Multiple-Nodes.html), 
+  
+  
+        because Stanford mobile aloha robot consists of multiple nodes, launch xml is the enterpoint to start up the Stanford aloha.
+
+      
