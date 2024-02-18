@@ -1,7 +1,15 @@
 # Migrate Stanford aloha from ROS1 to ROS2
 SO1E01, 2024.02.18
 
-# 1. Preparation
+# 1. Objective
+
+So far [Stanford mobile aloha housework robot](https://github.com/MarkFzp/mobile-aloha?tab=readme-ov-file#software-selection----os) is running on Ubuntu 20.04 and ROS1/noetic, and Stanford will migrate their system to Ubuntu 22.04 and ROS2. 
+
+We will help to migrate Stanford aloha to Ubuntu 22.04/jammy and ROS2/humble. 
+
+In the process of migration, it will help us to better understand the source codes of Stanford aloha project. 
+
+# 2. Preparation
 
 1. We use a linux desktop with GPU, [Lamdba Tensorbook](https://lambdalabs.com/deep-learning/laptops/tensorbook/specs).
 
@@ -29,21 +37,150 @@ SO1E01, 2024.02.18
 
 
 
-# 2. Install ROS2/Humble
+# 3. Install ROS2/Humble
 
 1. Following [ROS2/Humble official website](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html), to install ROS2/Humble.
 
-2. To verify the success of installation, and to learn ROS2 quickly, following chapters of ROS2 tutorials are helpful, 
+
+2. Install some useful ROS2 packages,
+   ~~~
+    $ sudo apt-get install ros-humble-usb-cam
+    $ sudo apt-get install ros-humble-cv-bridge
+    $ source /opt/ros/humble/setup.sh
+   ~~~
+
+3. To verify the success of installation, and to learn ROS2 quickly, following chapters of ROS2 tutorials are helpful, 
 
     * [Configuring environment](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Configuring-ROS2-Environment.html#configuring-environment), 
   
         If environmental settings are not configured correctly, we may encounter many problems later on. Therefore, it is worthy to spend some time to get familiar with ROS2 environment configurations.  
 
-    * Understanding [nodes](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html), [topics](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html), [services](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.html), [actions](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html) are essential.
+    * Understanding [nodes](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html), [topics](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html), [services](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.html), and [actions](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html) is essential.
 
     * [Launching nodes](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Launching-Multiple-Nodes/Launching-Multiple-Nodes.html), 
   
   
         because Stanford mobile aloha robot consists of multiple nodes, launch xml is the enterpoint to start up the Stanford aloha.
 
-      
+
+
+# 4. Install Interbotix robot toolkit
+
+1. Following [Trossen interbotix official documentation](https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros_interface/ros2/software_setup.html#amd64-architecture) to install interbotix robot toolkit. 
+
+    * Since we install the interbotix system on Ubuntu 22.04, we should follow the section on AMD64 architecture. 
+
+    * In case you encounter difficulty to connect to https://raw.githubusercontent.com, one soluction refers to the section above, "2. Preparation, (4) Connection routing". 
+
+2. As a shortcut, you can take our practice as a reference. 
+   ~~~
+    $ rosversion -d
+    humble
+    $ cd /home/robot/
+
+    $ sudo apt install curl
+    $ curl 'https://raw.githubusercontent.com/Interbotix/interbotix_ros_manipulators/main/interbotix_ros_xsarms/install/amd64/xsarm_amd64_install.sh' > xsarm_amd64_install.sh
+    
+    $ chmod +x xsarm_amd64_install.sh
+    $ ./xsarm_amd64_install.sh -d humble -p /home/robot/interbotix_ws
+
+    $ source /opt/ros/humble/setup.sh
+    $ source /home/robot/interbotix_ws/install/setup.sh
+   ~~~
+
+3. To verify the installation is successful, and to enjoy the beauty of interbotix, you can run the rviz to demonstrate the movement of interbotix robot arm. 
+
+    * The detailed tutorial refers to [ROS 2 Quickstart Guide](https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros_interface/ros2/quickstart.html#ros-2-quickstart-guide)
+
+    * As a shortcut, you can watch [Interbotix tutorial video on Rviz simulation](https://www.youtube.com/watch?v=p0hmgNEqU8Q&list=PL8X3t2QTE54sMTCF59t0pTFXgAmdf0Y9t&index=7) on youtube. 
+
+
+# 5. Migrate Stanford aloha software
+
+1. Download [Stanford aloha source code from github](https://github.com/MarkFzp/mobile-aloha?tab=readme-ov-file#software-installation---ros). 
+
+   As a shortcut, you may take our practice as a reference,
+
+   ~~~
+    $ cd /home/robot/
+    $ git clone https://github.com/MarkFzp/mobile-aloha.git
+
+    $ cp -rf /home/robot/mobile-aloha /home/robot/interbotix_ws/src/stanford_aloha
+   ~~~
+
+2. Following [ROS2 tutorial](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package.html) to create 'stanford_aloha' python package. 
+
+    As a shortcut, you can take our practice as a reference,
+
+    ~~~
+    $ cd /home/robot/interbotix_ws/src
+    $ ros2 pkg create --build-type ament_python stanford_aloha
+    ~~~
+
+
+3. Copy the files in '/home/robot/mobile-aloha/' to '/home/robot/interbotix_ws/src/stanford_aloha/', 
+
+    * Don't change the file structure of '/home/robot/interbotix_ws/src/stanford_aloha/', because the file structure is crucial for ROS packaging.
+
+   * In Stanford aloha's scenario, it is a pure python package, hence, we don't need ament_cmake, CMakeLists.txt, and other c++ related tools and files. 
+
+    The file structure of 'stanford_aloha' python package is like the following, 
+   
+   ~~~
+    $ tree /home/robot/interbotix_ws/src/stanford_aloha/
+    /home/robot/interbotix_ws/src/stanford_aloha/
+
+    ├── commands.txt
+    ├── config
+    │   ├── master_modes_left.yaml
+    │   ├── master_modes_right.yaml
+    │   ├── puppet_modes_left.yaml
+    │   └── puppet_modes_right.yaml
+    ├── hardware
+    │   ├── aloha_gripper_assembly.pdf
+    │   ├── rsd405_belly_cam_mount_v2.stl
+    │   ├── rsd405_overhead_cam_mount_v2.stl
+    │   ├── rsd405_wrist_mount_v2.stl
+    │   ├── Shim_rotor_v1.STL
+    │   ├── viperx_gripper_stl.zip
+    │   ├── viperx_joint1_adapter.zip
+    │   ├── widowx_gripper_std.zip
+    │   └── W-shim_rotor_v1.STL
+    ├── launch
+    │   └── 4arms_teleop.launch
+    ├── package.xml
+    ├── resource
+    │   └── stanford_aloha
+    ├── setup.cfg
+    ├── setup.py
+    ├── stanford_aloha
+    │   ├── auto_record.sh
+    │   ├── constants.py
+    │   ├── dynamixel_client.py
+    │   ├── example_waypoint_pid.py
+    │   ├── get_episode_len.py
+    │   ├── __init__.py
+    │   ├── one_side_teleop.py
+    │   ├── real_env.py
+    │   ├── realsense_test.py
+    │   ├── record_episodes.py
+    │   ├── replay_and_record_episodes.py
+    │   ├── replay_episodes.py
+    │   ├── robot_utils.py
+    │   ├── sleep.py
+    │   ├── speed_test.py
+    │   ├── test.ipynb
+    │   ├── visualize_episodes.py
+    │   └── waypoint_control.py
+    └── test
+        ├── test_copyright.py
+        ├── test_flake8.py
+        └── test_pep257.py
+
+   ~~~
+
+4. The source code of the original Stanford aloha project needs to be modify, 
+
+    You can copy and paste the content of the codes from this repository to your desktop. 
+
+    There are quite some differences between our code comparing with Stanford's original code. Detailed explanation may come later on. 
