@@ -184,3 +184,42 @@ In the process of migration, it will help us to better understand the source cod
     You can copy and paste the content of the codes in ['src/'](https://github.com/housework-robot/main/tree/main/S01_anatomy_of_stanford_aloha/src) subfolder of this repository to your desktop. 
 
     There are quite some differences between our code comparing with Stanford's original code. Detailed explanation may come later on. 
+
+5. Build stanford_aloha python package,
+
+    As a shortcut, you may take our practice as a reference, 
+
+    ~~~
+    $ cd /home/robot/interbotix_ws/
+    $ rm -rf install/ build/ log/
+
+    $ colcon build 
+    ... RuntimeWarning:        
+    ERROR: setuptools==58.2.0 is used in combination with setuptools_scm>=8.x
+    # You can ignore the above warnings and errors
+
+    $ source install/local_setup.bash   
+    # Don't forget to source the environmental settings, otherwise, 'stanford_aloha' cannot be shown in the ros2 package list.   
+    
+    $ ros2 pkg list | grep aloha
+    stanford_aloha
+    $     
+    ~~~
+
+6. To verify the success of migration, you can follow Stanford mobile aloha github repo's [teleoperation testing guidance](https://github.com/MarkFzp/mobile-aloha?tab=readme-ov-file#testing-teleoperation). 
+   
+   As a shortcut, you can take our practice as a reference. 
+
+   1. Open a terminal, execute the following command, and 4 rviz windows will pop up, simulating the 4 interbotix arms. 
+   
+    ~~~
+    $ cd /home/robot/interbotix_ws/src/stanford_aloha/launch
+    $ ros2 launch 4arms_teleop.launch     
+    ~~~
+
+    2. Open another terminal, 
+   
+    ~~~
+    $ cd /home/robot/interbotix_ws/src/stanford_aloha/stanford_aloha
+    $ python3 one_side_teleop.py left
+    ~~~
