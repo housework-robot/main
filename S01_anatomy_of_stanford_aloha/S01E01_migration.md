@@ -210,14 +210,14 @@ In the process of migration, it will help us to better understand the source cod
    
    As a shortcut, you can take our practice as a reference. 
 
-   1. Open a terminal, execute the following command, and 4 rviz windows will pop up, simulating the 4 interbotix arms. 
+   * Open a terminal, execute the following command, and 4 rviz windows will pop up, simulating the 4 interbotix arms. 
    
     ~~~
     $ cd /home/robot/interbotix_ws/src/stanford_aloha/launch
     $ ros2 launch 4arms_teleop.launch     
     ~~~
 
-    2. Open another terminal, 
+   * Open another terminal, 
    
     ~~~
     $ cd /home/robot/interbotix_ws/src/stanford_aloha/stanford_aloha
