@@ -70,7 +70,7 @@ In the process of migration, it will help us to better understand the source cod
 
     * Since we install the interbotix system on Ubuntu 22.04, we should follow the section on AMD64 architecture. 
 
-    * In case you encounter difficulty to connect to https://raw.githubusercontent.com, one soluction refers to the section above, "2. Preparation, (4) Connection routing". 
+    * In case you encounter difficulty to connect to https://raw.githubusercontent.com, one soluction refers to the section above, ["2. Preparation, (4) Connection routing"](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/S01E01_migration.md#2-preparation). 
 
 2. As a shortcut, you can take our practice as a reference. 
    ~~~
@@ -181,6 +181,6 @@ In the process of migration, it will help us to better understand the source cod
 
 4. The source code of the original Stanford aloha project needs to be modify, 
 
-    You can copy and paste the content of the codes from this repository to your desktop. 
+    You can copy and paste the content of the codes in ['src/'](https://github.com/housework-robot/main/tree/main/S01_anatomy_of_stanford_aloha/src) subfolder of this repository to your desktop. 
 
     There are quite some differences between our code comparing with Stanford's original code. Detailed explanation may come later on. 
