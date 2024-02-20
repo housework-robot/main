@@ -86,6 +86,7 @@
     exec="static_transform_publisher"
     args="0 0.25 0 0 0 0 /world /$(var robot_name_puppet_right)/base_link"/>
 
+  <!-- 
   <node name="usb_cam_high" pkg="usb_cam" exec="usb_cam_node_exe" output="screen" >
     <param name="video_device" value="/dev/CAM_HIGH" />
     <param name="framerate" value="60" />
@@ -99,7 +100,7 @@
     <param name="autoexposure" value="true"/>
   </node>
 
-  <!-- <node name="usb_cam_low" pkg="usb_cam" exec="usb_cam_node_exe" output="screen" >
+  <node name="usb_cam_low" pkg="usb_cam" exec="usb_cam_node_exe" output="screen" >
     <param name="video_device" value="/dev/CAM_LOW" />
     <param name="framerate" value="60" />
     <param name="image_width" value="640" />
@@ -114,7 +115,7 @@
 
   <node name="usb_cam_left_wrist" pkg="usb_cam" exec="usb_cam_node_exe" output="screen" >
     <param name="video_device" value="/dev/CAM_LEFT_WRIST" />
-    <param name="framerate" value="60" />
+    <param name="framerate" value="60.0" />
     <param name="image_width" value="640" />
     <param name="image_height" value="480" />
     <param name="pixel_format" value="yuyv" />
@@ -127,7 +128,7 @@
 
   <node name="usb_cam_right_wrist" pkg="usb_cam" exec="usb_cam_node_exe" output="screen" >
     <param name="video_device" value="/dev/CAM_RIGHT_WRIST" />
-    <param name="framerate" value="60" />
+    <param name="framerate" value="60.0" />
     <param name="image_width" value="640" />
     <param name="image_height" value="480" />
     <param name="pixel_format" value="yuyv" />
