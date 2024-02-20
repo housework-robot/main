@@ -1,0 +1,35 @@
+# Modify the following interbotix sys config
+# $ sudo more /etc/udev/rules.d/99-interbotix-udev.rules 
+
+# Place this file in /etc/udev/rules.d/
+# Then reload udev by typing 'udevadm control --reload-rules && udevadm trigger'
+# Sets up rules to give permanent names to devices
+
+# Allow serial devices to be read by anyone
+KERNEL=="ttyUSB*", MODE:="0666"
+KERNEL=="ttyACM*", MODE:="0666"
+KERNEL=="js*", MODE:="0666"
+KERNEL=="video*", MODE:="0666"
+
+# OpenCM9.04C board
+SUBSYSTEM=="tty", ATTRS{idVendor}=="fff1", ATTRS{idProduct}=="ff48", ENV{ID_MM_DEVICE_IGNORE}="1", SYMLINK+="ttyDXL"
+
+# U2D2 board (also sets latency timer to 1ms for faster communication)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", ENV{ID_MM_DEVICE_IGNORE}="1", ATTR{device/latency_timer}="1", SYMLINK+="ttyDXL"
+
+# RPLidar
+SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="rplidar"
+
+# Kobuki base
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="kobuki*", ATTR{device/latency_timer}="1", MODE:="0666", GROUP:="dialout", SYMLINK+="kobuki"
+
+# LifeCam Cinema
+SUBSYSTEM=="video4linux", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="0812", ATTR{index}=="0", SYMLINK+="lifecam"
+
+# Webcam
+# serial, index, and id_product can be found by executing following commands. 
+# $ ls -l /dev/v4l/by-id/
+# $ udevadm info --name=/dev/video6
+SUBSYSTEM=="video4linux", ATTRS{serial}=="F3B679BF", ATTR{index}=="4", ATTRS{idProduct}=="046d", ATTR{device/latency_timer}="1", SYMLINK+="CAM_LEFT_WRIST"
+SUBSYSTEM=="video4linux", ATTRS{serial}=="1F3679BF", ATTR{index}=="6", ATTRS{idProduct}=="046d", ATTR{device/latency_timer}="1", SYMLINK+="CAM_RIGHT_WRIST"
+# SUBSYSTEM=="video4linux", ATTRS{serial}=="<serial number here>", ATTR{index}=="0", ATTRS{idProduct}=="085c", ATTR{device/latency_timer}="1", SYMLINK+="CAM_HIGH"
