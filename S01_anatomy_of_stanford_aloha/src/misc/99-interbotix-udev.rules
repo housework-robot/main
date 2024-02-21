@@ -26,6 +26,12 @@ SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{seria
 # LifeCam Cinema
 SUBSYSTEM=="video4linux", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="0812", ATTR{index}=="0", SYMLINK+="lifecam"
 
+# Arm
+SUBSYSTEM=="tty", ATTRS{serial}=="FT6Z5N1W", ENV{ID_MM_DEVICE_IGNORE}="1", ATTR{device/latency_timer}="1", SYMLINK+="ttyDXL_puppet_left"
+SUBSYSTEM=="tty", ATTRS{serial}=="FT66U3A8", ENV{ID_MM_DEVICE_IGNORE}="1", ATTR{device/latency_timer}="1", SYMLINK+="ttyDXL_master_right"
+SUBSYSTEM=="tty", ATTRS{serial}=="FT66U2XR", ENV{ID_MM_DEVICE_IGNORE}="1", ATTR{device/latency_timer}="1", SYMLINK+="ttyDXL_master_left"
+SUBSYSTEM=="tty", ATTRS{serial}=="FT6Z5NYV", ENV{ID_MM_DEVICE_IGNORE}="1", ATTR{device/latency_timer}="1", SYMLINK+="ttyDXL_puppet_right"
+
 # Webcam
 # serial, index, and id_product can be found by executing following commands. 
 # $ ls -l /dev/v4l/by-id/
