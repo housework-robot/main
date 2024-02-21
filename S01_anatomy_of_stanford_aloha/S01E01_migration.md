@@ -206,7 +206,19 @@ In the process of migration, it will help us to better understand the source cod
     $     
     ~~~
 
-6. To verify the success of migration, you can follow Stanford mobile aloha github repo's [teleoperation testing guidance](https://github.com/MarkFzp/mobile-aloha?tab=readme-ov-file#testing-teleoperation). 
+# 6. Hardware configuration
+
+1. Following [Stanford mobile aloha guidance on hardware installation](https://github.com/MarkFzp/mobile-aloha?tab=readme-ov-file#hardware-installation) modify [/etc/udev/rules.d/99-fixed-interbotix-udev.rules](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/src/misc/99-interbotix-udev.rules). 
+
+    Notice when you install the hardwares including interbotix arms and webcams, you need to change the serial numbers in the "99-interbotix-udev.rules" file. 
+
+2. To active the change to the udev rules with symlinks, execute the following command in a terminal, in any directory. 
+
+    ~~~
+    sudo udevadm control --reload && sudo udevadm trigger
+    ~~~
+
+3. To verify the success of hardware configuration, you can follow Stanford mobile aloha github repo's [teleoperation testing guidance](https://github.com/MarkFzp/mobile-aloha?tab=readme-ov-file#testing-teleoperation). 
    
    As a shortcut, you can take our practice as a reference. 
 
@@ -215,6 +227,12 @@ In the process of migration, it will help us to better understand the source cod
     ~~~
     $ cd /home/robot/interbotix_ws/src/stanford_aloha/launch
     $ ros2 launch 4arms_teleop.launch     
+    ~~~
+
+    Notice that you can safely ignore the following warnings and errors. 
+    ~~~
+    [usb_cam_node_exe-18] [ERROR] [1708524145.550032124] [camera_calibration_parsers]: Unable to open camera calibration file [/home/robot/.ros/camera_info/default_cam.yaml]
+    [usb_cam_node_exe-18] [WARN] [1708524145.550051058] [usb_cam_right_wrist]: Camera calibration file /home/robot/.ros/camera_info/default_cam.yaml not found
     ~~~
 
    * Open another terminal, 
