@@ -1,5 +1,9 @@
 # Anatomy of Housework Robots
 
+[![Anatomy of housework robot video on youtube]
+(https://img.youtube.com/vi/XVGTwpWPCrI/hqdefault.jpg)]
+(https://www.youtube.com/watch?v=XVGTwpWPCrI)
+
 # Objectives
 
 Here is a set of repositories, containing 3 kinds of contents, 
