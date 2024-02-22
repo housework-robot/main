@@ -1,7 +1,7 @@
 # Anatomy of Housework Robots
 
 [![Anatomy of housework robot video on youtube](https://img.youtube.com/vi/XVGTwpWPCrI/hqdefault.jpg)](https://www.youtube.com/watch?v=XVGTwpWPCrI)
-
+Click the preview image to see the video on youtube. 
 
 # Objectives
 
