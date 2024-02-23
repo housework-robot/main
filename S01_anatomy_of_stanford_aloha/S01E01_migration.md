@@ -63,7 +63,6 @@ In the process of migration, it will help us to better understand the source cod
         because Stanford mobile aloha robot consists of multiple nodes, launch xml is the enterpoint to start up the Stanford aloha.
 
 
-
 # 4. Install Interbotix robot toolkit
 
 1. Following [Trossen interbotix official documentation](https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros_interface/ros2/software_setup.html#amd64-architecture) to install interbotix robot toolkit. 
@@ -93,6 +92,46 @@ In the process of migration, it will help us to better understand the source cod
     * The detailed tutorial refers to [ROS 2 Quickstart Guide](https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros_interface/ros2/quickstart.html#ros-2-quickstart-guide)
 
     * As a shortcut, you can watch [Interbotix tutorial video on Rviz simulation](https://www.youtube.com/watch?v=p0hmgNEqU8Q&list=PL8X3t2QTE54sMTCF59t0pTFXgAmdf0Y9t&index=7) on youtube. 
+
+4. Once you have already downloaded the interbotix source code from github, for some reason, you want to reinstall it, you can execute the following commands.
+   ~~~
+   $ cd /home/robot/interbotix_ws
+   $ rm -rf build/ install/ log/
+   $ ros2 pkg list | grep interbotix
+   $ 
+   $ colcon build
+   ... ...
+   $ ros2 pkg list | grep interbotix
+   interbotix_common_modules
+   interbotix_common_sim
+   interbotix_common_toolbox
+   interbotix_moveit_interface
+   interbotix_moveit_interface_msgs
+   interbotix_perception_modules
+   interbotix_perception_msgs
+   interbotix_perception_pipelines
+   interbotix_perception_toolbox
+   interbotix_ros_xsarms
+   interbotix_ros_xsarms_examples
+   interbotix_ros_xseries
+   interbotix_tf_tools
+   interbotix_xs_driver
+   interbotix_xs_modules
+   interbotix_xs_msgs
+   interbotix_xs_ros_control
+   interbotix_xs_rviz
+   interbotix_xs_sdk
+   interbotix_xs_toolbox
+   interbotix_xsarm_control
+   interbotix_xsarm_descriptions
+   interbotix_xsarm_joy
+   interbotix_xsarm_moveit
+   interbotix_xsarm_moveit_interface
+   interbotix_xsarm_perception
+   interbotix_xsarm_ros_control
+   interbotix_xsarm_sim
+   $
+   ~~~
 
 
 # 5. Migrate Stanford aloha software
