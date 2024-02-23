@@ -131,6 +131,7 @@ In the process of migration, it will help us to better understand the source cod
    interbotix_xsarm_ros_control
    interbotix_xsarm_sim
    $
+   $ source /home/robot/interbotix_ws/install/setup.sh
    ~~~
 
 
