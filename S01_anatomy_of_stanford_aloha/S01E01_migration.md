@@ -86,8 +86,9 @@ In the process of migration, it will help us to better understand the source cod
     $ chmod +x xsarm_amd64_install.sh
     $ ./xsarm_amd64_install.sh -d humble -p /home/robot/interbotix_ws
 
-    $ source /opt/ros/humble/setup.sh
-    $ source /home/robot/interbotix_ws/install/setup.sh
+    $ source /opt/ros/humble/setup.bash
+    $ source /home/robot/interbotix_ws/install/setup.bash
+    $ ros2 pkg list | grep interbotix
    ~~~
 
 3. To verify the installation is successful, and to enjoy the beauty of interbotix, you can run the rviz to demonstrate the movement of interbotix robot arm. 
