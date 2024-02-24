@@ -49,7 +49,11 @@ In the process of migration, it will help us to better understand the source cod
     $ source /opt/ros/humble/setup.sh
    ~~~
 
-3. To verify the success of installation, and to learn ROS2 quickly, following chapters of ROS2 tutorials are helpful, 
+3. To verify the success of installation, and to learn ROS2 quickly, following chapters of ROS2 tutorials are helpful,
+
+   ~~~
+   $ printenv | grep -i ROS
+   ~~~
 
     * [Configuring environment](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Configuring-ROS2-Environment.html#configuring-environment), 
   
@@ -58,7 +62,6 @@ In the process of migration, it will help us to better understand the source cod
     * Understanding [nodes](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html), [topics](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html), [services](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.html), and [actions](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html) is essential.
 
     * [Launching nodes](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Launching-Multiple-Nodes/Launching-Multiple-Nodes.html), 
-  
   
         because Stanford mobile aloha robot consists of multiple nodes, launch xml is the enterpoint to start up the Stanford aloha.
 
