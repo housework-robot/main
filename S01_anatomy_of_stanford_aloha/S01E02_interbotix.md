@@ -1,4 +1,4 @@
-# Manipulate interbotix robotic arm
+# Manipulate interbotix robotic arm with rviz2
 SO1E02, 2024.02.25
 
 # 1. Objective
