@@ -39,5 +39,6 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    Click the preview image to see the video on youtube, the content is our objective and project progress. 
 
+2. S01E02. [Manipulate interbotix robotic arm with rviz2](./S01_anatomy_of_stanford_aloha/S01E02_interbotix.md)
 
 # To be continued.
