@@ -108,6 +108,7 @@ Click the preview image to see the video on youtube.
    $ ros2 pkg list | grep interbotix
    $ 
    $ colcon build
+   $ source /home/robot/interbotix_ws/install/setup.bash
    ... ...
    $ ros2 pkg list | grep interbotix
    interbotix_common_modules
