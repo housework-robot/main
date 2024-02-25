@@ -9,6 +9,10 @@ We will help to migrate Stanford aloha to Ubuntu 22.04/jammy and ROS2/humble.
 
 In the process of migration, it will help us to better understand the source codes of Stanford aloha project. 
 
+[![Anatomy of housework robot video on youtube](https://img.youtube.com/vi/XVGTwpWPCrI/hqdefault.jpg)](https://www.youtube.com/watch?v=XVGTwpWPCrI)
+
+Click the preview image to see the video on youtube. 
+
 # 2. Preparation
 
 1. We use a linux desktop with GPU, [Lamdba Tensorbook](https://lambdalabs.com/deep-learning/laptops/tensorbook/specs).
