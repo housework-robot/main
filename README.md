@@ -1,8 +1,5 @@
 # Anatomy of Housework Robots
 
-[![Anatomy of housework robot video on youtube](https://img.youtube.com/vi/XVGTwpWPCrI/hqdefault.jpg)](https://www.youtube.com/watch?v=XVGTwpWPCrI)
-
-Click the preview image to see the video on youtube. 
 
 # Objectives
 
@@ -37,6 +34,10 @@ Here is a set of repositories, containing 3 kinds of contents,
 ## Season 1. Anatomy of Stanford mobile aloha
 
 1. S01E01. [Migrate Stanford aloha from ROS1 to ROS2](./S01_anatomy_of_stanford_aloha/S01E01_migration.md)
+
+   [![Anatomy of housework robot video on youtube](https://img.youtube.com/vi/XVGTwpWPCrI/hqdefault.jpg)](https://www.youtube.com/watch?v=XVGTwpWPCrI)
+
+   Click the preview image to see the video on youtube, the content is our objective and project progress. 
 
 
 # To be continued.
