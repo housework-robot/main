@@ -17,7 +17,7 @@
   <depend>interbotix_xsarm_control</depend>
   <depend>rosbag</depend>
   <depend>roscpp</depend>
-  <depend>tf2_ros</depend><buildtool_depend>ament_python</buildtool_depend>
+  <depend>tf2_ros</depend>
   <depend>rviz</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
