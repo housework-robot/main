@@ -81,3 +81,17 @@ We looked into the directory of '/home/robot/interbotix_ws/install/interbotix_ro
 
 # 5. Create interbotix_xsarm_dual package from scratch
 
+Follow these steps to re-create a interbotix_xsarm_dual package from scratch, 
+
+1. Execute 'ros2 pkg create' command, so as to create the file skeleon for a ROS2 pacakge. 
+   ~~~
+    $ cd /home/robot/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples
+    $ ros2 pkg create interbotix_xsarm_dual_andy --build-type ament_python
+   ~~~
+2. Create and/or modify several codes, including 
+    * [package.xml](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual_andy/package.xml),
+    * [setup.py](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual_andy/setup.py), 
+    * [launch/xsarm_dual.xml](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual_andy/launch/xsarm_dual.launch), 
+    * [rviz/xsarm_dual.rviz](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual_andy/rviz/xsarm_dual.rviz) etc, 
+
+    These modified source codes are stored in this repository. 
