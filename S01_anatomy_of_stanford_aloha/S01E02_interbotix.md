@@ -63,7 +63,9 @@ searching: ['/home/robot/apriltag_ws/install/apriltag_ros',
 ...
 ~~~
 
-It looks like for the new version of interbotix toolkit, the 'interbotix_xsarm_dual' old package doesn't exist any more. Also, it looks like that 'interbotix_ros_xsarms_examples' package might be the replacement of the old 'interbotix_xsarm_dual' package. 
+It looks like for the new version of interbotix toolkit, the 'interbotix_xsarm_dual' old package doesn't exist any more. 
+
+In addition, it looks like that 'interbotix_ros_xsarms_examples' package might be the replacement of the old 'interbotix_xsarm_dual' package. However, when executing the following commands, they didn't work. 
 
 ~~~
 $ ros2 launch interbotix_ros_xsarms_examples xsarm_dual.launch use_dual_rviz:=true
@@ -76,23 +78,6 @@ file 'xsarm_dual.launch.py' was not found in the share directory of package 'int
 
 We looked into the directory of '/home/robot/interbotix_ws/install/interbotix_ros_xsarms_examples/share/interbotix_ros_xsarms_examples', noticed that it didn't contain the 'launch' subdirectory. 
 
-~~~
-$ ls -l /home/robot/interbotix_ws/install/interbotix_ros_xsarms_examples/share/interbotix_ros_xsarms_examples
-总计 56
-drwxrwxr-x 2 robot robot 4096  2月 25 00:07 cmake
-drwxrwxr-x 2 robot robot 4096  2月 25 00:07 environment
-drwxrwxr-x 2 robot robot 4096  2月 25 00:07 hook
--rw-r--r-- 1 robot robot 1594  2月 25 00:07 local_setup.bash
--rw-r--r-- 1 robot robot  141  2月 25 00:07 local_setup.dsv
--rw-r--r-- 1 robot robot 5074  2月 25 00:07 local_setup.sh
--rw-r--r-- 1 robot robot 1957  2月 25 00:07 local_setup.zsh
--rw-rw-r-- 1 robot robot 1410  2月 25 00:07 package.bash
--rw-r--r-- 1 robot robot  512  2月 25 00:07 package.dsv
--rw-rw-r-- 1 robot robot 3289  2月 25 00:07 package.ps1
--rw-rw-r-- 1 robot robot 2920  2月 25 00:07 package.sh
--rw-r--r-- 1 robot robot 1188  2月 25 00:06 package.xml
--rw-rw-r-- 1 robot robot 1694  2月 25 00:07 package.zsh
-~~~
 
-Therefore, in order to run xsarm_dual, we need to modify interbolix source code and recompile. 
+# 5. Create interbotix_xsarm_dual package from scratch
 
