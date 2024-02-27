@@ -143,5 +143,5 @@ Trouble shooting.
     [xs_sdk_sim.py-1] [INFO] [1709011914.504201126] [interbotix_xs_sdk.xs_sdk_sim]: Interbotix 'xs_sdk_sim' node is up!
 
     ~~~
-   ![xsarm_dual not displayed correctly with rviz](./image/xsarm_dual_wrong_20240227.jpeg)
+   ![xsarm_dual not displayed correctly with rviz](./image/xsarm_dual_wrong_20240227.png)
 
