@@ -230,7 +230,9 @@ Click the preview image to see the video on youtube.
 
 4. The source code of the original Stanford aloha project needs to be modify, 
 
-    You can copy and paste the content of the codes in ['src/'](https://github.com/housework-robot/main/tree/main/S01_anatomy_of_stanford_aloha/src) subfolder of this repository to your desktop. 
+    You can copy and paste the content of the codes in ['src/stanford_aloha
+/'](https://github.com/housework-robot/main/tree/main/S01_anatomy_of_stanford_aloha/src/stanford_aloha
+) subfolder of this repository to your desktop. 
 
     There are quite some differences between our code comparing with Stanford's original code. Detailed explanation may come later on. 
 
