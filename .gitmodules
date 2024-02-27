@@ -6,3 +6,7 @@
 	path = S01_anatomy_of_stanford_aloha/src/third_party/interbotix/interbotix_ros_manipulators
 	url = https://github.com/Interbotix/interbotix_ros_manipulators.git
     branch = humble
+[submodule "S01_anatomy_of_stanford_aloha/src/third_party/interbotix/interbotix_ros_toolboxes"]
+	path = S01_anatomy_of_stanford_aloha/src/third_party/interbotix/interbotix_ros_toolboxes
+	url = https://github.com/Interbotix/interbotix_ros_toolboxes.git
+	branch = humble
