@@ -16,6 +16,17 @@ The goal of this episode is to use rviz to simulate 2 pairs interbotix arms, eac
 
 Follow [the instruction of S01E01](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/S01E01_migration.md), to install ROS2/Humble and Interbotix toolkit. 
 
+~~~
+$ sudo apt install curl
+$ curl 'https://raw.githubusercontent.com/Interbotix/interbotix_ros_manipulators/main/interbotix_ros_xsarms/install/amd64/xsarm_amd64_install.sh' > xsarm_amd64_install.sh
+$ chmod +x xsarm_amd64_install.sh
+$ ./xsarm_amd64_install.sh -d humble -p /home/robot/interbotix_ws
+
+$ source /opt/ros/humble/setup.bash
+$ source /home/robot/interbotix_ws/install/setup.bash
+$ ros2 pkg list | grep interbotix
+~~~
+
 
 # 3. Get started with interbotlix robotic arm and rviz2
 
