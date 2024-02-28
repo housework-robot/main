@@ -75,6 +75,7 @@ $ ros2 launch interbotix_xsarm_descriptions xsarm_description.launch.py robot_mo
 [INFO] [rviz2-3]: process started with pid [1234928]
 ~~~
 
+Click the picture, jump to the video download page, download the mp4 file, and view it in browser like chrome. 
 [![Control xsarm with interbotix_xsarm_descriptions](./image/xsarm_description.jpeg)](./video/interbotix_description.mp4)
 
 
@@ -167,5 +168,6 @@ $ python3 xsarm_dual.py
 [INFO] [1709044654.388837393] [arm_2.robot_manipulation]: Initialized InterbotixGripperXSInterface!
 ~~~
 
+Click the picture, jump to the video download page, download the mp4 file, and view it in browser like chrome. 
 [![Run interbotix_xsarm_dual package](./image/xsarm_dual_20240228.png)](./video/dual_arms_20240227_2031.mp4)
 
