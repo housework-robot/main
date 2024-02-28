@@ -85,7 +85,12 @@ Following [interbotix video tutorial: Working with multiple arms](https://www.yo
 
 Open two terminals, in the first one, launch the interbotix_xsarm_dual package. 
 ~~~
-$ ros2 launch interbotix_xsarm_dual xsarm_dual.launch use_dual_rviz:=true
+$ source /opt/ros/humble/setup.bash
+$ source /home/robot/interbotix_ws/install/setup.bash
+
+$ cd /home/robot/interbotix_ws/
+$ rosdep install --from-paths src --ignore-src -y -c    # This step is not mandatory.
+
 $ ros2 launch interbotix_xsarm_dual xsarm_dual.launch.py use_dual_rviz:=true  use_sim:=true
 [INFO] [launch]: All log files can be found below /home/robot/.ros/log/2024-02-27-22-36-31-570039-robot-test-1455379
 [INFO] [launch]: Default logging verbosity is set to INFO
@@ -162,5 +167,5 @@ $ python3 xsarm_dual.py
 [INFO] [1709044654.388837393] [arm_2.robot_manipulation]: Initialized InterbotixGripperXSInterface!
 ~~~
 
-[![Run interbotix_xsarm_dual package](./image/xsarm_dual_wrong_20240227.png)](./video/dual_arms_20240227_2031.mp4)
+[![Run interbotix_xsarm_dual package](./image/xsarm_dual_20240228.png)](./video/dual_arms_20240227_2031.mp4)
 
