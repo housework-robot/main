@@ -12,7 +12,7 @@ To reduce the learning difficulty, we start to learn interbotix arm using simula
 The goal of this episode is to use rviz to simulate 2 pairs interbotix arms, each pair consists of one master arm and one puppet arm. We manually predefine a series of actions to control the 2 master arms, and ask the 2 puppet arms to automatically follow their masters. 
 
 
-# 2. Installation
+# 2. Install ROS2/Humble and Interbotix
 
 Follow [the instruction of S01E01](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/S01E01_migration.md), to install ROS2/Humble and Interbotix toolkit. 
 
@@ -24,11 +24,43 @@ $ ./xsarm_amd64_install.sh -d humble -p /home/robot/interbotix_ws
 
 $ source /opt/ros/humble/setup.bash
 $ source /home/robot/interbotix_ws/install/setup.bash
+
 $ ros2 pkg list | grep interbotix
+interbotix_common_modules
+interbotix_common_sim
+interbotix_common_toolbox
+interbotix_moveit_interface
+interbotix_moveit_interface_msgs
+interbotix_perception_modules
+interbotix_perception_msgs
+interbotix_perception_pipelines
+interbotix_perception_toolbox
+interbotix_ros_xsarms
+interbotix_ros_xsarms_examples
+interbotix_ros_xseries
+interbotix_tf_tools
+interbotix_xs_driver
+interbotix_xs_modules
+interbotix_xs_msgs
+interbotix_xs_ros_control
+interbotix_xs_rviz
+interbotix_xs_sdk
+interbotix_xs_toolbox
+interbotix_xsarm_control
+interbotix_xsarm_descriptions
+interbotix_xsarm_dual
+interbotix_xsarm_joy
+interbotix_xsarm_moveit
+interbotix_xsarm_moveit_interface
+interbotix_xsarm_perception
+interbotix_xsarm_ros_control
+interbotix_xsarm_sim
 ~~~
 
+Notice that interbotix_xsarm_descriptions and interbotix_xsarm_dual are in the list of packages. 
 
-# 3. Get started with interbotlix robotic arm and rviz2
+
+# 3. Get started with interbotix_xsarm_descriptions
 
 Let us play around with rviz2 and interbotix robotic arm. 
 
@@ -43,105 +75,92 @@ $ ros2 launch interbotix_xsarm_descriptions xsarm_description.launch.py robot_mo
 [INFO] [rviz2-3]: process started with pid [1234928]
 ~~~
 
-![xsarm_description with rviz](./image/xsarm_description.jpeg)
+[![Control xsarm with interbotix_xsarm_descriptions](./image/xsarm_description.jpeg)](./video/interbotix_description.mp4)
 
 
-# 4. Try dual arms
+# 4. Study dual arms package interbotix_xsarm_dual
 
 
-Following [interbotix video tutorial: Working with multiple arms](https://www.youtube.com/watch?v=DnjbNXxBE_8&list=PL8X3t2QTE54sMTCF59t0pTFXgAmdf0Y9t&index=10)'s instruction at at 6:48, we executed the following command, but failed. 
+Following [interbotix video tutorial: Working with multiple arms](https://www.youtube.com/watch?v=DnjbNXxBE_8&list=PL8X3t2QTE54sMTCF59t0pTFXgAmdf0Y9t&index=10)'s instruction at at 6:48, we ran interbotix_xsarm_dual package to let 2 arms working together. 
 
+Open two terminals, in the first one, launch the interbotix_xsarm_dual package. 
 ~~~
 $ ros2 launch interbotix_xsarm_dual xsarm_dual.launch use_dual_rviz:=true
-Package 'interbotix_xsarm_dual' not found: "package 'interbotix_xsarm_dual' not found, 
-searching: ['/home/robot/apriltag_ws/install/apriltag_ros', 
-'/home/robot/interbotix_ws/install/interbotix_ros_xsarms_examples', 
-'/home/robot/interbotix_ws/install/interbotix_xsarm_moveit_interface', 
-'/home/robot/interbotix_ws/install/interbotix_moveit_interface', 
-'/home/robot/interbotix_ws/install/moveit_visual_tools', 
-'/home/robot/interbotix_ws/install/interbotix_ros_xsarms', 
-...
+$ ros2 launch interbotix_xsarm_dual xsarm_dual.launch.py use_dual_rviz:=true  use_sim:=true
+[INFO] [launch]: All log files can be found below /home/robot/.ros/log/2024-02-27-22-36-31-570039-robot-test-1455379
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [xs_sdk_sim.py-1]: process started with pid [1455401]
+[INFO] [robot_state_publisher-2]: process started with pid [1455403]
+[INFO] [xs_sdk_sim.py-3]: process started with pid [1455405]
+[INFO] [robot_state_publisher-4]: process started with pid [1455407]
+[INFO] [static_transform_publisher-5]: process started with pid [1455409]
+[INFO] [static_transform_publisher-6]: process started with pid [1455411]
+[INFO] [rviz2-7]: process started with pid [1455413]
+[static_transform_publisher-5] [WARN] [1709044592.054890976] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-6] [WARN] [1709044592.056908492] []: Old-style arguments are deprecated; see --help for new-style arguments
+[static_transform_publisher-5] [INFO] [1709044592.065522545] [robot_1_transform_broadcaster]: Spinning until stopped - publishing transform
+[static_transform_publisher-5] translation: ('0.000000', '-0.250000', '0.000000')
+[static_transform_publisher-5] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-5] from '/world' to '/arm_1/base_link'
+[static_transform_publisher-6] [INFO] [1709044592.067838465] [robot_2_transform_broadcaster]: Spinning until stopped - publishing transform
+[static_transform_publisher-6] translation: ('0.000000', '0.250000', '0.000000')
+[static_transform_publisher-6] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-6] from '/world' to '/arm_2/base_link'
+[xs_sdk_sim.py-3] Unknown tag "ros2_control" in /robot[@name='wx200']
+[xs_sdk_sim.py-1] Unknown tag "ros2_control" in /robot[@name='wx200']
+[xs_sdk_sim.py-3] [INFO] [1709044592.362476243] [interbotix_xs_sdk.xs_sdk_sim]: Loaded motor configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/wx200.yaml`.
+[xs_sdk_sim.py-3] [INFO] [1709044592.363442824] [interbotix_xs_sdk.xs_sdk_sim]: Loaded mode configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_dual/share/interbotix_xsarm_dual/config/modes_2.yaml`.
+[xs_sdk_sim.py-3] [INFO] [1709044592.363646936] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'all' group was changed to 'position'.
+[xs_sdk_sim.py-3] [INFO] [1709044592.363812213] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'arm' group was changed to 'position'.
+[xs_sdk_sim.py-3] [INFO] [1709044592.370096123] [interbotix_xs_sdk.xs_sdk_sim]: Interbotix 'xs_sdk_sim' node is up!
+[xs_sdk_sim.py-1] [INFO] [1709044592.373569747] [interbotix_xs_sdk.xs_sdk_sim]: Loaded motor configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/wx200.yaml`.
+[xs_sdk_sim.py-1] [INFO] [1709044592.374507981] [interbotix_xs_sdk.xs_sdk_sim]: Loaded mode configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_dual/share/interbotix_xsarm_dual/config/modes_1.yaml`.
+[xs_sdk_sim.py-1] [INFO] [1709044592.374719185] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'all' group was changed to 'position'.
+[xs_sdk_sim.py-1] [INFO] [1709044592.374882373] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'arm' group was changed to 'position'.
+[xs_sdk_sim.py-1] [INFO] [1709044592.381391772] [interbotix_xs_sdk.xs_sdk_sim]: Interbotix 'xs_sdk_sim' node is up!
+
 ~~~
 
-It looks like for the new version of interbotix toolkit, the 'interbotix_xsarm_dual' old package doesn't exist any more. 
-
-In addition, it looks like that 'interbotix_ros_xsarms_examples' package might be the replacement of the old 'interbotix_xsarm_dual' package. However, when executing the following commands, they didn't work. 
+In the secondary terminal, run xsarm_dual.py. 
 
 ~~~
-$ ros2 launch interbotix_ros_xsarms_examples xsarm_dual.launch use_dual_rviz:=true
-file 'xsarm_dual.launch' was not found in the share directory of package 'interbotix_ros_xsarms_examples' which is at '/home/robot/interbotix_ws/install/interbotix_ros_xsarms_examples/share/interbotix_ros_xsarms_examples'
+$ source /opt/ros/humble/setup.bash
+$ source /home/robot/interbotix_ws/install/setup.bash
 
+$ cd /home/robot/interbotix_ws/
+$ rosdep install --from-paths src --ignore-src -y -c    # This step is not mandatory.
+$ cd /home/robot/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual/demos/
 
-$ ros2 launch interbotix_ros_xsarms_examples xsarm_dual.launch.py use_dual_rviz:=true
-file 'xsarm_dual.launch.py' was not found in the share directory of package 'interbotix_ros_xsarms_examples' which is at '/home/robot/interbotix_ws/install/interbotix_ros_xsarms_examples/share/interbotix_ros_xsarms_examples'
+$ python3 xsarm_dual.py 
+[INFO] [1709044652.836164680] [arm_1.robot_manipulation]: 
+        Robot Name: arm_1
+        Robot Model: wx200
+[INFO] [1709044652.836364354] [arm_1.robot_manipulation]: Initialized InterbotixRobotXSCore!
+[INFO] [1709044652.838042881] [arm_1.robot_manipulation]: 
+        Arm Group Name: arm
+        Moving Time: 2.00 seconds
+        Acceleration Time: 0.30 seconds
+        Drive Mode: Time-Based-Profile
+[INFO] [1709044652.838206496] [arm_1.robot_manipulation]: Initialized InterbotixArmXSInterface!
+[INFO] [1709044653.340617131] [arm_1.robot_manipulation]: 
+        Gripper Name: gripper
+        Gripper Pressure: 50.0%
+[INFO] [1709044653.341213526] [arm_1.robot_manipulation]: Initialized InterbotixGripperXSInterface!
+[INFO] [1709044653.873589022] [arm_2.robot_manipulation]: 
+        Robot Name: arm_2
+        Robot Model: wx200
+[INFO] [1709044653.874243449] [arm_2.robot_manipulation]: Initialized InterbotixRobotXSCore!
+[INFO] [1709044653.878449430] [arm_2.robot_manipulation]: 
+        Arm Group Name: arm
+        Moving Time: 2.00 seconds
+        Acceleration Time: 0.30 seconds
+        Drive Mode: Time-Based-Profile
+[INFO] [1709044653.880321962] [arm_2.robot_manipulation]: Initialized InterbotixArmXSInterface!
+[INFO] [1709044654.387733508] [arm_2.robot_manipulation]: 
+        Gripper Name: gripper
+        Gripper Pressure: 50.0%
+[INFO] [1709044654.388837393] [arm_2.robot_manipulation]: Initialized InterbotixGripperXSInterface!
 ~~~
 
-We looked into the directory of '/home/robot/interbotix_ws/install/interbotix_ros_xsarms_examples/share/interbotix_ros_xsarms_examples', noticed that it didn't contain the 'launch' subdirectory. 
-
-
-# 5. Create interbotix_xsarm_dual package from scratch
-
-Follow these steps to re-create a interbotix_xsarm_dual package from scratch, 
-
-1. Execute 'ros2 pkg create' command, so as to create the file skeleon for a ROS2 pacakge. 
-   ~~~
-    $ cd /home/robot/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples
-    $ ros2 pkg create interbotix_xsarm_dual_andy --build-type ament_python
-   ~~~
-2. Create and/or modify several codes, including 
-    * [package.xml](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual_andy/package.xml),
-    * [setup.py](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual_andy/setup.py), 
-    * [launch/xsarm_dual.xml](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual_andy/launch/xsarm_dual.launch), 
-    * [rviz/xsarm_dual.rviz](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual_andy/rviz/xsarm_dual.rviz) 
-
-    These modified source codes are stored in this repository.
-
-Trouble shooting. 
-
-1. Rviz file contains mistakes. 
-    ~~~
-    $ ros2 launch interbotix_xsarm_dual_andy xsarm_dual.launch use_dual_rviz:=true  use_sim:=true
-    [INFO] [launch]: All log files can be found below /home/robot/.ros/log/2024-02-27-13-31-53-714231-robot-test-1392703
-    [INFO] [launch]: Default logging verbosity is set to INFO
-    [INFO] [xs_sdk_sim.py-1]: process started with pid [1392725]
-    [INFO] [robot_state_publisher-2]: process started with pid [1392727]
-    [INFO] [xs_sdk_sim.py-3]: process started with pid [1392729]
-    [INFO] [robot_state_publisher-4]: process started with pid [1392731]
-    [INFO] [static_transform_publisher-5]: process started with pid [1392733]
-    [INFO] [static_transform_publisher-6]: process started with pid [1392735]
-    [INFO] [rviz2-7]: process started with pid [1392737]
-    [static_transform_publisher-5] [WARN] [1709011914.170073229] []: Old-style arguments are deprecated; see --help for new-style arguments
-    [static_transform_publisher-6] [WARN] [1709011914.171207862] []: Old-style arguments are deprecated; see --help for new-style arguments
-    [static_transform_publisher-6] [INFO] [1709011914.182176143] [robot_2_transform_broadcaster]: Spinning until stopped - publishing transform
-    [static_transform_publisher-6] translation: ('0.000000', '0.250000', '0.000000')
-    [static_transform_publisher-6] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-    [static_transform_publisher-6] from '/world' to '/arm_2/base_link'
-    [static_transform_publisher-5] [INFO] [1709011914.182898467] [robot_1_transform_broadcaster]: Spinning until stopped - publishing transform
-    [static_transform_publisher-5] translation: ('0.000000', '-0.250000', '0.000000')
-    [static_transform_publisher-5] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
-    [static_transform_publisher-5] from '/world' to '/arm_1/base_link'
-    [rviz2-7] Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.
-    [rviz2-7] [INFO] [1709011914.400218711] [rviz2]: Stereo is NOT SUPPORTED
-    [rviz2-7] [INFO] [1709011914.400341700] [rviz2]: OpenGl version: 4.6 (GLSL 4.6)
-    [rviz2-7] [INFO] [1709011914.410892299] [rviz2]: Stereo is NOT SUPPORTED
-    [xs_sdk_sim.py-3] Unknown tag "ros2_control" in /robot[@name='wx200']
-    [xs_sdk_sim.py-3] [INFO] [1709011914.465742582] [interbotix_xs_sdk.xs_sdk_sim]: Loaded motor configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/wx200.yaml`.
-    [xs_sdk_sim.py-3] [INFO] [1709011914.466703036] [interbotix_xs_sdk.xs_sdk_sim]: Loaded mode configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_dual_andy/share/interbotix_xsarm_dual_andy/config/modes_2.yaml`.
-    [xs_sdk_sim.py-3] [INFO] [1709011914.466905864] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'all' group was changed to 'position'.
-    [xs_sdk_sim.py-3] [INFO] [1709011914.467063614] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'arm' group was changed to 'position'.
-    [xs_sdk_sim.py-3] [INFO] [1709011914.474459280] [interbotix_xs_sdk.xs_sdk_sim]: Interbotix 'xs_sdk_sim' node is up!
-    [xs_sdk_sim.py-1] Unknown tag "ros2_control" in /robot[@name='wx200']
-    [rviz2-7] [ERROR] [1709011914.494841630] [rviz2]: PluginlibFactory: The plugin for class 'rviz_default_plugins/Displays' failed to load. Error: According to the loaded plugin descriptions the class rviz_default_plugins/Displays with base class type rviz_common::Panel does not exist. Declared types are  interbotix_xs_rviz/Interbotix Control Panel rviz_visual_tools/RvizVisualToolsGui
-    [rviz2-7] [ERROR] [1709011914.495763991] [rviz2]: PluginlibFactory: The plugin for class 'rviz_default_plugins/Selection' failed to load. Error: According to the loaded plugin descriptions the class rviz_default_plugins/Selection with base class type rviz_common::Panel does not exist. Declared types are  interbotix_xs_rviz/Interbotix Control Panel rviz_visual_tools/RvizVisualToolsGui
-    [xs_sdk_sim.py-1] [INFO] [1709011914.495778547] [interbotix_xs_sdk.xs_sdk_sim]: Loaded motor configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/wx200.yaml`.
-    [rviz2-7] [ERROR] [1709011914.496065746] [rviz2]: PluginlibFactory: The plugin for class 'rviz_default_plugins/Tool Properties' failed to load. Error: According to the loaded plugin descriptions the class rviz_default_plugins/Tool Properties with base class type rviz_common::Panel does not exist. Declared types are  interbotix_xs_rviz/Interbotix Control Panel rviz_visual_tools/RvizVisualToolsGui
-    [rviz2-7] [ERROR] [1709011914.496345358] [rviz2]: PluginlibFactory: The plugin for class 'rviz_default_plugins/Views' failed to load. Error: According to the loaded plugin descriptions the class rviz_default_plugins/Views with base class type rviz_common::Panel does not exist. Declared types are  interbotix_xs_rviz/Interbotix Control Panel rviz_visual_tools/RvizVisualToolsGui
-    [rviz2-7] [ERROR] [1709011914.496595062] [rviz2]: PluginlibFactory: The plugin for class 'rviz_default_plugins/Time' failed to load. Error: According to the loaded plugin descriptions the class rviz_default_plugins/Time with base class type rviz_common::Panel does not exist. Declared types are  interbotix_xs_rviz/Interbotix Control Panel rviz_visual_tools/RvizVisualToolsGui
-    [xs_sdk_sim.py-1] [INFO] [1709011914.496621698] [interbotix_xs_sdk.xs_sdk_sim]: Loaded mode configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_dual_andy/share/interbotix_xsarm_dual_andy/config/modes_1.yaml`.
-    [xs_sdk_sim.py-1] [INFO] [1709011914.496806840] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'all' group was changed to 'position'.
-    [xs_sdk_sim.py-1] [INFO] [1709011914.496956407] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'arm' group was changed to 'position'.
-    [xs_sdk_sim.py-1] [INFO] [1709011914.504201126] [interbotix_xs_sdk.xs_sdk_sim]: Interbotix 'xs_sdk_sim' node is up!
-
-    ~~~
-   ![xsarm_dual not displayed correctly with rviz](./image/xsarm_dual_wrong_20240227.png)
+[![Run interbotix_xsarm_dual package](./image/xsarm_dual_wrong_20240227.png)](./video/dual_arms_20240227_2031.mp4)
 
