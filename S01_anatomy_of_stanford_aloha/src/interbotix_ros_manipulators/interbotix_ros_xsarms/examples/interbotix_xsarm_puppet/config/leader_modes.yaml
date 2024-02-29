@@ -3,9 +3,9 @@ port: /dev/ttyUSB0
 groups:
   arm:
     operating_mode: position
-    profile_type: 'time'
-    profile_velocity: 2000
-    profile_acceleration: 300
+    profile_type: time
+    profile_velocity: 0
+    profile_acceleration: 0
     torque_enable: true
 
 singles:
