@@ -171,3 +171,115 @@ $ python3 xsarm_dual.py
 Click the picture, jump to the video download page, download the mp4 file, and view it in browser like chrome. 
 [![Run interbotix_xsarm_dual package](./image/xsarm_dual_20240228.png)](./video/dual_arms_20240227_2031.mp4)
 
+
+# 5. Update puppet arms package interbotix_xsarm_puppet
+
+Step 1. Update the interbotix_xsarm_puppet package source code. 
+
+[interbotix_xsarm_puppet package](https://github.com/orgs/Interbotix/discussions/47) was updated yesterday, 2024.2.28. 
+
+![Updated interbotix_xsarm_puppet package source code with ROS2/humble branch](./image/interbotix_xsarm_puppet_fa04fa8.jpg)
+
+You need to download [the updated code from github](https://github.com/Interbotix/interbotix_ros_manipulators/tree/humble/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet), and replace their previous codes. 
+
+A easy-to-use tool to download the github repo branch, is this website, https://download-directory.github.io/
+
+Suppose you have downloaded the updated branch from github, and saved it to a file folder, ~/interbotix_xsarm_puppet_fa04fa8/, then you need to replace interbotix previous codes for interbotix_xsarm_puppet package. 
+
+~~~
+$ cd ~/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/
+$ mv -r interbotix_xsarm_puppet/ ~/interbotix_xsarm_puppet_20240229
+$ cp -rf ~/interbotix_xsarm_puppet_fa04fa8 .  
+~~~
+
+Step 2. Re-compile entire interbotix toolkit. 
+
+Notice that, after compilation, interbotix_xsarm_puppet will show up in the package list. 
+
+~~~
+$ cd ~/interbotix_ws
+$ rm -rf build/ install/ log/
+
+$ rosdep install --from-paths src --ignore-src -y -c 
+$ colcon build --symlink-install
+$ source ~/interbotix_ws/install/setup.bash 
+
+$ ros2 pkg list | grep interbotix
+interbotix_common_modules
+interbotix_common_sim
+interbotix_common_toolbox
+interbotix_moveit_interface
+interbotix_moveit_interface_msgs
+interbotix_perception_modules
+interbotix_perception_msgs
+interbotix_perception_pipelines
+interbotix_perception_toolbox
+interbotix_ros_xsarms
+interbotix_ros_xsarms_examples
+interbotix_ros_xseries
+interbotix_tf_tools
+interbotix_xs_driver
+interbotix_xs_modules
+interbotix_xs_msgs
+interbotix_xs_ros_control
+interbotix_xs_rviz
+interbotix_xs_sdk
+interbotix_xs_toolbox
+interbotix_xsarm_control
+interbotix_xsarm_descriptions
+interbotix_xsarm_dual
+interbotix_xsarm_dual_andy
+interbotix_xsarm_joy
+interbotix_xsarm_moveit
+interbotix_xsarm_moveit_interface
+interbotix_xsarm_perception
+interbotix_xsarm_puppet
+interbotix_xsarm_ros_control
+interbotix_xsarm_sim
+~~~
+
+Step 3. Launch interbotix_xsarm_puppet package with rviz
+
+Referring to interbotix youtube video tutorial, [X-Series Arms | Working With Multiple Arms](https://www.youtube.com/watch?v=DnjbNXxBE_8) at at 11:06, we need interbotix physical arms, to run the demo. 
+
+With only rviz simulation, when launching interbotix_xsarm_puppet with rviz, we can only see a pair of static arms with no movement. 
+
+![A pair of static arms with no movement in rviz](./image/interbotix_xsarm_puppet_static.png)
+
+we will write a python code in the next section, using a series of predefined action to control the master arm's movement, and then the puppet arm will automatically follow the master's movement. 
+
+~~~
+$ ros2 launch interbotix_xsarm_puppet xsarm_puppet.launch.py robot_model_leader:=wx200 robot_model_follower:=wx200 use_sim:=true
+[INFO] [launch]: All log files can be found below /home/robot/.ros/log/2024-02-29-09-58-08-097330-robot-test-1538813
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [xs_sdk_sim.py-1]: process started with pid [1538835]
+[INFO] [robot_state_publisher-2]: process started with pid [1538837]
+[INFO] [xs_sdk_sim.py-3]: process started with pid [1538839]
+[INFO] [robot_state_publisher-4]: process started with pid [1538841]
+[INFO] [xsarm_puppet-5]: process started with pid [1538843]
+[INFO] [static_transform_publisher-6]: process started with pid [1538845]
+[INFO] [static_transform_publisher-7]: process started with pid [1538847]
+[INFO] [rviz2-8]: process started with pid [1538849]
+[static_transform_publisher-6] [INFO] [1709171888.600876685] [tf_broadcaster_leader]: Spinning until stopped - publishing transform
+[static_transform_publisher-6] translation: ('0.000000', '-0.250000', '0.000000')
+[static_transform_publisher-6] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-6] from '/world' to 'leader/base_link'
+[static_transform_publisher-7] [INFO] [1709171888.601449875] [tf_broadcaster_follower]: Spinning until stopped - publishing transform
+[static_transform_publisher-7] translation: ('0.000000', '0.250000', '0.000000')
+[static_transform_publisher-7] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-7] from '/world' to 'follower/base_link'
+[xs_sdk_sim.py-3] Unknown tag "ros2_control" in /robot[@name='wx200']
+[xs_sdk_sim.py-1] Unknown tag "ros2_control" in /robot[@name='wx200']
+[xs_sdk_sim.py-3] [INFO] [1709171888.923684358] [interbotix_xs_sdk.xs_sdk_sim]: Loaded motor configs from `/home/robot/housework_robot_ws/S01_anatomy_of_stanford_aloha/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/wx200.yaml`.
+[xs_sdk_sim.py-3] [INFO] [1709171888.924794168] [interbotix_xs_sdk.xs_sdk_sim]: Loaded mode configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_puppet/share/interbotix_xsarm_puppet/config/follower_modes.yaml`.
+[xs_sdk_sim.py-3] [INFO] [1709171888.925022496] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'all' group was changed to 'position'.
+[xs_sdk_sim.py-3] [INFO] [1709171888.925204707] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'arm' group was changed to 'position'.
+[xs_sdk_sim.py-3] [INFO] [1709171888.931886925] [interbotix_xs_sdk.xs_sdk_sim]: Interbotix 'xs_sdk_sim' node is up!
+[xs_sdk_sim.py-1] [INFO] [1709171888.935820884] [interbotix_xs_sdk.xs_sdk_sim]: Loaded motor configs from `/home/robot/housework_robot_ws/S01_anatomy_of_stanford_aloha/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/wx200.yaml`.
+[xs_sdk_sim.py-1] [INFO] [1709171888.936509986] [interbotix_xs_sdk.xs_sdk_sim]: Loaded mode configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_puppet/share/interbotix_xsarm_puppet/config/leader_modes.yaml`.
+[xs_sdk_sim.py-1] [INFO] [1709171888.936729484] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'all' group was changed to 'position'.
+[xs_sdk_sim.py-1] [INFO] [1709171888.936909864] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'arm' group was changed to 'position'.
+[xs_sdk_sim.py-1] [INFO] [1709171888.944919346] [interbotix_xs_sdk.xs_sdk_sim]: Interbotix 'xs_sdk_sim' node is up!
+[xsarm_puppet-5] [INFO] [1709171889.035756066] [xsarm_puppet]: Ready to start puppetting!
+~~~
+
