@@ -90,7 +90,7 @@ $ source /opt/ros/humble/setup.bash
 $ source /home/robot/interbotix_ws/install/setup.bash
 
 $ cd /home/robot/interbotix_ws/
-$ rosdep install --from-paths src --ignore-src -y -c    # This step is not mandatory.
+$ rosdep install --from-paths src --ignore-src -y    # This step is not mandatory.
 
 $ ros2 launch interbotix_xsarm_dual xsarm_dual.launch.py use_dual_rviz:=true  use_sim:=true
 [INFO] [launch]: All log files can be found below /home/robot/.ros/log/2024-02-27-22-36-31-570039-robot-test-1455379
@@ -134,7 +134,7 @@ $ source /opt/ros/humble/setup.bash
 $ source /home/robot/interbotix_ws/install/setup.bash
 
 $ cd /home/robot/interbotix_ws/
-$ rosdep install --from-paths src --ignore-src -y -c    # This step is not mandatory.
+$ rosdep install --from-paths src --ignore-src -y    # This step is not mandatory.
 $ cd /home/robot/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual/demos/
 
 $ python3 xsarm_dual.py 
@@ -200,7 +200,7 @@ Notice that, after compilation, interbotix_xsarm_puppet will show up in the pack
 $ cd ~/interbotix_ws
 $ rm -rf build/ install/ log/
 
-$ rosdep install --from-paths src --ignore-src -y -c 
+$ rosdep install --from-paths src --ignore-src -y 
 $ colcon build --symlink-install
 $ source ~/interbotix_ws/install/setup.bash 
 
