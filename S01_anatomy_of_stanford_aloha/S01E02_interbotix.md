@@ -314,9 +314,40 @@ Step 3. In one terminal, launch the xsarm_puppet package.
 
 ~~~
 $ cd ~/interbotix_ws/
-$ source install/setup.bash 
+$ source install/setup.bash
 
 $ ros2 launch interbotix_xsarm_puppet xsarm_puppet.launch.py robot_model_leader:=wx200 robot_model_follower:=wx200 use_sim:=true
+[INFO] [launch]: All log files can be found below /home/robot/.ros/log/2024-02-29-19-02-21-548524-robot-test-1571115
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [xs_sdk_sim.py-1]: process started with pid [1571137]
+[INFO] [robot_state_publisher-2]: process started with pid [1571139]
+[INFO] [xs_sdk_sim.py-3]: process started with pid [1571141]
+[INFO] [robot_state_publisher-4]: process started with pid [1571143]
+[INFO] [xsarm_puppet-5]: process started with pid [1571145]
+[INFO] [static_transform_publisher-6]: process started with pid [1571147]
+[INFO] [static_transform_publisher-7]: process started with pid [1571149]
+[INFO] [rviz2-8]: process started with pid [1571151]
+[static_transform_publisher-6] [INFO] [1709204542.051400189] [tf_broadcaster_leader]: Spinning until stopped - publishing transform
+[static_transform_publisher-6] translation: ('0.000000', '-0.250000', '0.000000')
+[static_transform_publisher-6] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-6] from '/world' to 'leader/base_link'
+[static_transform_publisher-7] [INFO] [1709204542.055114612] [tf_broadcaster_follower]: Spinning until stopped - publishing transform
+[static_transform_publisher-7] translation: ('0.000000', '0.250000', '0.000000')
+[static_transform_publisher-7] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')
+[static_transform_publisher-7] from '/world' to 'follower/base_link'
+[xs_sdk_sim.py-3] Unknown tag "ros2_control" in /robot[@name='wx200']
+[xs_sdk_sim.py-1] Unknown tag "ros2_control" in /robot[@name='wx200']
+[xs_sdk_sim.py-3] [INFO] [1709204542.347662226] [interbotix_xs_sdk.xs_sdk_sim]: Loaded motor configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/wx200.yaml`.
+[xs_sdk_sim.py-3] [INFO] [1709204542.348775675] [interbotix_xs_sdk.xs_sdk_sim]: Loaded mode configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_puppet/share/interbotix_xsarm_puppet/config/follower_modes.yaml`.
+[xs_sdk_sim.py-3] [INFO] [1709204542.349003998] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'all' group was changed to 'position'.
+[xs_sdk_sim.py-3] [INFO] [1709204542.349199524] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'arm' group was changed to 'position'.
+[xs_sdk_sim.py-1] [INFO] [1709204542.354913092] [interbotix_xs_sdk.xs_sdk_sim]: Loaded motor configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/wx200.yaml`.
+[xs_sdk_sim.py-1] [INFO] [1709204542.355905703] [interbotix_xs_sdk.xs_sdk_sim]: Loaded mode configs from `/home/robot/interbotix_ws/install/interbotix_xsarm_puppet/share/interbotix_xsarm_puppet/config/leader_modes.yaml`.
+[xs_sdk_sim.py-1] [INFO] [1709204542.356148727] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'all' group was changed to 'position'.
+[xs_sdk_sim.py-3] [INFO] [1709204542.356194396] [interbotix_xs_sdk.xs_sdk_sim]: Interbotix 'xs_sdk_sim' node is up!
+[xs_sdk_sim.py-1] [INFO] [1709204542.356345789] [interbotix_xs_sdk.xs_sdk_sim]: The operating mode for the 'arm' group was changed to 'position'.
+[xs_sdk_sim.py-1] [INFO] [1709204542.363521110] [interbotix_xs_sdk.xs_sdk_sim]: Interbotix 'xs_sdk_sim' node is up!
+[xsarm_puppet-5] [INFO] [1709204542.446782404] [xsarm_puppet]: Ready to start puppetting!
 ~~~
 
 Step 4. In another terminal, run bartender_puppet.py
@@ -324,6 +355,25 @@ Step 4. In another terminal, run bartender_puppet.py
 ~~~
 $ cp ~/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/demo/
 $ python3 bartender_puppet.py
+$ python3 bartender_puppet.py 
+[INFO] [1709205591.646824524] [leader.robot_manipulation]: 
+	Robot Name: leader
+	Robot Model: wx200
+[INFO] [1709205591.647026247] [leader.robot_manipulation]: Initialized InterbotixRobotXSCore!
+>> andy.nyu: group_info, 
+  [group_info]: interbotix_xs_msgs.srv.RobotInfo_Response(mode='position', profile_type='time', joint_names=['waist', 'shoulder', 'elbow', 'wrist_angle', 'wrist_rotate'], joint_ids=[1, 2, 4, 5, 6], joint_lower_limits=[-3.141582727432251, -1.884955644607544, -1.884955644607544, -1.7453292608261108, -3.141582727432251], joint_upper_limits=[3.141582727432251, 1.972222089767456, 1.623156189918518, 2.1467549800872803, 3.141582727432251], joint_velocity_limits=[3.1415927410125732, 1.0, 3.1415927410125732, 3.1415927410125732, 3.1415927410125732], joint_sleep_positions=[0.0, -1.8799999952316284, 1.5, 0.800000011920929, 0.0], joint_state_indices=[0, 1, 2, 3, 4], num_joints=5, name=['arm']) 
+
+[INFO] [1709205591.650562695] [leader.robot_manipulation]: 
+	Arm Group Name: arm
+	Moving Time: 2.00 seconds
+	Acceleration Time: 0.30 seconds
+	Drive Mode: Time-Based-Profile
+[INFO] [1709205591.650744882] [leader.robot_manipulation]: Initialized InterbotixArmXSInterface!
+[INFO] [1709205592.154157880] [leader.robot_manipulation]: 
+	Gripper Name: gripper
+	Gripper Pressure: 50.0%
+[INFO] [1709205592.154355402] [leader.robot_manipulation]: Initialized InterbotixGripperXSInterface!
+
 ~~~
 
 Click the picture, jump to the video download page, download the mp4 file, and view it in browser like chrome. 
