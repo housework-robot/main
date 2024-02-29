@@ -289,8 +289,8 @@ The last task of this episode, is to hard-code a series of actions in a python p
 
 Step 1. Download our modified xsarm_puppet codes from this repository, and replace the previous the previous codes.
 
-* [config/leader_modes.yaml](./src/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/config/leader_modes.yaml)
-* [demo/bartender_puppet.py](./src/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/demo/bartender_puppet.py)
+* [config/leader_modes.yaml](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/config/leader_modes.yaml)
+* [demo/bartender_puppet.py](./src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/demo/bartender_puppet.py)
 
 ~~~
 $ cd ~/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet
