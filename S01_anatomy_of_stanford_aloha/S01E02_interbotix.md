@@ -283,3 +283,45 @@ $ ros2 launch interbotix_xsarm_puppet xsarm_puppet.launch.py robot_model_leader:
 [xsarm_puppet-5] [INFO] [1709171889.035756066] [xsarm_puppet]: Ready to start puppetting!
 ~~~
 
+# 6. Move the puppet arms
+
+The last task of this episode, is to hard-code a series of actions in a python program, to control the master arm, and then automatically ask the puppet arm to follow its master's movement. 
+
+Step 1. Download our modified xsarm_puppet codes from this repository, and replace the previous the previous codes.
+
+* [config/leader_modes.yaml](./src/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/config/leader_modes.yaml)
+* [demo/bartender_puppet.py](./src/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/demo/bartender_puppet.py)
+
+~~~
+$ cd ~/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet
+$ mkdir demo
+
+# Download our modified examples/interbotix_xsarm_puppet/ codes, and replace their previous version. 
+~~~
+
+Step 2. re-compile interbotix system.
+
+~~~
+$ cd ~/interbotix_ws/
+$ rm -rf build/ install/ log/
+
+$ rosdep install --from-paths src --ignore-src -y -r
+$ colcon build --symlink-install
+
+~~~
+
+Step 3. In one terminal, launch the xsarm_puppet package. 
+
+~~~
+$ cd ~/interbotix_ws/
+$ source install/setup.bash 
+
+$ ros2 launch interbotix_xsarm_puppet xsarm_puppet.launch.py robot_model_leader:=wx200 robot_model_follower:=wx200 use_sim:=true
+~~~
+
+Step 4. In another terminal, run bartender_puppet.py
+
+~~~
+$ cp ~/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/demo/
+$ python3 bartender_puppet.py
+~~~
