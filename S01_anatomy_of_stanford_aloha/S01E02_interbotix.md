@@ -326,31 +326,5 @@ $ cp ~/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examp
 $ python3 bartender_puppet.py
 ~~~
 
-Temporarily, trouble-shooting:
-~~~
-robot@robot-test:~/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/demo$ python3 bartender_puppet.py 
-[INFO] [1709201589.777080301] [leader.robot_manipulation]: 
-        Robot Name: leader
-        Robot Model: wx200
-[INFO] [1709201589.777291199] [leader.robot_manipulation]: Initialized InterbotixRobotXSCore!
->> andy.nyu: group_info, 
-  [group_info]: interbotix_xs_msgs.srv.RobotInfo_Response(mode='position', profile_type='time', joint_names=['waist', 'shoulder', 'elbow', 'wrist_angle', 'wrist_rotate'], joint_ids=[1, 2, 4, 5, 6], joint_lower_limits=[-3.141582727432251, -1.884955644607544, -1.884955644607544, -1.7453292608261108, -3.141582727432251], joint_upper_limits=[3.141582727432251, 1.972222089767456, 1.623156189918518, 2.1467549800872803, 3.141582727432251], joint_velocity_limits=[3.1415927410125732, 1.0, 3.1415927410125732, 3.1415927410125732, 3.1415927410125732], joint_sleep_positions=[0.0, -1.8799999952316284, 1.5, 0.800000011920929, 0.0], joint_state_indices=[0, 1, 2, 3, 4], num_joints=5, name=['arm']) 
-
-[INFO] [1709201589.779117879] [leader.robot_manipulation]: 
-        Arm Group Name: arm
-        Moving Time: 2.00 seconds
-        Acceleration Time: 0.30 seconds
-        Drive Mode: Time-Based-Profile
-[INFO] [1709201589.779289517] [leader.robot_manipulation]: Initialized InterbotixArmXSInterface!
-Traceback (most recent call last):
-  File "/home/robot/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/demo/bartender_puppet.py", line 84, in <module>
-    main()
-  File "/home/robot/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_puppet/demo/bartender_puppet.py", line 52, in main
-    bot = InterbotixManipulatorXS(
-  File "/home/robot/interbotix_ws/build/interbotix_xs_modules/interbotix_xs_modules/xs_robot/arm.py", line 149, in __init__
-    self.gripper = InterbotixGripperXSInterface(
-  File "/home/robot/interbotix_ws/build/interbotix_xs_modules/interbotix_xs_modules/xs_robot/gripper.py", line 189, in __init__
-    self.core.get_logger().err(
-AttributeError: 'RcutilsLogger' object has no attribute 'err'
-
-~~~
+Click the picture, jump to the video download page, download the mp4 file, and view it in browser like chrome. 
+[![Write a python program to control the actions of the leader arm, then ask the follower arm to mimic its leader](./image/xarm_puppet_2024029.png)](./video/xarm_puppet_2024029.mp4)
