@@ -374,5 +374,5 @@ $ python3 bartender_puppet.py
 [INFO] [1709208031.323309239] [leader.robot_manipulation]: Initialized InterbotixGripperXSInterface!
 ~~~
 
-Click the picture, jump to the video download page, download the mp4 file, and view the puppet follower bigger arm mimicks its leader master yet smaller arm in browser like chrome. 
-[![Write a python program to control the actions of the leader arm, then ask the follower arm to mimic its leader](./image/xarm_bigger_2024029.png)](./video/xarm_puppet_2024029.mp4)
+Click the picture, jump to the video download page, download the mp4 file, and view the puppet follower arm mimicks its leader master  arm in browser like chrome. 
+[![Write a python program to control the actions of the leader arm, then ask the follower arm to mimic its leader](./image/xarm_puppet_2024029.png)](./video/xarm_puppet_2024029.mp4)
