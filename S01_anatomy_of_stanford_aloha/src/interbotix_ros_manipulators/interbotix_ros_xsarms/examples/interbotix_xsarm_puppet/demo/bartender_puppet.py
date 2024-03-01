@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Modified from interbotix_ros_manipulators/interbotix_ros_xsarms/examples/python_demos/bartender.py
-# by andy.nyu@qq.com, 2024.02.29
+# by andy.nyu, 2024.02.29 
 
 import sys
 
