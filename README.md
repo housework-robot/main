@@ -35,10 +35,13 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 1. S01E01. [Migrate Stanford aloha from ROS1 to ROS2](./S01_anatomy_of_stanford_aloha/S01E01_migration.md)
 
-   [![Anatomy of housework robot video on youtube](https://img.youtube.com/vi/XVGTwpWPCrI/hqdefault.jpg)](https://www.youtube.com/watch?v=XVGTwpWPCrI)
+   [![S01E01 Affordable housework github robot project, migration, on youtube](https://img.youtube.com/vi/XVGTwpWPCrI/hqdefault.jpg)](https://www.youtube.com/watch?v=XVGTwpWPCrI)
 
    Click the preview image to see the video on youtube, the content is our objective and project progress. 
 
 2. S01E02. [Manipulate interbotix robotic arm with rviz2](./S01_anatomy_of_stanford_aloha/S01E02_interbotix.md)
+
+   [![S01E02 Affordable housework github robot project, interbotix, on youtube](https://img.youtube.com/vi/2XLhbFUmqrI/hqdefault.jpg)](https://www.youtube.com/watch?v=2XLhbFUmqrI)
+
 
 # To be continued.
