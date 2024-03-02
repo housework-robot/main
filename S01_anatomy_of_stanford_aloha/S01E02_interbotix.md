@@ -9,7 +9,11 @@ It is helpful to learn how to use Interbotix robotic arms, before diving into St
 
 To reduce the learning difficulty, we start to learn interbotix arm using simulatin with [rviz2](https://github.com/ros2/rviz). After then, we use [the physical arms](https://docs.trossenrobotics.com/interbotix_xsarms_docs/).  
 
-The goal of this episode is to use rviz to simulate 2 pairs interbotix arms, each pair consists of one master arm and one puppet arm. We manually predefine a series of actions to control the 2 master arms, and ask the 2 puppet arms to automatically follow their masters. 
+The goal of this episode is to use rviz to simulate 2 interbotix arms, one leader arm and one follower arm. We manually predefine a series of actions to control the leader arm, and ask the follower arms to automatically mimick its master. 
+
+[![S01E02 Affordable housework github robot project, interbotix, on youtube](https://img.youtube.com/vi/2XLhbFUmqrI/hqdefault.jpg)](https://www.youtube.com/watch?v=2XLhbFUmqrI)
+
+Click the preview image to see the video on youtube. 
 
 
 # 2. Install ROS2/Humble and Interbotix
