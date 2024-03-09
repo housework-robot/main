@@ -1,4 +1,4 @@
-# Train robotic arm with robomimic
+# Simulate and train robotic arm with robosuite and robomimic
 SO1E03, 2024.03.09
 
 
