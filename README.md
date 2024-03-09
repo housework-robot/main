@@ -43,5 +43,6 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![S01E02 Affordable housework github robot project, interbotix, on youtube](https://img.youtube.com/vi/2XLhbFUmqrI/hqdefault.jpg)](https://www.youtube.com/watch?v=2XLhbFUmqrI)
 
+3. S01E03. [Simulate and train robotic arm with robosuite and robomimic](./S01_anatomy_of_stanford_aloha/S01E03_robomimic.md)
 
 # To be continued.
