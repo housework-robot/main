@@ -11,7 +11,7 @@ For the simulation, Stanford aloha project used [robomimic](https://robomimic.gi
 In this episode, we learned how to use robomimic, and use [R2D2 Residential Robot Demonstration Dataset](https://github.com/snasiriany/r2d2/tree/robomimic-eval?tab=readme-ov-file) as training dataset to test various action planning algorithms. 
 
 
-# 2. Install Nvidia driver and Pytorch
+# 2. Install Nvidia driver and CUDA toolkit
 
 Following Stanford aloha project, we used [Lambda Tensorbook with RTX 3070Ti GPU](https://shop.lambdalabs.com/deep-learning/laptops/tensorbook/customize?_gl=1*gmxhat*_ga*OTQyNjk2NTU1LjE3MDUyMDA1MDk.*_ga_43EZT1FM6Q*MTcwOTk3ODUyNy45LjEuMTcwOTk3OTI5Ni41MS4wLjA). 
 
@@ -20,6 +20,9 @@ Following Stanford aloha project, we used [Lambda Tensorbook with RTX 3070Ti GPU
 The lambda tensorbook we received did not pre-install CUDA and Pytorch as expected, so we installed them by ourselves. 
 
 Following [How to Install CUDA on Ubuntu 22.04 Step-by-Step](https://www.cherryservers.com/blog/install-cuda-ubuntu), we installed CUDA on the Lambda tensorbook with Ubuntu 22.04 preinstalled.
+
+
+Step 1. install nvidia-driver
 
 ~~~
 $ nvidia-smi
@@ -56,7 +59,30 @@ Notice that the system recommended nvidia-driver-550, hence, we installed it.
 $ sudo apt install nvidia-driver-550
 ~~~
 
-After installing the above, we rebooted the tensorbook laptop, then the nvidia driver is ready to use. 
+
+Step 2. install CUDA toolkit
+
+~~~
+$ cd ~
+$ wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+$ sudo dpkg -i cuda-keyring_1.1-1_all.deb
+$ sudo apt-get update
+
+$ sudo apt-get -y install cuda
+~~~
+
+Step 3. setup environmental variables
+
+Add the following content to the ~/.bashrc file. 
+
+~~~
+export PATH=/home/robot/.local/bin:/usr/local/cuda-12.2/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/lib/nvidia:/usr/local/cuda-12.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+~~~
+
+Step 4. Verify the installation 
+
+After installing the above, we rebooted the tensorbook laptop, to verify the installation of nvidia drivers and CUDA toolkit. 
 
 ~~~
 $ sudo reboot now
@@ -110,10 +136,21 @@ gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
 Copyright (C) 2021 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+$ nvcc --version
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2023 NVIDIA Corporation
+Built on Tue_Aug_15_22:02:13_PDT_2023
+Cuda compilation tools, release 12.2, V12.2.140
+Build cuda_12.2.r12.2/compiler.33191640_0
 ~~~
 
 
+# 3. Install pytorch
+
 After installing nvidia driver, we installed pytorch following [pytorch official webpage](https://pytorch.org/get-started/locally/). 
+
+Step 1. install pytorch
 
 ~~~
 $ pip3 install torch torchvision torchaudio
@@ -155,8 +192,26 @@ Requires: torch
 Required-by: 
 ~~~
 
+Step 2. Verify the installation
 
-# 3. Install Mujoco
+After reboot Ubuntu system, we used python to verify whether or not the installation of pytorch together with CUDA is successful. 
+
+~~~
+$ sudo reboot now
+~~~
+
+~~~
+$ python3
+Python 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import torch
+>>> torch.cuda.is_available()
+True
+>>> quit()
+~~~
+
+
+# 4. Install Mujoco
 
 Following [an instruction posted on github](https://gist.github.com/saratrajput/60b1310fe9d9df664f9983b38b50d5da), we installed [Mujoco](https://mujoco.org/), which is a free and open source physics engine that aims to facilitate research and development in robotics, biomechanics, graphics and animation, where fast and accurate simulation is needed. Mujoco was [purchased by](https://deepmind.google/discover/blog/open-sourcing-mujoco/) Google Deepmind in 2021. 
 
@@ -216,6 +271,8 @@ Version: 1.13.0-5
 
 Step 4. Install mujoco-py
 
+Notice that [mujoco-py is deprecated](https://robomimic.github.io/docs/datasets/robomimic_v0.1.html#downloading), but still, we installed mujoco-py for testing purpose. 
+
 ~~~
 $ pip3 install mujoco-py
 
@@ -237,8 +294,8 @@ Step 5. Setup the environmental variables
 Add the following content to the ~/.bashrc file. Notice that, our home directory is /home/robot, change the directory to your own home directory. 
 
 ~~~
-export PATH=/home/robot/.local/bin:/home/robot/.local/binusr/local/cuda-12.2/bin${PATH:+:${PATH}}
-export LD_LIBRARY_PATH=/usr/lib/nvidia:/home/robot/.mujoco/mujoco210/bin:/usr/local/cuda-12.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export PATH=/home/robot/.local/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/home/robot/.mujoco/mujoco210/bin${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 ~~~
 
 
@@ -279,7 +336,7 @@ running build_ext
 ~~~
 
 
-# 4. Install and run robosuite 
+# 5. Install and run robosuite 
 
 
-# 5. Install and run robomimic
+# 6. Install and run robomimic
