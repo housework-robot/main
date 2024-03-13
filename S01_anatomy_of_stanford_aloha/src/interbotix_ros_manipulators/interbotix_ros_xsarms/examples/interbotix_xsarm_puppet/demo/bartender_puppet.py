@@ -25,7 +25,7 @@ Then change to this directory and type:
 # python3 bartender_puppet.py
 def main():
     bot = InterbotixManipulatorXS(
-        robot_model='wx200',
+        robot_model='wx250',
         robot_name = 'leader',
         group_name='arm',
         gripper_name='gripper'
