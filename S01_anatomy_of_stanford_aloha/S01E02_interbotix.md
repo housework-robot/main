@@ -320,7 +320,7 @@ Step 3. In one terminal, launch the xsarm_puppet package.
 $ cd ~/interbotix_ws/
 $ source install/setup.bash
 
-$ ros2 launch interbotix_xsarm_puppet xsarm_puppet.launch.py robot_model_leader:=wx200 robot_model_follower:=wx200 use_sim:=true
+$ ros2 launch interbotix_xsarm_puppet xsarm_puppet.launch.py robot_model_leader:=wx250 robot_model_follower:=vx300 use_sim:=true
 [INFO] [launch]: All log files can be found below /home/robot/.ros/log/2024-02-29-19-58-37-696287-robot-test-1574573
 [INFO] [launch]: Default logging verbosity is set to INFO
 [INFO] [xs_sdk_sim.py-1]: process started with pid [1574595]
