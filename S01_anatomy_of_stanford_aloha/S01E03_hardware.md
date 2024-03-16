@@ -216,7 +216,134 @@ $ python3 xsarm_dual.py
 
 # 5. Trouble shooting.
 
-If you do not follow the steps above, you might encounter the following error.
-<img src="./image/physical_arm_20240315_8.jpeg">
+## 1. Misconnection of USB port
 
-At this point, you can refer to the instructions in "``3. Testing the control of the Interbotix arm``" and follow them, then run the corresponding command.
+If you encounter the following error with rviz, it means the USB connection from the computer to the robotic arms is disfunctional. 
+<img src="./image/misconnected_arm.jpeg">
+
+
+A possible solution is to, 
+
+1. Unplug and plug again the cable to the USB port of the computer, as well as the robotic arm, 
+
+2. Detect the USB port " 3. Single arm manipulation -> Step 1 " and " 4. Dual arms manipulation -> Step 1 ",
+
+3. Change the configurations if necessary, following the instruction of " 3. Single arm manipulation -> Step 2 " and " 4. Dual arms manipulation -> Step 2 ",
+
+
+## 2. Symlink port binding
+
+In addition, you can bind each robotic arm to a fixed symlink port, to deal with the issue that the port connecting to the robotic arm is changing over time. 
+
+1. Use dynamixel to find the port that the robotic arm is currently binding to, e.g. "ttyUSB0",
+
+2. Run the following command to find the ID_SERIAL_SHORT of that USB port, e.g. "FT891LKI",
+
+   ~~~
+   $ udevadm info --name=/dev/ttyUSB0 --attribute-walk | grep -i serial
+    SUBSYSTEMS=="usb-serial"
+    ATTRS{interface}=="USB <-> Serial Converter"
+    ATTRS{product}=="USB <-> Serial Converter"
+    ATTRS{serial}=="FT891LKI"
+    ATTRS{serial}=="0000:00:14.0"
+   ~~~
+
+3. Add the mapping to the system file "/etc/udev/rules.d/99-fixed-interbotix-udev.rules", with a self-defined "ttyDXL_my_robot_name"
+
+   ~~~
+   $ gedit /etc/udev/rules.d/99-fixed-interbotix-udev.rules
+
+   # Add the following line to the end of the file. 
+   SUBSYSTEM=="tty", ATTRS{serial}=="FT891LKI", ENV{ID_MM_DEVICE_IGNORE}="1", ATTR{device/latency_timer}="1", SYMLINK+="ttyDXL_my_robot_name"
+   ~~~
+
+4. Apply the change by executing the following command,
+
+   ~~~
+   $ sudo udevadm control --reload && sudo udevadm trigger
+   ~~~
+
+5. Double-check whether the symlink is functional,
+
+   ~~~
+   $ ls -l /dev/ttyDXL*
+      lrwxrwxrwx 1 root root 7 Mar 17 01:08 /dev/ttyDXL -> ttyUSB1
+      lrwxrwxrwx 1 root root 7 Mar 16 21:28 /dev/ttyDXL_master_right -> ttyUSB0
+      lrwxrwxrwx 1 root root 7 Mar 17 01:08 /dev/ttyDXL_puppet_right -> ttyUSB1
+   ~~~
+
+6. If the above doesn't work, reboot the ubuntu.
+
+   ~~~
+   $ sudo reboot now
+   ~~~
+   
+
+## 3. Motor disfunctional
+
+If you encounter the following error, it means some motors of the robotic arms are not funcational. 
+
+~~~
+$ ros2 launch interbotix_xsarm_control xsarm_control.launch.py robot_model:=wx250
+[INFO] [launch]: All log files can be found below /home/robot/.ros/log/2024-03-16-21-32-56-298965-robot-test-20324
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [xs_sdk-1]: process started with pid [20345]
+[INFO] [robot_state_publisher-2]: process started with pid [20347]
+[INFO] [rviz2-3]: process started with pid [20349]
+[xs_sdk-1] [INFO] Using Interbotix X-Series Driver Version: 'v0.3.3'.
+[xs_sdk-1] [INFO] Using logging level 'INFO'.
+[xs_sdk-1] [INFO] Loaded mode configs from '/home/robot/interbotix_ws/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/modes.yaml'.
+[xs_sdk-1] [INFO] Loaded motor configs from '/home/robot/interbotix_ws/install/interbotix_xsarm_control/share/interbotix_xsarm_control/config/wx250.yaml'.
+[xs_sdk-1] [INFO] Pinging all motors specified in the motor_config file. (Attempt 1/3)
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  7, Model: 'XM430-W350', Joint Name: 'wrist_rotate'.
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  6, Model: 'XM430-W350', Joint Name: 'wrist_angle'.
+[xs_sdk-1] [ERROR]         Can't find DYNAMIXEL ID:  5, Joint Name: 'elbow_shadow':
+[xs_sdk-1]                 '[RxPacketError] Hardware error occurred. Check the error at Control Table (Hardware Error Status)!'
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  4, Model: 'XM430-W350', Joint Name: 'elbow'.
+[xs_sdk-1] [ERROR]         Can't find DYNAMIXEL ID:  2, Joint Name: 'shoulder':
+[xs_sdk-1]                 '[RxPacketError] Hardware error occurred. Check the error at Control Table (Hardware Error Status)!'
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  8, Model: 'XL430-W250', Joint Name: 'gripper'.
+[xs_sdk-1] [ERROR]         Can't find DYNAMIXEL ID:  3, Joint Name: 'shoulder_shadow':
+[xs_sdk-1]                 '[RxPacketError] Hardware error occurred. Check the error at Control Table (Hardware Error Status)!'
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  1, Model: 'XM430-W350', Joint Name: 'waist'.
+[xs_sdk-1] [INFO] Pinging all motors specified in the motor_config file. (Attempt 2/3)
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  7, Model: 'XM430-W350', Joint Name: 'wrist_rotate'.
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  6, Model: 'XM430-W350', Joint Name: 'wrist_angle'.
+[xs_sdk-1] [ERROR]         Can't find DYNAMIXEL ID:  5, Joint Name: 'elbow_shadow':
+[xs_sdk-1]                 '[RxPacketError] Hardware error occurred. Check the error at Control Table (Hardware Error Status)!'
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  4, Model: 'XM430-W350', Joint Name: 'elbow'.
+[xs_sdk-1] [ERROR]         Can't find DYNAMIXEL ID:  2, Joint Name: 'shoulder':
+[xs_sdk-1]                 '[RxPacketError] Hardware error occurred. Check the error at Control Table (Hardware Error Status)!'
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  8, Model: 'XL430-W250', Joint Name: 'gripper'.
+[xs_sdk-1] [ERROR]         Can't find DYNAMIXEL ID:  3, Joint Name: 'shoulder_shadow':
+[xs_sdk-1]                 '[RxPacketError] Hardware error occurred. Check the error at Control Table (Hardware Error Status)!'
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  1, Model: 'XM430-W350', Joint Name: 'waist'.
+[xs_sdk-1] [INFO] Pinging all motors specified in the motor_config file. (Attempt 3/3)
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  7, Model: 'XM430-W350', Joint Name: 'wrist_rotate'.
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  6, Model: 'XM430-W350', Joint Name: 'wrist_angle'.
+[xs_sdk-1] [ERROR]         Can't find DYNAMIXEL ID:  5, Joint Name: 'elbow_shadow':
+[xs_sdk-1]                 '[RxPacketError] Hardware error occurred. Check the error at Control Table (Hardware Error Status)!'
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  4, Model: 'XM430-W350', Joint Name: 'elbow'.
+[xs_sdk-1] [ERROR]         Can't find DYNAMIXEL ID:  2, Joint Name: 'shoulder':
+[xs_sdk-1]                 '[RxPacketError] Hardware error occurred. Check the error at Control Table (Hardware Error Status)!'
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  8, Model: 'XL430-W250', Joint Name: 'gripper'.
+[xs_sdk-1] [ERROR]         Can't find DYNAMIXEL ID:  3, Joint Name: 'shoulder_shadow':
+[xs_sdk-1]                 '[RxPacketError] Hardware error occurred. Check the error at Control Table (Hardware Error Status)!'
+[xs_sdk-1] [INFO]         Found DYNAMIXEL ID:  1, Model: 'XM430-W350', Joint Name: 'waist'.
+[xs_sdk-1] [FATAL] Failed to find all motors. Shutting down...
+[xs_sdk-1] [FATAL] [1710595977.786931052] [interbotix_xs_sdk.xs_sdk]: InterbotixDriverXS initialization failed: 'Failed to find all motors.'.
+[xs_sdk-1] [FATAL] [1710595977.787167509] [interbotix_xs_sdk.xs_sdk]: For troubleshooting, please see 'https://docs.trossenrobotics.com/interbotix_xsarms_docs/troubleshooting.html'.
+[ERROR] [xs_sdk-1]: process has died [pid 20345, exit code 1, cmd '/home/robot/interbotix_ws/install/interbotix_xs_sdk/lib/interbotix_xs_sdk/xs_sdk --ros-args -r __node:=xs_sdk -r __ns:=/wx250 --params-file /tmp/launch_params_ouxc2wvj'].
+^C[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 20347]
+^C[WARNING] [launch]: user interrupted with ctrl-c (SIGINT) again, ignoring...
+[ERROR] [rviz2-3]: process has died [pid 20349, exit code -2, cmd '/opt/ros/humble/lib/rviz2/rviz2 -d /home/robot/interbotix_ws/install/interbotix_xsarm_descriptions/share/interbotix_xsarm_descriptions/rviz/xsarm_description.rviz --ros-args -r __node:=rviz2 -r __ns:=/wx250 --params-file /tmp/launch_params_xu4i7zcq'].
+~~~
+
+A possible solution is to, 
+
+1. Unplug and plug again the cable to the USB port of the computer, as well as the robotic arm.
+
+2. Run the dynamixel wizard, and click the "Reboot" radio button to reset the robotic arm, especially those joints which are not connected well.
+<img src="./image/physical_arm_20240315_3.jpeg">
+
