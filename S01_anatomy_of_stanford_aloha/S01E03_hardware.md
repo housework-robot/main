@@ -179,7 +179,10 @@ It should automatically open the rviz simulator.
 
 Step 4. Run a series of predefined actions
 
-Open another terminal, execute the following command,
+Modify the xsarm_dual.py code, if needed, take a look of [the src of this repo](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual/demos/xsarm_dual.py) for reference. 
+
+
+Open another terminal, execute the following command, 
 
 ~~~
 $ cd ~/interbotix_ws/src/interbotix_ros_manipulators/interbotix_ros_xsarms/examples/interbotix_xsarm_dual/demos/
