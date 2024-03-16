@@ -226,9 +226,9 @@ A possible solution is to,
 
 1. Unplug and plug again the cable to the USB port of the computer, as well as the robotic arm, 
 
-2. Detect the USB port " 3. Single arm manipulation -> Step 1 " and " 4. Dual arms manipulation -> Step 1 ",
+2. Detect the USB port, by following the instruction of " 3. Single arm manipulation -> Step 1 " and " 4. Dual arms manipulation -> Step 1 ",
 
-3. Change the configurations if necessary, following the instruction of " 3. Single arm manipulation -> Step 2 " and " 4. Dual arms manipulation -> Step 2 ",
+3. Change the configurations if necessary, following the instruction of " 3. Single arm manipulation -> Step 2 " and " 4. Dual arms manipulation -> Step 2 ".
 
 
 ## 2. Symlink port binding
