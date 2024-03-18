@@ -10,6 +10,11 @@ In last episode, we worked with the [rviz2](https://github.com/ros2/rviz) simula
 First we used one interbotix arm, to execute a series of actions. Then we used two arms to move simultaneously. The purpose was to learn the usage of interbotix robotic arms, but not yet the action learning algorithms. Therefore, in both scenarios, the series of actions were hard-coded in our python programs. 
 
 
+   [![S01E03 Manipulate the physical interbotix robotic arm, on youtube](https://img.youtube.com/vi/f9kXg28GX2g/hqdefault.jpg)](https://www.youtube.com/watch?v=f9kXg28GX2g)
+   
+   Click the image to view the video on youtube. 
+
+
 # 2. Preparation
 
 Step 1. We took an Interbotix vx300 robotic arm out of the box, and connected it to a computer USB port. We used a linux desktop with GPU, [Lamdba Tensorbook](https://lambdalabs.com/deep-learning/laptops/tensorbook/specs).
