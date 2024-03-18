@@ -45,4 +45,7 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 3. S01E03. [Manipulate the physical interbotix robotic arm](./S01_anatomy_of_stanford_aloha/S01E03_hardware.md)
 
+   [![S01E03 Manipulate the physical interbotix robotic arm, on youtube](https://img.youtube.com/vi/f9kXg28GX2g/hqdefault.jpg)](https://www.youtube.com/watch?v=f9kXg28GX2g)
+   
+
 # To be continued.
