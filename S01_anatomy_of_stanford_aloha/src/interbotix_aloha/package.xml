@@ -1,0 +1,26 @@
+<?xml version="1.0"?>  
+<package format="3">  
+  <name>interbotix_aloha</name>  
+  <version>0.0.0</version>  
+  <description>ALOHA: A Low-cost Open-source Hardware System for Bimanual Teleoperation</description>  
+  <maintainer email="tonyzhao@stanford.edu">Tony Zhao</maintainer>  
+  <author email="tonyzhao@stanford.edu">Tony Zhao</author>  
+  <license>BSD</license>  
+  
+  <depend>interbotix_xs_msgs</depend>  
+  <depend>interbotix_xs_modules</depend>
+  <depend>interbotix_xsarm_control</depend>  
+  <depend>rosbag2</depend>
+  <depend>rclcpp</depend> 
+  <depend>tf2_ros</depend>  
+  <depend>rviz2</depend>
+  <depend>sensor_msgs</depend>  
+  <depend>std_msgs</depend>  
+  <depend>std_srvs</depend>  
+  <depend>launch_ros</depend>
+  <depend>launch</depend>
+
+  <export>  
+    <build_type>ament_cmake</build_type> <!-- 或者使用ament_python，取决于你的包类型 -->  
+  </export>  
+</package>
