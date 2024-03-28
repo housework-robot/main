@@ -52,7 +52,7 @@ void joint_state_cb(JointState::SharedPtr msg)
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<rclcpp::Node>("xsarm_puppet_single");
+  auto node = std::make_shared<rclcpp::Node>("xsarm_puppet_single_left");
 
   node->declare_parameter<std::string>("robot_name_master_left", "master_left");
   node->declare_parameter<std::string>("robot_name_puppet_left", "puppet_left");
