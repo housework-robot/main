@@ -1,4 +1,4 @@
-# Stanford aloha arms
+# Clone Stanford aloha robotic arms hardware architecture
 SO1E04, 2024.03.28
 
 # 1. Objective
