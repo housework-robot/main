@@ -25,7 +25,11 @@ Since Stanford aloha project's codes do not support ROS2/Humble with Ubuntu22.04
 
 3. Display 4 arms' movements with rviz simulation, this means we need to create a rviz configuation file to display the 4 arms. 
 
-4. Configurate the USB ports to connect the computers to the arms. 
+4. Configurate the USB ports to connect the computers to the arms.
+
+[![Clone Stanford aloha robotic arms hardware architecture, on youtube](https://img.youtube.com/vi/D53mRnVwRCs/hqdefault.jpg)](https://www.youtube.com/watch?v=D53mRnVwRCs)
+ 
+Click the preview image to see the video on youtube. 
 
 
 # 2. Source code
