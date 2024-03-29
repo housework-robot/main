@@ -195,7 +195,7 @@ Since Stanford aloha project's codes do not support ROS2/Humble with Ubuntu22.04
 
 # 5. Trouble shooting
 
-## 1. Fastrtps port failure
+## 5.1 Fastrtps port failure
 
 ![Fastrtps port failure](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/image/fastrtps_failure.png)
 
@@ -205,7 +205,7 @@ If you encounter the above error, the solution is simpley reboot your ubuntu OS.
 $ sudo reboot now
 ~~~
 
-## 2. Simulation movement is not smooth
+## 5.2 Simulation movement is not smooth
 
 [![The interbotix robotic arms do not move smoothly in rviz simulation](https://img.youtube.com/vi/OdhbOGEiO4Y/hqdefault.jpg)](https://www.youtube.com/watch?v=OdhbOGEiO4Y)
 
