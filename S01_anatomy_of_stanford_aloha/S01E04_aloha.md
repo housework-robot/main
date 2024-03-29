@@ -194,3 +194,30 @@ Since Stanford aloha project's codes do not support ROS2/Humble with Ubuntu22.04
 
 
 # 5. Trouble shooting
+
+## 1. Fastrtps port failure
+
+![Fastrtps port failure](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/image/fastrtps_failure.png)
+
+If you encounter the above error, the solution is simpley reboot your ubuntu OS.
+
+~~~
+$ sudo reboot now
+~~~
+
+## 2. Simulation movement is not smooth
+
+[![The interbotix robotic arms do not move smoothly in rviz simulation](https://img.youtube.com/vi/OdhbOGEiO4Y/hqdefault.jpg)](https://www.youtube.com/watch?v=OdhbOGEiO4Y)
+
+If the four arms do not move smoothly in rviz simulation, a possible solution consists of several steps. 
+
+1. Change the coordinates of the 4 arms, referring to [the launch file](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/src/interbotix_aloha/launch/xsarm_puppet.launch.py).
+
+2. Change the display window size of the rviz simulator, referring to [the rviz configuation file](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/src/interbotix_aloha/rviz/stanford_aloha.rviz).
+
+3. Change the demo python code from single thread to multiple threads, referring to [the demo python code](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/src/interbotix_aloha/demo/bartender_puppet.py).
+
+After those above, the 4 arms in rviz simulator move like this,
+
+[![The interbotix robotic arms move smoothly in rviz simulation](https://img.youtube.com/vi/Gzb734OmZ6s/hqdefault.jpg)](https://www.youtube.com/watch?v=Gzb734OmZ6s)
+
