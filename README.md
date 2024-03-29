@@ -46,6 +46,11 @@ Here is a set of repositories, containing 3 kinds of contents,
 3. S01E03. [Manipulate the physical interbotix robotic arm](./S01_anatomy_of_stanford_aloha/S01E03_hardware.md)
 
    [![S01E03 Manipulate the physical interbotix robotic arm, on youtube](https://img.youtube.com/vi/f9kXg28GX2g/hqdefault.jpg)](https://www.youtube.com/watch?v=f9kXg28GX2g)
+
+
+4. S01E04. [Clone Stanford aloha robotic arms hardware architecture](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/S01E04_aloha.md)
+
+   [![S01E04 Clone Stanford aloha robotic arms hardware architecture, on youtube](https://img.youtube.com/vi/6jDUNo8QN2U/hqdefault.jpg)](https://www.youtube.com/watch?v=6jDUNo8QN2U)
    
 
 # To be continued.
