@@ -50,7 +50,7 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 4. S01E04. [Clone Stanford aloha robotic arms hardware architecture](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/S01E04_aloha.md)
 
-   [![S01E04 Clone Stanford aloha robotic arms hardware architecture, on youtube](https://img.youtube.com/vi/6jDUNo8QN2U/hqdefault.jpg)](https://www.youtube.com/watch?v=6jDUNo8QN2U)
+   [![S01E04 Clone Stanford aloha robotic arms hardware architecture, on youtube](https://img.youtube.com/vi/D53mRnVwRCs/hqdefault.jpg)](https://www.youtube.com/watch?v=D53mRnVwRCs)
    
 
 # To be continued.
