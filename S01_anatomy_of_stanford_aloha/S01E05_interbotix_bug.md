@@ -22,7 +22,7 @@ TL;DR
 
 The solution is simple, 
 
-## Step 1. Download the updated xsarm_puppet.launch.py, in addition to the package.xml and CMakeLists.txt.
+### Step 1. Download the updated codes.
 
 1. Download xsarm_puppet.launch.py
 
@@ -42,7 +42,7 @@ You can download the CMakeLists.txt, either from the [interbotix github repo](ht
 
 
 
-## Step 2. Recompile the interbotix system. 
+### Step 2. Recompile the interbotix system. 
 
 Use the downloaded codes, to replace your old codes.
 
@@ -55,7 +55,7 @@ $ colcon build --symlink-install
 $ source /home/robot/interbotix_ws/install/setup.bash 
 ~~~
 
-## Step 3. Rerun the xsarm puppet package
+### Step 3. Rerun the xsarm puppet package
 
 ~~~
 $ ros2 launch interbotix_xsarm_puppet xsarm_puppet.launch3.py robot_model_leader:=wx250s robot_model_follower:=vx300s
@@ -122,7 +122,7 @@ $ ros2 launch interbotix_xsarm_puppet xsarm_puppet.launch3.py robot_model_leader
 ~~~
 
 
-## Step 4. Play with the puppet arm
+### Step 4. Play with the puppet arm
 
 You can now manually controlled the wx250s leader robotic arm, and the vx300s follower robotic arm will automatically imitate the exact same movements, referring to the following video clip. 
 
