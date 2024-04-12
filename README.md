@@ -52,5 +52,9 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![S01E04 Clone Stanford aloha robotic arms hardware architecture, on youtube](https://img.youtube.com/vi/D53mRnVwRCs/hqdefault.jpg)](https://www.youtube.com/watch?v=D53mRnVwRCs)
    
+5. S01E05. [Interbotix bug fixing](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/S01E05_interbotix_bug.md)
 
+   [![S01E05 Interbotix bug fixing, on youtube](https://img.youtube.com/vi/00pYmQL-r34/hqdefault.jpg)](https://www.youtube.com/watch?v=00pYmQL-r34)
+
+   
 # To be continued.
