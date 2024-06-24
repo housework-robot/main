@@ -41,8 +41,8 @@ Several issues,
 
 LeRobot has not only reimplemented the code for robot motion planning models such as ACT, but also converted the original training data into the data format proposed by LeRobot, which is stored on Huggingface for users to download.
 
-![alt text](image.png)
-![alt text](image.png)
+![LeRobot homepage on huggingface](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image01_huggingface.jpeg)
+![LeRobot homepage on huggingface](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image02_huggingface.jpeg)
 
 For example, the ACT model has a training dataset named [aloha_sim_insertion_human](https://link.zhihu.com/?target=https%3A//huggingface.co/datasets/lerobot/aloha_sim_insertion_human/tree/main). In addition to the documentation files that describe the content and format of the data, the most important file is [train-00000-of-00001.parquet](https://link.zhihu.com/?target=https%3A//huggingface.co/datasets/lerobot/aloha_sim_insertion_human/tree/main/data).
 
@@ -130,8 +130,8 @@ The reason for choosing the [parquet](https://link.zhihu.com/?target=https%3A//p
 
 LeRobot has also stored these training datasets on Github,
 
-![alt text](image.png)
-![alt text](image.png)
+![LeRobot homepage on github](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image03_github.jpeg)
+![LeRobot homepage on github](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image04_github.jpeg)
 
 Comparing the LeRobot training data stored on Github and Huggingface, these two datasets are not only different in their file structures , but also the file formats. On Github, the file format is arrow, e.g `data-00000-of-00001.arrow`, while on Huggingface, the file format is parquest, e.g `train-00000-of-00001.parquet`. 
 
