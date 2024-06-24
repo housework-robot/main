@@ -61,7 +61,6 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 1. S02E01. [Why to learn LeRobot?](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/why_to_learn_lerobot.md)
 
-   [![S02E01 Successfully clone Stanford aloha robot, will mount LeRobot robot brain to aloha body, on youtube](https://img.youtube.com/vi/KeyY7mVpCds/hqdefault.jpg)]
-   ([https://youtu.be/KeyY7mVpCds](https://www.youtube.com/watch?v=KeyY7mVpCds))
+   [![S02E01 Successfully clone Stanford aloha robot, will mount LeRobot robot brain to aloha body, on youtube](https://img.youtube.com/vi/KeyY7mVpCds/hqdefault.jpg)](https://www.youtube.com/watch?v=KeyY7mVpCds)
    
 ### To be continued.
