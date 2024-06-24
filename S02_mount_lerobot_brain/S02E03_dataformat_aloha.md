@@ -1,4 +1,4 @@
-# 1. Connecting the robot brain with the body
+# 1. Mount a robot brain to its body
 
 In [the previous article](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_dataformat_lerobot.md), we analyzed the file format of LeRobot training dataset to understand the input and output data formats of the LeRobot robot brain.
 
@@ -21,7 +21,7 @@ Our motivation for doing this is,
 
 # 2. Stanford aloha native dataset
 
-## 2.1 Data structure of the native real training Dataset
+## 2.1 The original real training Dataset
 
 On [the GitHub homepage](https://mobile-aloha.github.io/) of the Stanford mobile aloha project, there is a link to some training datasets they collected. These training datasets were obtained through manual operation of the Aloha robot bimanual robot.
 
@@ -94,7 +94,7 @@ $ python3 peek_hdf5.py
 The result indicates that this training dataset contains the system states at 3,750 moments. A system state includes a motion action, and an action consists of the parameters of 14 joints.
 
 
-## 2.2 Data structure of the native simulation training dataset
+## 2.2 The original simulation training dataset
 
 We use the same program to inspect the data structure of the simulation data.
 
@@ -116,7 +116,7 @@ The result shows that this simulation training dataset contains the system state
 Additionally, it is interesting to note that in the simulation training dataset, each video frame is represented as a tensor of shape (480, 640, 3); whereas in the real training dataset, each video frame is flattened into a one-dimensional array with 21,167 elements.
 
 
-# 3. Visualizing the contents of the Stanford aloha native dataset
+# 3. Visualize the contents of the aloha dataset
 
 Download [the ACT code](https://github.com/tonyzhaozh/act) from Github, set up the environment following the user guide, and then view the dataset.
 
@@ -135,7 +135,7 @@ Saved qpos plot to: /home/robot/lerobot/dataset/sim_insertion_scripted/episode_0
 ![episode_0_qpos](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E03_image03_hdf5.jpeg)
 
 
-# 4. Training the ACT model with the Stanford aloha native training dataset
+# 4. Train the ACT model with the aloha dataset
 
 ## 4.1 The training process of the ACT model
 
@@ -272,7 +272,7 @@ Saved video to: ./ckpt/video1.mp4
 [![ckpt/video1](https://img.youtube.com/vi/mMrMPIht3GM/hqdefault.jpg)](https://www.youtube.com/watch?v=mMrMPIht3GM)
 
 
-# 6. Inspecting the data formats and the content of the ACT model's input and output during runtime
+# 6. Inspecting the data structure and content during runtime
 
 Modify [the act-main/imitate_episodes.py code](https://github.com/tonyzhaozh/act/blob/main/imitate_episodes.py) to inspect the data formats and the content of the ACT model's input and output during the execution process.
 
