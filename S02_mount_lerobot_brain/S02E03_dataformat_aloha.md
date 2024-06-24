@@ -25,11 +25,11 @@ Our motivation for doing this is,
 
 On [the GitHub homepage](https://mobile-aloha.github.io/) of the Stanford mobile aloha project, there is a link to some training datasets they collected. These training datasets were obtained through manual operation of the Aloha robot bimanual robot.
 
-![alt text](image-1.png)
+![Stanford aloha real training dataset](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E03_image01_dataset.jpeg)
 
 Additionally, if for the time being we do not focus on the mobile base of aloha robot, but only focus on the motion of its dual arms, then we can find the simulation dataset the Stanford team collected, on [the ACT GitHub homepage](https://github.com/tonyzhaozh/act), which is used for the training of the Action Chunking with Transformers (ACT) motion planning model.
 
-![alt text](image-2.png)
+![Stanford aloha simulation training dataset](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E03_image02_dataset.jpeg)
 
 We first downloaded [the aloha_mobile_shrimp_truncated dataset](https://drive.google.com/drive/folders/1FP5eakcxQrsHyiWBRDsMRvUfSxeykiDc) from the real dataset collection, which includes an MP4 video file and several [HDF5](https://docs.hdfgroup.org/hdf5/v1_14/_getting_started.html) files.
 
@@ -132,7 +132,7 @@ Saved qpos plot to: /home/robot/lerobot/dataset/sim_insertion_scripted/episode_0
 
 [[video]]
 
-![alt text](image-3.png)
+![episode_0_qpos](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E03_image03_hdf5.jpeg)
 
 
 # 4. Training the ACT model with the Stanford aloha native training dataset
@@ -232,9 +232,9 @@ ckpt/
 0 directories, 11 files
 ~~~
 
-![alt text](image-4.png)
-![alt text](image-5.png)
-![alt text](image-6.png)
+![train_val_kl_seed_0](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E02_image05_training.png)
+![train_val_l1_seed_0](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E02_image06_training.png)
+![train_val_loss_seed_0](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E02_image07_training.png)
 
 
 # 5. Use the ACT model after training
