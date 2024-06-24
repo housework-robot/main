@@ -37,7 +37,7 @@ It is hoped that LeRobot can also replicate this success by organizing experts t
 
 To facilitate the standardization of APIs, it is advisable to adopt a divide-and-conquer approach, dividing the robot into three parts: the brain, brainstem, and body.
 
-## 2.1 Robot Brainstem
+## 2.1 Robot brainstem
 
 LeRobot utilizes [Gymnasium](https://gymnasium.farama.org/content/basic_usage/) as the hub connecting the brain and the body of the robot, transmitting the action commands from the brain to the body, and then relaying the operational results and environmental information collected by the body, such as videos captured by the body's camera, back to the brain.
 
@@ -52,7 +52,7 @@ Or, whether generative models like Diffusion Transformer can also be used as the
 We set aside these questions for the time being, and use Gym to solve some problems, if not all of them.
 
 
-## 2.2 Robot Brain
+## 2.2 Robot brain
 
 Currently, LeRobot has reprogramed three robot brains, or more accurately, three robot motion planning models, using their proposed standardized APIs. These models are [aloha](https://link.zhihu.com/?target=https%3A//github.com/tonyzhaozh/aloha/), [diffusion](https://link.zhihu.com/?target=https%3A//github.com/real-stanford/diffusion_policy), and [tdmpc](https://link.zhihu.com/?target=https%3A//github.com/fyhMer/fowm).
 
@@ -63,7 +63,7 @@ It is worth to watch closely, in addition to visual-motor models, LeRobot may al
 An even more exciting question is whether the robot brain  will evolve from visual-motor model, to visual-lingual-motor model, and then to the multi-modal large language model (MLLM).
 
 
-## 2.3 Robot Body
+## 2.3 Robot body
 
 The current industry consensus is to use ROS (Robot Operating System) to control the hardware of the robot body.
 
@@ -82,7 +82,7 @@ The current industry consensus is to use ROS (Robot Operating System) to control
 For robots, or more specifically, for humanoid robots, can we develop a humanoid robot operating system based on the practices of Dora-rs, Interbotix, and Robo-gym?
 
 
-## 2.4 Synchronization of Physical Body and Online Simulation
+## 2.4 Synergy of physical body and online simulation
 
 By integrating the physical robot body with online simulation, not only it facilitates a low-cost and safer training of robots through simulation, but also improves the user experience when the remote controlling of robots.
 
