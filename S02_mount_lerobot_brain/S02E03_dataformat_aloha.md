@@ -33,7 +33,7 @@ Additionally, if for the time being we do not focus on the mobile base of aloha 
 
 We first downloaded [the aloha_mobile_shrimp_truncated dataset](https://drive.google.com/drive/folders/1FP5eakcxQrsHyiWBRDsMRvUfSxeykiDc) from the real dataset collection, which includes an MP4 video file and several [HDF5](https://docs.hdfgroup.org/hdf5/v1_14/_getting_started.html) files.
 
-We used a Python program shared by an engineer on Stackoverflow that utilizes [the h5py library](https://docs.h5py.org/en/stable/quick.html%23quick) to open the HDF5 files.
+We used a Python program shared by an engineer on Stackoverflow that utilizes [the h5py library](https://docs.h5py.org/en/stable/quick.html) to open the HDF5 files.
 
 ~~~
 import h5py
