@@ -65,6 +65,12 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 2. S02E02. [The data format of LeRobot brain](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_dataformat_lerobot.md)
 
-   ![The dataformat of lerobot](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image04_github.jpeg)
+   <img src="https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image04_github.jpeg" alt="The dataformat of lerobot" width="500" height="300">
+
+4. S02E03. [A case study, the data format of the native Stanford aloha robot body](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_dataformat_aloha.md)
+
+   [![The evaluation of the model training result](https://img.youtube.com/vi/6vT0V0ciftI/hqdefault.jpg)](https://www.youtube.com/watch?v=6vT0V0ciftI)
+
+
    
 ### To be continued ...
