@@ -57,6 +57,8 @@ Here is a set of repositories, containing 3 kinds of contents,
    [![S01E05 Interbotix bug fixing, on youtube](https://img.youtube.com/vi/00pYmQL-r34/hqdefault.jpg)](https://www.youtube.com/watch?v=00pYmQL-r34)
 
 
-## Season 2. Mount LeRobot robot brain to various robot bodies
+## Season 2. Mount LeRobot robot brain
+
+1. S02E01. [Why to learn LeRobot?](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/why_to_learn_lerobot.md)
    
-# To be continued.
+### To be continued.
