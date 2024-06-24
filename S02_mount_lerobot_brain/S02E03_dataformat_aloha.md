@@ -130,7 +130,7 @@ Saved video to: /home/robot/lerobot/dataset/sim_insertion_scripted/episode_0_vid
 Saved qpos plot to: /home/robot/lerobot/dataset/sim_insertion_scripted/episode_0_qpos.png
 ~~~
 
-[[video]]
+[![episode_0_video](https://img.youtube.com/vi/Zj7dtEuPCqw/hqdefault.jpg)](https://www.youtube.com/watch?v=Zj7dtEuPCqw)
 
 ![episode_0_qpos](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E03_image03_hdf5.jpeg)
 
@@ -233,7 +233,9 @@ ckpt/
 ~~~
 
 ![train_val_kl_seed_0](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E02_image05_training.png)
+
 ![train_val_l1_seed_0](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E02_image06_training.png)
+
 ![train_val_loss_seed_0](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_src/S02E02_image07_training.png)
 
 
@@ -263,9 +265,11 @@ episode_return=143, episode_highest_reward=3, env_max_reward=4, Success: False
 Saved video to: ./ckpt/video1.mp4
 ~~~
 
-[[video]]
 
-[[video]]
+[![ckpt/video0](https://img.youtube.com/vi/6vT0V0ciftI/hqdefault.jpg)](https://www.youtube.com/watch?v=6vT0V0ciftI)
+
+
+[![ckpt/video1](https://img.youtube.com/vi/mMrMPIht3GM/hqdefault.jpg)](https://www.youtube.com/watch?v=mMrMPIht3GM)
 
 
 # 6. Inspecting the data formats and the content of the ACT model's input and output during runtime
