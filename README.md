@@ -56,5 +56,7 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![S01E05 Interbotix bug fixing, on youtube](https://img.youtube.com/vi/00pYmQL-r34/hqdefault.jpg)](https://www.youtube.com/watch?v=00pYmQL-r34)
 
+
+## Season 2. Mount LeRobot robot brain to various robot bodies
    
 # To be continued.
