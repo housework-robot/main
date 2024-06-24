@@ -44,9 +44,9 @@ LeRobot has not only reimplemented the code for robot motion planning models suc
 ![LeRobot homepage on huggingface](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image01_huggingface.jpeg)
 ![LeRobot homepage on huggingface](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image02_huggingface.jpeg)
 
-For example, the ACT model has a training dataset named [aloha_sim_insertion_human](https://link.zhihu.com/?target=https%3A//huggingface.co/datasets/lerobot/aloha_sim_insertion_human/tree/main). In addition to the documentation files that describe the content and format of the data, the most important file is [train-00000-of-00001.parquet](https://link.zhihu.com/?target=https%3A//huggingface.co/datasets/lerobot/aloha_sim_insertion_human/tree/main/data).
+For example, the ACT model has a training dataset named [aloha_sim_insertion_human](https://huggingface.co/datasets/lerobot/aloha_sim_insertion_human/tree/main). In addition to the documentation files that describe the content and format of the data, the most important file is [train-00000-of-00001.parquet](https://huggingface.co/datasets/lerobot/aloha_sim_insertion_human/tree/main/data).
 
-We downloaded this parquet data file and then used [parquet-cli](https://link.zhihu.com/?target=https%3A//github.com/chhantyal/parquet-cli) to inspect the contents of this parquet file.
+We downloaded this parquet data file and then used [parquet-cli](https://github.com/chhantyal/parquet-cli) to inspect the contents of this parquet file.
 
 ~~~
 $ parq train-00000-of-00001.parquet
@@ -124,7 +124,7 @@ As shown above, the first two rows extracted from the train-00000-of-00001.parqu
 
 Note,
 
-The reason for choosing the [parquet](https://link.zhihu.com/?target=https%3A//parquet.apache.org/docs/overview/) format for storing the files is likely because the file system used by Huggingface to store training dataset is Hadoop's HDFS. Parquet not only supports Hadoop's data processing workflow, but it also allows for reading partial data from files without the need to load the entire file into memory, making [the data reading process very efficient](https://link.zhihu.com/?target=https%3A//www.upsolver.com/blog/apache-parquet-why-use).
+The reason for choosing the [parquet](https://parquet.apache.org/docs/overview/) format for storing the files is likely because the file system used by Huggingface to store training dataset is Hadoop's HDFS. Parquet not only supports Hadoop's data processing workflow, but it also allows for reading partial data from files without the need to load the entire file into memory, making [the data reading process very efficient](https://www.upsolver.com/blog/apache-parquet-why-use).
 
 # 3. LeRobot training dataset stored on Github
 
@@ -135,7 +135,7 @@ LeRobot has also stored these training datasets on Github,
 
 Comparing the LeRobot training data stored on Github and Huggingface, these two datasets are not only different in their file structures , but also the file formats. On Github, the file format is arrow, e.g `data-00000-of-00001.arrow`, while on Huggingface, the file format is parquest, e.g `train-00000-of-00001.parquet`. 
 
-The [Parquet vs Arrow](https://link.zhihu.com/?target=https%3A//stackoverflow.com/questions/56472727/difference-between-apache-parquet-and-arrow) data file formats have different uses:
+The [Parquet vs Arrow](https://stackoverflow.com/questions/56472727/difference-between-apache-parquet-and-arrow) data file formats have different uses:
 
 1. **Parquet** is used for storage; the file size is smaller. However, when used, it requires decompression and  decoding into a predetermined format for easy data reading.
 
@@ -143,7 +143,7 @@ The [Parquet vs Arrow](https://link.zhihu.com/?target=https%3A//stackoverflow.co
 
 3. The same data can be stored as either a parquet file or an arrow file. The size of the parquet file is much smaller than that of the arrow file.
 
-When a parquet file is opened in memory, it requires both decompression and decoding into a predetermined format, including the arrow format. Therefore, [parquet and arrow can be used in conjunction with each other](https://link.zhihu.com/?target=https%3A//arrow.apache.org/cookbook/py/io.html).
+When a parquet file is opened in memory, it requires both decompression and decoding into a predetermined format, including the arrow format. Therefore, [parquet and arrow can be used in conjunction with each other](https://arrow.apache.org/cookbook/py/io.html).
 
 
 # 4. Inspecting the contents of the arrow file
