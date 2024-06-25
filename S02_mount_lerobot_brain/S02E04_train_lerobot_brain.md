@@ -72,7 +72,7 @@ LeRobot offers two methods for training the model:
 
     LeRobot provides a ready-to-go training code, [lerobot/scripts/train.py](https://github.com/huggingface/lerobot/blob/main/lerobot/scripts/train.py). The only thing you need to do is to set the parameters yourself to do your job.  
 
-    However, directly reading and understanding the source code of `lerobot/scripts/train.py` is a bit challenging. Fortunately, LeRobot provides a user guide for this code.
+    However, directly reading and understanding the source code of `lerobot/scripts/train.py` is a bit challenging. Fortunately, LeRobot provides [a user guide for this code](https://github.com/huggingface/lerobot/blob/main/examples/4_train_policy_with_script.md).
 
     We use this method to complete the training of the aloha-act model.
 
