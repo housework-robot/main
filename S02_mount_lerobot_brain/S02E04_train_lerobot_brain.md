@@ -238,7 +238,7 @@ Open `eval_episode_[0-3].mp4`, and notice that the motions of the Aloha dual-arm
 
 Although the task of 'insertion' was not successfully completed, our goal was to complete the model training in a shorter amount of time, rather than pursuing the accuracy of the model.
 
-[[video]]
+[![eval_episode_3.mp4](https://img.youtube.com/vi/Z4bYLt5zQUg/hqdefault.jpg)](https://www.youtube.com/watch?v=Z4bYLt5zQUg)
 
 
 # 4. Use model after training
@@ -340,4 +340,4 @@ As anticipated, none of the episodes successfully completed the task. This is be
 
 Reviewing the video, it confirms again that although the aloha bimanual robot's motions are smooth, meeting our expectation, how as anticipated, the arms did not successfully complete the insertion task.
 
-[[video]]
+[![eval_episode_9.mp4](https://img.youtube.com/vi/icePdOwNmkQ/hqdefault.jpg)](https://www.youtube.com/watch?v=icePdOwNmkQ)
