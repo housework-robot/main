@@ -2,7 +2,7 @@
 
 The subject of this article is to train the LeRobot robot brain.
 
-Specifically, it is to train [the Action Chunking with Transformers (ACT)](https://github.com/tonyzhaozh/act) bimanual robot motion planning model developed by the Stanford aloha team, using the simulation training data provided by LeRobot, to complete the `[aloha_sim_insertion_scripted](https://github.com/huggingface/lerobot/tree/main/tests/data/lerobot/aloha_sim_insertion_scripted)` action.
+Specifically, it is to train [the Action Chunking with Transformers (ACT)](https://github.com/tonyzhaozh/act) bimanual robot motion planning model developed by the Stanford aloha team, using the simulation training data provided by LeRobot, to complete the [aloha_sim_insertion_scripted](https://github.com/huggingface/lerobot/tree/main/tests/data/lerobot/aloha_sim_insertion_scripted) action.
 
 1. LeRobot has optimized and reimplemented the original ACT model code of the Stanford aloha team, making it more structured, easier to understand, and easier to redevelop.
 
@@ -10,7 +10,7 @@ Specifically, it is to train [the Action Chunking with Transformers (ACT)](https
 
 The subject of the next article will be how to perform a robot head transplant.
 
-Epecifically, we will mount the LeRobot robot brain to the simulated body of the Stanford aloha robot via the LeRobot robot brainstem.
+Specifically, we will mount the LeRobot robot brain to the simulated body of the Stanford aloha robot via the LeRobot robot brainstem.
 
 In the later articles, we will mount the LeRobot robot brain and brainstem to the real hardware body of the Stanford aloha robot.
 
@@ -70,7 +70,7 @@ LeRobot offers two methods for training the model:
 
 2. Set the parameters yourself, and then run the ready-to-go training code provided by LeRobot to complete the training task.
 
-    LeRobot provides a ready-to-go training code, `[lerobot/scripts/train.py](https://github.com/huggingface/lerobot/blob/main/lerobot/scripts/train.py)`. The only thing you need to do is to set the parameters yourself to do your job.  
+    LeRobot provides a ready-to-go training code, [lerobot/scripts/train.py](https://github.com/huggingface/lerobot/blob/main/lerobot/scripts/train.py). The only thing you need to do is to set the parameters yourself to do your job.  
 
     However, directly reading and understanding the source code of `lerobot/scripts/train.py` is a bit challenging. Fortunately, LeRobot provides a user guide for this code.
 
@@ -82,7 +82,7 @@ To train the aloha-act model, you only need to perform the following 3 steps.
 
 Modify the related parameters in the configuration file.
 
-Only one configuration file needs modification, which is `[lerobot/configs/policy/act.yaml](https://github.com/huggingface/lerobot/blob/main/lerobot/configs/policy/act.yaml)`.
+Only one configuration file needs modification, which is [lerobot/configs/policy/act.yaml](https://github.com/huggingface/lerobot/blob/main/lerobot/configs/policy/act.yaml).
 
 ~~~
 # ${lerobot_home}/lerobot/configs/policy/act.yaml
@@ -202,7 +202,7 @@ hydra:
 ...  
 ~~~
 
-Examining the ${lerobot_home}/outputs/train directory, and find that it contains the following contents:
+Examining the `${lerobot_home}/outputs/train` directory, and find that it contains the following contents:
 
 ~~~
 (lerobot)$ tree outputs/train/2024-06-23/16-48-49_aloha_act_default/
