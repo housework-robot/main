@@ -63,14 +63,21 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![S02E01 Successfully clone Stanford aloha robot, will mount LeRobot robot brain to aloha body, on youtube](https://img.youtube.com/vi/KeyY7mVpCds/hqdefault.jpg)](https://www.youtube.com/watch?v=KeyY7mVpCds)
 
+
 2. S02E02. [The data format of LeRobot brain](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_dataformat_lerobot.md)
 
    <img src="https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image04_github.jpeg" alt="The dataformat of lerobot" width="500" height="300">
 
-4. S02E03. [A case study, the data format of the native Stanford aloha robot body](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_dataformat_aloha.md)
+
+3. S02E03. [A case study, the data format of the native Stanford aloha robot body](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_dataformat_aloha.md)
 
    [![The evaluation of the model training result](https://img.youtube.com/vi/6vT0V0ciftI/hqdefault.jpg)](https://www.youtube.com/watch?v=6vT0V0ciftI)
 
 
+4. S02E04. [Train leRobot brain](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E04_train_lerobot_brain.md)
+
+   [![The evaluation of leRobot model training result](https://img.youtube.com/vi/icePdOwNmkQ/hqdefault.jpg)](https://www.youtube.com/watch?v=icePdOwNmkQ)
+
+   
    
 ### To be continued ...
