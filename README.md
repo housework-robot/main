@@ -76,7 +76,7 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 4. S02E04. [Train leRobot brain](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E04_train_lerobot_brain.md)
 
-   [![The evaluation of leRobot model training result](https://img.youtube.com/vi/icePdOwNmkQ/hqdefault.jpg)](https://www.youtube.com/watch?v=icePdOwNmkQ)
+   [![The evaluation of leRobot model training result](https://img.youtube.com/vi/-HI1ylUtpn4/hqdefault.jpg)](https://www.youtube.com/watch?v=-HI1ylUtpn4)
 
    
    
