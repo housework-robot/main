@@ -550,8 +550,232 @@ tensor([[[[0., 0., 0.,  ..., 0., 0., 0.],
 ~~~
 
 
-
 ## 5.2 The creation of LeRobot brain
+
+To invoke the LeRobot brain within the Stanford Aloha system, we need to understand how to instantiate a LeRobot `policy`. 
+
+1. Set up parameters
+
+Read the source code of [lerobot/scripts/eval.py](https://github.com/huggingface/lerobot/blob/main/lerobot/scripts/eval.py%23L154),
+
+~~~
+def main(
+    pretrained_policy_path: Path | None = None,
+    hydra_cfg_path: str | None = None,
+    out_dir: str | None = None,
+    config_overrides: list[str] | None = None,
+):
+    
+    if pretrained_policy_path is not None:
+        hydra_cfg = init_hydra_config(
+            str(pretrained_policy_path / "config.yaml"), 
+            config_overrides
+        )
+    else:
+        ...
+
+    if out_dir is None:
+        out_dir = f"outputs/eval/{dt.now().strftime('%Y-%m-%d/%H-%M-%S')}_{hydra_cfg.env.name}_{hydra_cfg.policy.name}"
+    ...
+
+    logging.info("Making environment.")
+    env = make_env(hydra_cfg)
+
+    logging.info("Making policy.")
+    if hydra_cfg_path is None:
+        # policy = ACTPolicy(hydra_cfg)
+        policy = make_policy(
+            hydra_cfg=hydra_cfg, 
+            pretrained_policy_name_or_path=str(pretrained_policy_path)
+        )
+    else:
+        ...
+
+
+if __name__ == "__main__":
+    init_logging()
+
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "-p",
+        "--pretrained-policy-name-or-path",
+        help=(
+            "Either the repo ID of a model hosted on the Hub or a path to a directory containing weights "
+            "saved using `Policy.save_pretrained`. If not provided, the policy is initialized from scratch "
+            "(useful for debugging). This argument is mutually exclusive with `--config`."
+        ),
+    )
+    group.add_argument(
+        "--config",
+        help=(
+            "Path to a yaml config you want to use for initializing a policy from scratch (useful for "
+            "debugging). This argument is mutually exclusive with `--pretrained-policy-name-or-path` (`-p`)."
+        ),
+    )
+    parser.add_argument("--revision", help="Optionally provide the Hugging Face Hub revision ID.")
+    parser.add_argument(
+        "--out-dir",
+        help=(
+            "Where to save the evaluation outputs. If not provided, outputs are saved in "
+            "outputs/eval/{timestamp}_{env_name}_{policy_name}"
+        ),
+    )
+    parser.add_argument(
+        "overrides",
+        nargs="*",
+        help="Any key=value arguments to override config values (use dots for.nested=overrides)",
+    )
+    args = parser.parse_args()
+    
+    if args.pretrained_policy_name_or_path is None:
+        ...
+    else:
+        try:
+            pretrained_policy_path = Path(
+                snapshot_download(args.pretrained_policy_name_or_path, revision=args.revision)
+            )
+        except (HFValidationError, RepositoryNotFoundError) as e:
+            ...
+            
+        main(
+            pretrained_policy_path=pretrained_policy_path,
+            out_dir=args.out_dir,
+            config_overrides=args.overrides,
+        )                  
+~~~
+
+Comparing the above source code with the CLI command that we executed, 
+
+~~~
+# (lerobot) robot@robot-test:~/lerobot$ python3 lerobot/scripts/eval.py \
+-p outputs/train/2024-06-23/16-48-49_aloha_act_default/checkpoints/last/pretrained_model \
+eval.n_episodes=1 \
+eval.batch_size=10
+~~~
+
+
+The values of the input parameters are,
+
+~~~
+pretrained_policy_path: "outputs/train/2024-06-23/16-48-49_aloha_act_default/checkpoints/last/pretrained_model",
+hydra_cfg_path: None,
+out_dir: None，
+config_overrides: None
+~~~
+
+
+2. The content of `hydra_cfg`
+
+Following is the source code of the creation of `policy`, note that there is an input parameter `hydra_cfg`, we need to inspect its content, 
+
+~~~
+policy = make_policy(
+            hydra_cfg=hydra_cfg, 
+            pretrained_policy_name_or_path=str(pretrained_policy_path)
+        )
+~~~
+
+
+Following is the source code of the creation of `hydra_cfg`, 
+
+~~~
+hydra_cfg = init_hydra_config(
+                str(pretrained_policy_path / "config.yaml"), 
+                config_overrides
+            )
+~~~
+
+As mentioned above, 
+
+~~~
+pretrained_policy_path: "outputs/train/2024-06-23/16-48-49_aloha_act_default/checkpoints/last/pretrained_model",
+config_overrides: None
+~~~
+
+
+Therefore, the content of `hydra_cfg` comes from `outputs/train/2024-06-23/16-48-49_aloha_act_default/checkpoints/last/pretrained_model/config.yaml`
+
+~~~
+resume: false
+device: cuda
+use_amp: false
+seed: 1000
+dataset_repo_id: lerobot/aloha_sim_insertion_scripted
+video_backend: pyav
+training:
+  offline_steps: 10010
+  online_steps: 0
+  online_steps_between_rollouts: 1
+  online_sampling_ratio: 0.5
+  online_env_seed: ???
+  eval_freq: 10000
+  log_freq: 250
+  save_checkpoint: true
+  save_freq: 10000
+  num_workers: 4
+  batch_size: 8
+  image_transforms:
+    ...
+eval:
+  n_episodes: 50
+  batch_size: 50
+  use_async_envs: false
+wandb:
+  ...
+fps: 50
+env:
+  name: aloha
+  task: AlohaInsertion-v0
+  state_dim: 14
+  action_dim: 14
+  fps: ${fps}
+  episode_length: 400
+  gym:
+    obs_type: pixels_agent_pos
+    render_mode: rgb_array
+override_dataset_stats:
+  ...
+policy:
+  name: act
+  n_obs_steps: 1
+  chunk_size: 100
+  n_action_steps: 100
+  input_shapes:
+    observation.images.top:
+    - 3
+    - 480
+    - 640
+    observation.state:
+    - ${env.state_dim}
+  output_shapes:
+    action:
+    - ${env.action_dim}  
+  ...
+  vision_backbone: resnet18
+  pretrained_backbone_weights: ResNet18_Weights.IMAGENET1K_V1
+  replace_final_stride_with_dilation: false
+  pre_norm: false
+  dim_model: 512
+  n_heads: 8
+  dim_feedforward: 3200
+  feedforward_activation: relu
+  n_encoder_layers: 4
+  n_decoder_layers: 1
+  use_vae: true
+  latent_dim: 32
+  n_vae_encoder_layers: 4
+  temporal_ensemble_momentum: null
+  dropout: 0.1
+  kl_weight: 10.0    
+~~~
+
+The content of the configuration file `config.yaml` is very comprehensive, covering the system structure of the LeRobot brain (`policy`), as well as the settings for the LeRobot brainstem (`env`), in addition to the control parameters of the training process. 
+
+
+
 
 ## 5.3 The usage of LeRobot brain
 
