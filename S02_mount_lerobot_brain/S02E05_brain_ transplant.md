@@ -260,7 +260,7 @@ $ echo $PYTHONPATH
 
 ## 4.2 CLI command
 
-We modified Stanford aloha's source code, `imitate_episodes.py`, and named the new code as `imitate_lerobot.py`. The source code of [imitate_lerobot.py]() is provided in this repo. 
+We modified Stanford aloha's source code, `imitate_episodes.py`, and named the new code as `imitate_lerobot.py`. The source code of [imitate_lerobot.py](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E05_src/imitate_lerobot.py) is provided in this repo. 
 
 Having completed the modification of the source code, we execute a CLI command similar to [the native aloha CLI command](https://github.com/tonyzhaozh/act?tab=readme-ov-file#simulated-experiments). 
 
