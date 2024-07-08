@@ -391,9 +391,12 @@ We need to take `qpos` and `images.top` out of Aloha `env`'s output, then conver
 
 ## 4.7 the process and result of the exection of Aloha body with LeRobot brain
 
-After meticulous preoperative preparation, the robot brain transplant surgery went relatively smoothly. Below is the execution process of the Aloha body with LeRobot brain for a certain task.
+After meticulous preoperative preparation, the robot brain transplant surgery went relatively smoothly. The video below is the execution process of the Aloha body with LeRobot brain for a certain task.
 
 Note that we have not yet carefully verified whether the simulation task was successfully completed.
 
 Our current goal is that the task execution process should be smooth and free of bugs. And obviously, our goal is achieved. 
 
+[![eval_episode_9.mp4](https://img.youtube.com/vi/icePdOwNmkQ/hqdefault.jpg)](https://www.youtube.com/watch?v=icePdOwNmkQ)
+
+[![aloba_body_lerobot brain in simulation](https://img.youtube.com/vi/nVKSSgXCWbE/hqdefault.jpg)](https://www.youtube.com/watch?v=nVKSSgXCWbE)
