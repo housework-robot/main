@@ -46,7 +46,7 @@ We only need to take 5 steps, to create and use the LeRobot brain, in addition t
 
 Here, we only discuss how to operate and the results of the operation.
 
-If you want to understand not only what is done but also why it is done, please refer to Appendix I of this document, "Appendix I. The life cycle of the LeRobot brain".
+If you want to understand not only what is done but also why it is done, please refer to Appendix I of this document, "[Appendix I. The life cycle of the LeRobot brain](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E05_src/Appendix_I_The_life_cycle_of_the_LeRobot_brain.md)".
 
 
 ## 2.1 CLI command
@@ -119,7 +119,7 @@ We only need to take 5 steps, to create and use an instance of the native Aloha 
 
 Here, we only discuss how to operate and the results of the operation.
 
-If you want to understand not only what is done but also why it is done, please refer to Appendix I of this document, "Appendix II. The life cycle of the native Stanford Aloha brain".
+If you want to understand not only what is done but also why it is done, please refer to Appendix II of this document, "[Appendix II. The life cycle of the native Stanford Aloha brain](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E05_src/Appendix_II_The_life_cycle_of_the_native_Stanford_aloha_brain.md)".
 
 
 ## 3.1 CLI command
