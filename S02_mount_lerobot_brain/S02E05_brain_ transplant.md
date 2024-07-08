@@ -40,18 +40,77 @@ To achieve excellence his work, one must first sharpen his tools. First, let us 
 3. Perform the head transplant surgery, using the Stanford Aloha native system as the framework, and replace the native Aloha brain with LeRobot's brain.
 
 
-
 # 2. LeRobot's brain
+
+We only need to take 5 steps, to create and use the LeRobot brain, in addition to inspecting its data formats.
+
+Here, we only discuss how to operate and the results of the operation.
+
+If you want to understand not only what is done but also why it is done, please refer to Appendix I of this document, "Appendix I. The life cycle of the LeRobot brain".
+
 
 ## 2.1 CLI command
 
+Following the user guide of [the LeRobot github](https://github.com/huggingface/lerobot/blob/main/README.md), when evaluating the performance of a LeRobot after training it, 
+in the CLI command, you should input the path and name of the file folder, which contains the checkpoint of the  LeRobot model.
+
+The `config.yaml` configuration file within the checkpoint file folder contains the system parameters we need.
+
+~~~
+# (lerobot) robot@robot-test:~/lerobot$ python3 lerobot/scripts/eval.py \
+  -p outputs/train/2024-06-23/16-48-49_aloha_act_default/checkpoints/last/pretrained_model \
+  eval.n_episodes=1 \
+  eval.batch_size=10
+~~~
+
+
 ## 2.2 the creation of hydra_cfg
+
+To generate hydra_cfg, which will be useful when creating LeRobot brain (aka `policy`), you need the the `config.yaml` file from the checkpoint file folder as an input parameter,
+
+~~~
+hydra_cfg = init_hydra_config(
+                str(pretrained_policy_path / "config.yaml"), 
+                config_overrides
+            )
+~~~
+
 
 ## 2.3 the creation of policy
 
+Use `hydra_cfg` as input parameter, to create an instance of `policy`.
+
+~~~
+policy = make_policy(
+            hydra_cfg=hydra_cfg, 
+            pretrained_policy_name_or_path=str(pretrained_policy_path)
+        )
+~~~
+
+
 ## 2.4 the usage of policy 
 
+~~~
+actions = policy.select_action(observations)
+~~~
+
+As the output of `policy`, `actions` usually consists of one or more actions. 
+
+The amount of output actions, should be the same as the number of the input observations. 
+
+
 ## 2.5 the usage of env
+
+~~~
+observation, reward, terminated, truncated, info = env.step(action)
+~~~
+
+When calling `env.step()`, shall we input only one single action, or mutiple ones?
+
+Well, it depends on your `env`, if you create a single instance of `env`, then you input only one single action to `env.step()`. 
+
+Otherwise, if you create an instance of `VectorEnv`, then you have to input multiple actions, and the number of actions should be consist with the size of `VectorEnv`.
+
 
 
 # 3. Native Aloha's brain
