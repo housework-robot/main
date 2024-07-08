@@ -1,4 +1,4 @@
-# 1. Two approaches of robot brain transplant
+# 1. The robot brain transplant surgery
 
 The subject of this article is the brain transplant surgery on the Stanford Aloha robot.
 
@@ -41,7 +41,7 @@ To achieve excellence his work, one must first sharpen his tools. First, let us 
 
 
 
-# 2. The creation, usage, and data format conversion of LeRobot's brain
+# 2. LeRobot's brain
 
 ## 2.1 CLI command
 
@@ -54,7 +54,7 @@ To achieve excellence his work, one must first sharpen his tools. First, let us 
 ## 2.5 the usage of env
 
 
-# 3. The creation, usage and data format conversion of native Aloha's brain
+# 3. Native Aloha's brain
 
 ## 3.1 CLI command
 
@@ -86,7 +86,7 @@ To achieve excellence his work, one must first sharpen his tools. First, let us 
 ## 4.7 the process and result of the exection of Aloha body with LeRobot brain
 
 
-# 5. Appendix 1. Analysis of the usage of LeRobot brain
+# 5. Appendix 1. The life cycle of the LeRobot brain
 
 ## 5.1 The input and output of LeRobot
 
@@ -95,7 +95,7 @@ To achieve excellence his work, one must first sharpen his tools. First, let us 
 ## 5.3 The usage of LeRobot brain
 
 
-# 6. Appendix 2. Analysis of the usage of native Stanford aloha brain
+# 6. Appendix 2. The life cycle of the native Stanford aloha brain
 
 ## 6.1 The input and output of native Aloha
 
