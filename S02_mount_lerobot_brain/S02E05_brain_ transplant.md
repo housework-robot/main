@@ -397,6 +397,4 @@ Note that we have not yet carefully verified whether the simulation task was suc
 
 Our current goal is that the task execution process should be smooth and free of bugs. And obviously, our goal is achieved. 
 
-[![eval_episode_9.mp4](https://img.youtube.com/vi/icePdOwNmkQ/hqdefault.jpg)](https://www.youtube.com/watch?v=icePdOwNmkQ)
-
 [![aloba_body_lerobot brain in simulation](https://img.youtube.com/vi/nVKSSgXCWbE/hqdefault.jpg)](https://www.youtube.com/watch?v=nVKSSgXCWbE)
