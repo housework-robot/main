@@ -554,7 +554,7 @@ tensor([[[[0., 0., 0.,  ..., 0., 0., 0.],
 
 To invoke the LeRobot brain within the Stanford Aloha system, we need to understand how to instantiate a LeRobot `policy`. 
 
-1. Set up parameters
+**1. Set up parameters**
 
 Read the source code of [lerobot/scripts/eval.py](https://github.com/huggingface/lerobot/blob/main/lerobot/scripts/eval.py%23L154),
 
@@ -667,7 +667,7 @@ config_overrides: None
 ~~~
 
 
-2. The content of `hydra_cfg`
+**2. The content of `hydra_cfg`**
 
 Following is the source code of the creation of `policy`, note that there is an input parameter `hydra_cfg`, we need to inspect its content, 
 
