@@ -242,19 +242,161 @@ In the above code, the data formats of `target_qpos` and `ts` are,
 
 # 4. Transplant LeRobot brain to Aloha body
 
+Having completed the preoperative preparations, we are now ready to proceed with the brain transplant surgery.
+
+Specifically, in the native Stanford Aloha simulation system, we will replace the `policy` from the original Stanford aloha's implementation of `ACT` (Action Chunking with Transformers) model, with LeRobot's implementation of `ACT` model. 
+
+The process is divided into the following steps:
+
+
 ## 4.1 setup PYTHONPATH
+
+~~~
+$ export PYTHONPATH=/home/robot/lerobot:/home/robot/act-main:$PYTHONPATH
+$ echo $PYTHONPATH
+  /home/robot/lerobot:/home/robot/act-main
+~~~
+
 
 ## 4.2 CLI command
 
+We modified Stanford aloha's source code, `imitate_episodes.py`, and named the new code as `imitate_lerobot.py`. The source code of [imitate_lerobot.py]() is provided in this repo. 
+
+Having completed the modification of the source code, we execute a CLI command similar to [the native aloha CLI command](https://github.com/tonyzhaozh/act?tab=readme-ov-file#simulated-experiments). 
+
+~~~
+(aloha) robot@robot-test:~/act-main$ $ python3 imitate_lerobot.py \
+  --ckpt_dir /home/robot/lerobot/outputs/train/2024-06-23/16-48-49_aloha_act_default/checkpoints/last/pretrained_model/ \
+  --batch_size 8 \
+  --num_episodes 1000
+~~~
+
+Note, `ckpt_dir` should be LeRobot model checkpoint, rather than Aloha native model checkpoint.  
+
+
+
 ## 4.3 the creation and usage of LeRobot policy
+
+In the source of `imitate_lerobot.py`, we modified the codes to create an instance of `policy`. 
+
+We do not use the native Stanford aloha's `ACT` model anymore, instead, we use LeRobot's implementation of `ACT` model. 
+
+~~~
+pretrained_policy_path = 'outputs/train/2024-06-23/16-48-49_aloha_act_default/checkpoints/last/pretrained_model'
+
+hydra_cfg = init_hydra_config(
+    str(pretrained_policy_path / "config.yaml"), 
+    config_overrides
+)
+
+policy = make_policy(
+    hydra_cfg=hydra_cfg, 
+    pretrained_policy_name_or_path=str(pretrained_policy_path)
+)  
+         
+with torch.inference_mode():
+    action = policy.select_action(observation)             
+~~~
+
 
 ## 4.4 the creation and usage of native Aloha env
 
+~~~
+from sim_env import make_sim_env
+env = make_sim_env(task_name)
+ts = env.step(target_qpos)
+~~~
+
+
 ## 4.5 the conversion of LeRobot data format to Aloha's
+
+Convert the data format of LeRobot's `policy` output, to be aligned with the data format of the native Aloha's `env` input.
+
+1. As mentioned above, the data format of LeRobot `policy` output is, 
+
+~~~
+Policy output data format:
+
+   action.shape, torch.Size([10, 14]) 
+~~~
+
+Note, the number of rows, 10, is determined by the input parameter in the CLI command, `batch_size=10`. 
+
+The 10 policy outputs will be executed by `env` in sequence according to their serial numbers.
+
+Also note, each policy output is an instruction to the robot body. Usually, the instruction contains the targeted angles of every servo of the robot body. 
+
+Stanford aloha robot body has multiple servos, totally they have 14 degree-of-freedom, therefore, the policy instruction need to provide 14 angles to the aloha robot body. 
+
+
+2. As mentioned above, the data format of the native Aloha `env` input is, 
+   
+~~~
+Output data format:
+
+   'target_qpos': (14,) 
+    
+e.g. [-9.3384460e-04 -1.7078998e+00  1.2308732e+00  4.6417303e-03
+       5.6922406e-01 -1.3676301e-02  1.6363129e-01 -1.0724664e-03
+      -1.7091711e+00  1.2568194e+00  2.2574503e-02  5.7522881e-01
+      -3.0301604e-02  1.3787243e-01] 
+
+~~~
+
+Note, the input of the native Aloha env, `target_qpos` is a list, consisting of 14 parameters. 
+
+We do not need to do any conversion of the data formats from the output of LeRobot `policy`, to the input of the native Stanford aloha `env`. 
+
+We only need to ask the native Stanford aloha's `env`, to execute the output of LeRobot `policy`, i.e `actions`, in sequence. 
+
 
 ## 4.6 the conversion of Aloha data format to LeRobot's
 
+Convert the data format of the output of the native Aloha's `env`, to be aligned with the data format of the input of LeRobot's `policy`. 
+
+1. As mentioned above, the data format of Aloha `env`'s output is, 
+
+~~~
+# Env output
+
+    'ts': is an instance of TimeStep 
+ TimeStep(step_type=<StepType.MID: 1>, 
+     reward=0, 
+     discount=1.0, 
+     observation=OrderedDict([
+        ('qpos', array(14,), 
+        ('qvel', array(14,), 
+        ('env_state', array(array(1, 14)) ), 
+        ('images', 
+           {'top': array(480, 640, 3)), 
+            'angle': array(480, 640, 3)), 
+            'vis': array(480, 640, 3))
+           }
+        )
+     ])
+ ) 
+~~~
+
+2. As mentioned above, the data format of LeRobot `policy`'s input is 
+
+~~~
+# Policy input: observation
+
+   observation['observation.images.top'].shape: torch.Size([10, 3, 480, 640])
+   observation['observation.state'].shape: torch.Size([10, 14]) 
+~~~
+
+We need to take `qpos` and `images.top` out of Aloha `env`'s output, then convert them to the input of LeRobot `policy`.  
+
+
 ## 4.7 the process and result of the exection of Aloha body with LeRobot brain
+
+After meticulous preoperative preparation, the robot brain transplant surgery went relatively smoothly. Below is the execution process of the Aloha body with LeRobot brain for a certain task.
+
+Note that we have not yet carefully verified whether the simulation task was successfully completed.
+
+Our current goal is that the task execution process should be smooth and free of bugs. And obviously, our goal is achieved. 
+
 
 
 # 5. Appendix 1. The life cycle of the LeRobot brain
