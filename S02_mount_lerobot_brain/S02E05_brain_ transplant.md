@@ -115,17 +115,129 @@ Otherwise, if you create an instance of `VectorEnv`, then you have to input mult
 
 # 3. Native Aloha's brain
 
+We only need to take 5 steps, to create and use an instance of the native Aloha brain, in addition to inspecting its data formats.
+
+Here, we only discuss how to operate and the results of the operation.
+
+If you want to understand not only what is done but also why it is done, please refer to Appendix I of this document, "Appendix II. The life cycle of the native Stanford Aloha brain".
+
+
 ## 3.1 CLI command
+
+In the CLI command, we need to specify some system parameters as the input parameters. 
+
+~~~
+# (aloha) robot@robot-test:~/act-main$ python3 imitate_episodes.py \
+    --task_name sim_insertion_scripted \
+    --ckpt_dir ./ckpt \
+    --policy_class ACT \
+    --kl_weight 10  \
+    --chunk_size 100 \
+    --hidden_dim 512 \ 
+    --batch_size 8  \ 
+    --dim_feedforward 3200 \ 
+    --num_epochs 2000 \ 
+    --lr 1e-5 \
+    --seed 0 \
+    --eval \
+    --onscreen_render
+~~~
+
 
 ## 3.2 the creation of policy_config
 
+Reading the source code of [imitate_episodes.py](https://github.com/tonyzhaozh/act/blob/main/imitate_episodes.py), we need to prepare `policy_config` which consists of some configurations, before creating an instance of `policy`.
+
+~~~
+policy_config = {
+    'lr': 1e-5,
+    'num_queries': 100,
+    'kl_weight': 10,
+    'hidden_dim': 512,
+    'dim_feedforward': 3200,
+    'lr_backbone': 1e-5,
+    'backbone': 'resnet18',
+    'enc_layers': 4,
+    'dec_layers': 7,
+    'nheads': 8,
+    'camera_names': ['top'],
+} 
+~~~
+
+
 ## 3.3 the creation of policy
+
+When creating an instance of the native Aloha `policy`, we need to use `policy_config` as the input parameter. 
+
+~~~
+from policy import ACTPolicy
+policy = ACTPolicy(policy_config)
+~~~
+
 
 ## 3.4 the usage of policy
 
+~~~
+all_actions = policy(qpos, curr_image)
+~~~
+
+In the above code, the data formats of `qpos`, `curr_image`, and `all_actions` are, 
+
+~~~
+# Policy inputs:
+
+   'qpos': torch.Size([1, 14]), dtype: torch.float32    
+   'curr_image': torch.Size([1, 1, 3, 480, 640]), dtype: torch.float32
+   # The first 1 means there is one data, 
+   # The second 1 means there is only one camera.
+
+# Policy outputs:
+
+   'all_actions': shape: torch.Size([1, 100, 14]), dtype: torch.float32
+~~~
+
+
 ## 3.5 the creation of env
 
+~~~
+from sim_env import make_sim_env
+task_name = 'sim_insertion_scripted'
+env = make_sim_env(task_name)
+~~~
+
+
 ## 3.6 the usage of env
+
+~~~
+ts = env.step(target_qpos)
+~~~
+
+In the above code, the data formats of `target_qpos` and `ts` are, 
+
+~~~
+# Env input 
+    
+    'target_qpos': array(14,) 
+
+# Env output
+
+    'ts': is an instance of TimeStep 
+ TimeStep(step_type=<StepType.MID: 1>, 
+     reward=0, 
+     discount=1.0, 
+     observation=OrderedDict([
+        ('qpos', array(14,), 
+        ('qvel', array(14,), 
+        ('env_state', array(array(1, 14)) ), 
+        ('images', 
+           {'top': array(480, 640, 3)), 
+            'angle': array(480, 640, 3)), 
+            'vis': array(480, 640, 3))
+           }
+        )
+     ])
+ ) 
+~~~
 
 
 # 4. Transplant LeRobot brain to Aloha body
