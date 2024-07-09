@@ -78,6 +78,10 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![The evaluation of leRobot model training result](https://img.youtube.com/vi/-HI1ylUtpn4/hqdefault.jpg)](https://www.youtube.com/watch?v=-HI1ylUtpn4)
 
+
+5. S02E05. [Transplant leRobot brain to Aloha body](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E05_brain_%20transplant.md)
+
+   [![aloba_body_lerobot brain in simulation](https://img.youtube.com/vi/nVKSSgXCWbE/hqdefault.jpg)](https://www.youtube.com/watch?v=nVKSSgXCWbE)
    
    
 ### To be continued ...
