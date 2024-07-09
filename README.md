@@ -81,7 +81,7 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 5. S02E05. [Transplant leRobot brain to Aloha body](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E05_brain_%20transplant.md)
 
-   [![aloba_body_lerobot brain in simulation](https://img.youtube.com/vi/nVKSSgXCWbE/hqdefault.jpg)](https://www.youtube.com/watch?v=nVKSSgXCWbE)
+   [![aloba_body_lerobot brain in simulation](https://img.youtube.com/vi/TeQzS_o9-uo/hqdefault.jpg)](https://www.youtube.com/watch?v=TeQzS_o9-uo)
    
    
 ### To be continued ...
