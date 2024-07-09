@@ -379,3 +379,184 @@ policy:
 
 The content of the configuration file `config.yaml` is very comprehensive, covering the system structure of the LeRobot brain (`policy`), as well as the settings for the LeRobot brainstem (`env`), in addition to the control parameters of the training process. 
 
+
+
+## 3. The lifecycle of LeRobot brain
+
+As mentioned above, in the source code, LeRobot brain is actually `policy`, its input is `observation`, and its output is `action`.
+
+`action` is both the output of the LeRobot brain, and the input of the native Aloha brainstem. 
+
+### 3.1 the source code
+
+Let us look into the source code of LeRobot, to understand how LeRobot's `env` uses LeRobot `policy`'s output `action`. 
+
+~~~
+# /home/robot/lerobot/lerobot/scripts/eval.py 
+
+def rollout(
+    env: gym.vector.VectorEnv,
+    policy: Policy,
+    seeds: list[int] | None = None,
+    return_observations: bool = False,
+    render_callback: Callable[[gym.vector.VectorEnv], None] | None = None,
+    enable_progbar: bool = False,
+) -> dict:
+    """
+    Run a batched policy rollout once through a batch of environments.
+
+    Note that all environments in the batch are run until the last environment is done. This means some
+    data will probably need to be discarded (for environments that aren't the first one to be done).
+
+    The return dictionary contains:
+        (optional) "observation": A a dictionary of (batch, sequence + 1, *) tensors mapped to observation
+            keys. NOTE the that this has an extra sequence element relative to the other keys in the
+            dictionary. This is because an extra observation is included for after the environment is
+            terminated or truncated.
+        "action": A (batch, sequence, action_dim) tensor of actions applied based on the observations (not
+            including the last observations).
+        "reward": A (batch, sequence) tensor of rewards received for applying the actions.
+        "success": A (batch, sequence) tensor of success conditions (the only time this can be True is upon
+            environment termination/truncation).
+        "done": A (batch, sequence) tensor of **cumulative** done conditions. For any given batch element,
+            the first True is followed by True's all the way till the end. This can be used for masking
+            extraneous elements from the sequences above.
+
+    Args:
+        env: The batch of environments.
+        policy: The policy. Must be a PyTorch nn module.
+        seeds: The environments are seeded once at the start of the rollout. If provided, this argument
+            specifies the seeds for each of the environments.
+        return_observations: Whether to include all observations in the returned rollout data. Observations
+            are returned optionally because they typically take more memory to cache. Defaults to False.
+        render_callback: Optional rendering callback to be used after the environments are reset, and after
+            every step.
+        enable_progbar: Enable a progress bar over rollout steps.
+    Returns:
+        The dictionary described above.
+    """
+    ...
+
+    # Reset the policy and environments.
+    policy.reset()
+    observation, info = env.reset(seed=seeds)
+
+    while not np.all(done):
+        # Numpy array to tensor and changing dictionary keys to LeRobot policy format.
+        observation = preprocess_observation(observation)
+        observation = {key: observation[key].to(device, non_blocking=True) for key in observation}
+        
+        with torch.inference_mode():
+            action = policy.select_action(observation)
+ 
+        # Apply the next action.
+        observation, reward, terminated, truncated, info = env.step(action)
+        
+        # Keep track of which environments are done so far.
+        done = terminated | truncated | done      
+~~~
+
+`Action` represents the control parameters for a robot. For example, the Stanford Aloha has two forearms, each with 7 degrees of freedom, so the `action` for the Stanford Aloha robot is a vector containing 14 elements.
+
+
+### 3.2 why not one single action?
+
+As mentioned above, the output of the `policy` is not a single `action`, but rather 10 `actions` output at once.
+
+This raises the question: when the LeRobot brainstem `env` receives 10 `actions` as input, does the `env` execute each `action` in sequence, or does it only select only one `action` to execute and ignore the other 9 `actions`?
+
+We read the source code of LeRobot to study the generation process of the brainstem `env`.
+
+In the source code, `env` is an instance of `VectorEnv`,
+
+~~~
+# /home/robot/lerobot/lerobot/scripts/eval.py 
+
+def rollout(
+    env: gym.vector.VectorEnv,
+    ...
+~~~
+
+
+### 3.3 why 10 actions?
+
+Let us inspect the creation process of `env`, to see the size of `VectorEnv`, 
+
+~~~
+# /home/robot/lerobot/lerobot/scripts/eval.py 
+
+from lerobot.common.envs.factory import make_env
+
+def main(
+    pretrained_policy_path: Path | None = None,
+    hydra_cfg_path: str | None = None,
+    out_dir: str | None = None,
+    config_overrides: list[str] | None = None,
+):
+    ...
+    logging.info("Making environment.")
+    env = make_env(hydra_cfg)
+~~~
+
+~~~
+# /home/robot/lerobot/lerobot/common/envs/factory.py
+
+def make_env(cfg: DictConfig, n_envs: int | None = None) -> gym.vector.VectorEnv:
+    """
+    Makes a gym vector environment according to the evaluation config.
+    n_envs can be used to override eval.batch_size in the configuration. Must be at least 1.
+    """
+
+    # cfg.env.name: aloha
+    package_name = f"gym_{cfg.env.name}"
+    try:
+        # package_name: gym_aloha
+        # https://github.com/huggingface/gym-aloha
+        importlib.import_module(package_name)
+    except ModuleNotFoundError as e:
+        ...
+       
+    # cfg.env.task: AlohaInsertion-v0
+    gym_handle = f"{package_name}/{cfg.env.task}"
+    gym_kwgs = dict(cfg.env.get("gym", {}))
+
+    if cfg.env.get("episode_length"):
+        gym_kwgs["max_episode_steps"] = cfg.env.episode_length
+
+    # batched version of the env that returns an observation of shape (b, c)
+    # Since, cfg.eval.use_async_envs: false
+    # hence, env_cls is gym.vector.SyncVectorEnv
+
+    env_cls = gym.vector.AsyncVectorEnv if cfg.eval.use_async_envs else gym.vector.SyncVectorEnv
+    env = env_cls(
+        [
+            lambda: gym.make(gym_handle, disable_env_checker=True, **gym_kwgs)
+            
+            # cfg.eval.batch_size: 50
+            # but the config is overridden by the command: 
+            # $ python3 lerobot/scripts/eval.py -p outputs/train/2024-06-23/16-48-49_aloha_act_default/checkpoints/last/pretrained_model \
+            #     eval.n_episodes=1 eval.batch_size=10
+            for _ in range(n_envs if n_envs is not None else cfg.eval.batch_size)
+        ]
+    )
+
+    return env
+~~~
+
+Note, 
+
+1. Even through in the config file, `cfg.eval.batch_size` is 50, however, it is overridden by the CLI command, 
+    ~~~
+    $ python3 lerobot/scripts/eval.py -p outputs/train/2024-06-23/16-48-49_aloha_act_default/checkpoints/last/pretrained_model \
+        eval.n_episodes=1 \
+        eval.batch_size=10
+    ~~~
+
+    Therefore, the size of `batch_size` is 10. 
+
+2. env_cls is an instance of `gym.vector.SyncVectorEnv`,
+
+    and the size of `gym.vector.SyncVectorEnv` is determined by `batch_size`, that is 10.
+
+3. On the website of gym, there is a well-written [tutorial on VectorEnv](https://www.gymlibrary.dev/content/vectorising/).  
+
