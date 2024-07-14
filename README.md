@@ -83,5 +83,12 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![aloba_body_lerobot brain in simulation](https://img.youtube.com/vi/TeQzS_o9-uo/hqdefault.jpg)](https://www.youtube.com/watch?v=TeQzS_o9-uo)
    
+
+## Season 3. Unitree dog body with LeRobot brain 
+
+1. S03E01. [Programming unitree-go2 robodog with python](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E01_unitree_go2_python_programming.md)
+
+   [![Programming unitree-go2 robodog with python](https://img.youtube.com/vi/GTO08j__9zs/hqdefault.jpg)](https://www.youtube.com/watch?v=GTO08j__9zs)
+
    
 ### To be continued ...
