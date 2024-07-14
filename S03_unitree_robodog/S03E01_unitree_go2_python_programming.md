@@ -362,3 +362,11 @@ Yaw velocity:  -0.015978964045643806
 ...
 ~~~
 
+
+# 7. The view of the robot dog
+
+The closed-loop feedback with real-time video from the robot dog's camera
+
+   [![Programming unitree-go2 robodog with python](https://img.youtube.com/vi/GTO08j__9zs/hqdefault.jpg)](https://www.youtube.com/watch?v=GTO08j__9zs)
+
+   
