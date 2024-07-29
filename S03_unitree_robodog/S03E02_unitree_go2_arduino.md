@@ -15,7 +15,7 @@ Specifically, we will ultimately complete the following tasks:
 4. When the user manually presses the HW483 button, the C program on the Arduino microcontroller reads the button signal and forwards it to the Python program running on the Nvidia Jetson Orin board.
 5. The Python program on the Nvidia Jetson Orin board sends instructions to the C program on the Arduino, instructing the C program to send commands to the HW493 module to emit a laser.
 
-![unitree arduino system](src/unitree_arduino.png)
+![unitree arduino system](S03E02_src/unitree_arduino.png)
 
 There are two questions here:
 
@@ -45,7 +45,7 @@ Due to the length, we will complete the final objective in two parts. The stagin
 
 The flowchart of the phased system is shown in the figure below.
 
-![arduino with computer](src/computer_arduino.png)
+![arduino with computer](S03E02_src/computer_arduino.png)
 
 Once we have verified that these two programs are working properly, we will then deploy the Python program to the Unitree-Go2 robot dog's body, to be more precise, to the Nvidia Jetson Orin board mounted on the Unitree-Go2 robot dog.
 
@@ -59,7 +59,7 @@ At the same time, the C program deployed and running on the Arduino microcontrol
 
 Assemble the Arduino microcontroller, with the HW483 button module and the HW493 laser module, following to the image below.
 
-![arduino with modules](src/arduino_module_annotation.png)
+![arduino with modules](S03E02_src/arduino_module_annotation.png)
 
 ## 2.2 Arduino port
 
@@ -71,9 +71,9 @@ The installation process went smoothly, but then we encountered a problem when u
 
 The IDE didn't find which USB port the Arduino is plugged into, as shown in the figure below. Since the IDE cannot find the Arduino connection, the "port" turned into grey. 
 
-![Arduino plugged into computer](src/arduino_module_computer.png)
+![Arduino plugged into computer](S03E02_src/arduino_module_computer.png)
 
-![Arduino IDE port turns into grey](src/arduino_ide_port_grey.png)
+![Arduino IDE port turns into grey](S03E02_src/arduino_ide_port_grey.png)
 
 ## 2.3 Solution
 
@@ -132,7 +132,7 @@ $
 4. At this point, you can see that the Arduino indicates the USB port for the arduino board as `/dev/ttyUSB0`.
 5. If need to select the `Board` type, for the Uno board, choose `Arduino Uno`.
 
-![Port found in the IDE](src/arduino_ide_port_found.png)
+![Port found in the IDE](S03E02_src/arduino_ide_port_found.png)
 
 
 # 3. Programs
@@ -145,7 +145,7 @@ We need to write two programs, one is a C program that is deployed and runs on t
 
 The entire process is shown in the figure below.
 
-![Computer with Arduino](src/computer_arduino.png)
+![Computer with Arduino](S03E02_src/computer_arduino.png)
 
 ## 3.1 C Program
 
@@ -275,7 +275,7 @@ Sending succeed: '0'
 
 The execution result is shown in the video below:
 
-[[Video]]
+[![Integrate Arduino into Unitree Go2 Robot Dog](https://img.youtube.com/vi/igY2Q1GGN84/hqdefault.jpg)](https://www.youtube.com/watch?v=igY2Q1GGN84)
 
 This article ends here.
 
