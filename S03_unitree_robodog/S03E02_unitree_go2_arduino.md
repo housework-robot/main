@@ -21,17 +21,17 @@ There are two questions here:
 
 1. After the button module HW483 sends the button signal, and the signal is received by the Arduino microcontroller, is it possible for the C program on the Arduino to process the button signal, and directly send the firing instruction to the laser module HW493 without going through the Nvidia Orin mainboard?
    
-The answer is, it is possible.
+   The answer is, it is possible.
 
-The reason we take a detour through the Orin board is to be ready to handle a more diverse and complex set of signals on the Orin board in the future, not just the button signal, using the AI large models.
+   The reason we take a detour through the Orin board is to be ready to handle a more diverse and complex set of signals on the Orin board in the future, not just the button signal, using the AI large models.
 
 2. In addition to the button module HW483 and the laser module HW493, is it possible to add other functional modules?
    
-The answer is, of course, yes.
+   The answer is, of course, yes.
 
-Arduino is a hub, with this hub, various peripheral devices can be connected, adding various functions to the Unitree-Go2 robot dog.
+   Arduino is a hub, with this hub, various peripheral devices can be connected, adding various functions to the Unitree-Go2 robot dog.
 
-Actually there are many awesome projects in Arduino community, we expect to use those project to empower unitree robot dog, to explore fun and profitable applications. 
+   Actually there are many awesome projects in Arduino community, we expect to use those project to empower unitree robot dog, to explore fun and profitable applications. 
 
 
 ## 1.2 Staging Objective
@@ -94,9 +94,9 @@ $
 
 [The root cause](https://learn.adafruit.com/ladyadas-learn-arduino-lesson-number-0/install-software-linux) for this problem is that, 
 
-~~~
-Some older Linux distributions used to install brltty (braille device) which will conflict with the Arduino. You must uninstall brltty if it is installed. Do so by running `sudo apt-get remove brltty`.
-~~~
+> Some older Linux distributions used to install brltty (braille device) which will conflict with the Arduino.
+> You must uninstall brltty if it is installed. Do so by running `sudo apt-get remove brltty`.
+
 
 Hence, the solution is to [uninstall brltty](https://learn.adafruit.com/ladyadas-learn-arduino-lesson-number-0/install-software-linux)
 
