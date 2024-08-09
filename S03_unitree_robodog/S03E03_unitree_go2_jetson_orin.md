@@ -245,7 +245,7 @@ To enable the Orin rboard to connect to the internet, we have tried three method
 
 ## 3.1 Using a WiFi card
 
-This is the method recommended by Unitree. Plug a Wi-Fi card into the USB port of the Orin board to allow it to connect to the internet via Wi-Fi.
+This is the method recommended by Unitree. Plug [a WiFi card](https://item.jd.com/10104528292124.html) into the USB port of the Orin board to allow it to connect to the internet via Wi-Fi.
 
 Before using the wifi card, you need to install the driver. During the installation process, we encountered many error warnings, but in the end, we successfully installed the driver. 
 
@@ -262,9 +262,9 @@ If the driver installation fails, it may be necessary to install other dependenc
 
 When the robotic dog enters an area without Wi-Fi, we can consider purchasing two devices:
 
-1. A WiFi card, as mentioned in the first method, plug the WiFi card into the USB port of the Orin board.
+1. [A WiFi card](https://item.jd.com/10104528292124.html), as mentioned in the first method, plug the WiFi card into the USB port of the Orin board.
   
-2. A 4g/5g mobile router, which communicates with the Orin board via WiFi and connects to the internet using a 4g/5g mobile network.
+2. [A 4g/5g mobile router](https://item.jd.com/10049596756645.html), which communicates with the Orin board via WiFi and connects to the internet using a 4g/5g mobile network.
 
 ### 3.2.2 WiFi Direct
 
