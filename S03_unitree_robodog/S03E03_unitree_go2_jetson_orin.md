@@ -216,3 +216,25 @@ $ scp -r -P22 unitree@192.168.123.18:~/<file on the board> <file on the computer
 ~~~
 
 
+## 2.2 NoMachine Remote Desktop
+
+Still using an Ethernet cable, connect the Orin board to a computer. Set the IP address of the computer's Ethernet port to 192.168.123.xx, ensuring it is on the same subnet as the Orin board. 
+
+Then, on the computer, run the NoMachine client. [NoMachine is a remote desktop software](https://www.nomachine.com/getting-started-with-nomachine) that allows you to remotely operate the Nvidia board from the computer using the NoMachine interface.
+
+
+## 2.3 Computer Peripherals
+
+Plug a USB hub into the USB port, which turns the Orin board to be with multiple USB data interfaces as well as an HDMI high-definition screen interface. 
+
+Then connect the keyboard and mouse to the USB interfaces and the screen to the HDMI interface. In this way, the Orin board is equipped with a keyboard, mouse, and screen, just like a complete computer.
+
+![Figure 2.2 Plug a USB hub to the USB port on the Orin board](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0202_jetson_port_replica.jpeg "Figure 2.2 Plug a USB hub to the USB port on the Orin board")
+
+Comparing method three with method two:
+
+1. Method three provides a clearer system interface and faster response times during operation.
+
+2. Method two involves using a remote desktop, which is simple to use and does not require a keyboard, mouse, or screen. 
+   However, because it needs to synchronize the remote desktop in real time, there is a sense of lag and some stuttering during operation.
+
