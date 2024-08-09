@@ -90,8 +90,13 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![Programming unitree-go2 robodog with python](https://img.youtube.com/vi/GTO08j__9zs/hqdefault.jpg)](https://www.youtube.com/watch?v=GTO08j__9zs)
 
-2. S03E0E. [Integrate Arduino into Unitree Go2 Robot Dog](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E02_unitree_go2_arduino.md)
+2. S03E02. [Integrate Arduino into Unitree Go2 Robot Dog](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E02_unitree_go2_arduino.md)
 
    [![Integrate Arduino into Unitree Go2 Robot Dog](https://img.youtube.com/vi/igY2Q1GGN84/hqdefault.jpg)](https://www.youtube.com/watch?v=igY2Q1GGN84)
+
+3. S03E03. [Nvidia Orin board of Unitree Go2 Robot Dog](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_unitree_go2_jetson_orin.md)
+
+   [![Nvidia Orin board of Unitree Go2 Robot Dog](https://img.youtube.com/vi/O1s2AWpVNLI/hqdefault.jpg)](https://www.youtube.com/watch?v=O1s2AWpVNLI)
+
    
 ### To be continued ...
