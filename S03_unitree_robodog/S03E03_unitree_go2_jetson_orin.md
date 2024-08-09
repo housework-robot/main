@@ -273,3 +273,89 @@ A 4G/5G mobile router can not only provide internet access to dozens of dogs in 
 When dogs A and B communicate, they can use the router to achieve WiFi point-to-point communication, significantly improving the communication efficiency between the dogs.
 
 
+## 3.3 Internet sharing
+
+Using an Ethernet cable to connect the Orin board to a computer allows the Orin board to access the internet indirectly through the computer. There are several articles online that describe the operational details of this method [ [1](https://askubuntu.com/questions/169473/sharing-connection-to-other-pcs-via-wired-ethernet) ][ [2](https://askubuntu.com/questions/171914/how-to-connect-share-your-internet-connection-wired-wireless) ][ [3](https://forums.developer.nvidia.com/t/internet-sharing-with-laptop-on-jetson-nano/180191) ].
+
+The principle of indirect internet access through the computer seems straightforward, but we were not successful in our actual operation, and the root cause of the failure is still under investigation.
+
+Here are the steps we followed in our operation:
+
+### 3.3.1 On the computer
+
+1. Execute the following commands in the CLI terminal of the computer,
+
+~~~
+$ sudo ifconfig enx207bd51a15b6 192.168.123.117 netmask 255.255.255.0 up
+
+$ ifconfig
+docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+        ether 02:42:28:09:a2:a3  txqueuelen 0  (Ethernet)
+        ...
+        
+enx207bd51a15b6: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.123.117  netmask 255.255.255.0  broadcast 192.168.123.255
+        inet6 fe80::256b:f72c:378c:9ecf  prefixlen 64  scopeid 0x20<link>
+        ether 20:7b:d5:1a:15:b6  txqueuelen 1000  (Ethernet)
+        RX packets 5291  bytes 504932 (504.9 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 3206  bytes 579858 (579.8 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        ...
+
+wlo1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.120  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::2585:b1c9:fad1:2c02  prefixlen 64  scopeid 0x20<link>
+        ether 70:d8:23:b8:39:36  txqueuelen 1000  (Ethernet)
+        ...
+
+$ route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.0.1     0.0.0.0         UG    600    0        0 wlo1
+169.254.0.0     0.0.0.0         255.255.0.0     U     1000   0        0 wlo1
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+192.168.0.0     0.0.0.0         255.255.255.0   U     600    0        0 wlo1
+
+$ ip route
+default via 192.168.0.1 dev wlo1 proto dhcp metric 600 
+169.254.0.0/16 dev wlo1 scope link metric 1000 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+192.168.0.0/24 dev wlo1 proto kernel scope link src 192.168.0.120 metric 600 
+
+$ arp -n
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.0.100            ether   98:97:cc:0b:01:01   C                     wlo1
+192.168.0.101            ether   98:97:cc:0b:07:81   C                     wlo1
+192.168.0.102            ether   98:97:cc:36:65:bf   C                     wlo1
+192.168.0.103            ether   98:97:cc:36:63:17   C                     wlo1
+192.168.0.1              ether   98:97:cc:0a:ec:39   C                     wlo1
+192.168.0.104            ether   98:97:cc:36:63:d7   C                     wlo1
+192.168.0.114            ether   fe:4f:5f:b9:ca:45   C                     wlo1
+~~~
+
+2. Open the the system setting software of Ubuntu OS of the computer,
+
+![Figure 3.3 Network setting tool in the computer](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0303_computer_network_setting.png "Figure 3.3 Network setting tool in the computer")   
+
+
+### 3.3.2 On the Orin board
+
+1. Execute the following commands in the CLI terminal of the Orin board,
+
+![Figure 3.4 Network setting commands of the Orin board](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0304_orin_network_setting_terminal.png "Figure 3.4 Network setting commands of the Orin board")
+
+2. Open the the system setting software of Ubuntu OS of the Orin board,
+
+![Figure 3.5 Network setting tool of the orin board](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0305_orin_network_setting_tool.png "Figure 3.5 Network setting tool of the orin board")
+
+3. After the above operations, we verified the communication between the computer and the board, but failed.
+
+![Figure 3.6 Test the network communication between the computer and the board](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0307_orin_ping.jpg "Figure 3.6 Test the network communication between the computer and the board")
+
