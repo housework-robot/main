@@ -238,3 +238,38 @@ Comparing method three with method two:
 2. Method two involves using a remote desktop, which is simple to use and does not require a keyboard, mouse, or screen. 
    However, because it needs to synchronize the remote desktop in real time, there is a sense of lag and some stuttering during operation.
 
+
+# 3. Connect Orin to Internet
+
+To enable the Orin rboard to connect to the internet, we have tried three methods:
+
+## 3.1 Using a WiFi card
+
+This is the method recommended by Unitree. Plug a Wi-Fi card into the USB port of the Orin board to allow it to connect to the internet via Wi-Fi.
+
+Before using the wifi card, you need to install the driver. During the installation process, we encountered many error warnings, but in the end, we successfully installed the driver. 
+
+If the driver installation fails, it may be necessary to install other dependency packages first, which can be quite troublesome. Hence, we may need method 3.3, internet sharing method.
+
+![Figure 3.1 A wifi network card](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0301_wifi_card.png "Figure 3.1 A wifi network card")
+
+
+## 3.2 Using a 4G/5G mobile router
+
+![Figure 3.2 A 4g/5g mobile router](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0302_mobile_router.png "Figure 3.2 A 4g/5g mobile router")
+
+### 3.2.1 Usage
+
+When the robotic dog enters an area without Wi-Fi, we can consider purchasing two devices:
+
+1. A WiFi card, as mentioned in the first method, plug the WiFi card into the USB port of the Orin board.
+  
+2. A 4g/5g mobile router, which communicates with the Orin board via WiFi and connects to the internet using a 4g/5g mobile network.
+
+### 3.2.2 WiFi Direct
+
+A 4G/5G mobile router can not only provide internet access to dozens of dogs in the vicinity, but also offer WiFi Direct services for these dogs. 
+
+When dogs A and B communicate, they can use the router to achieve WiFi point-to-point communication, significantly improving the communication efficiency between the dogs.
+
+
