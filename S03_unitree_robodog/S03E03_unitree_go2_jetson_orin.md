@@ -380,6 +380,9 @@ Now, let's take a look at the entire system:
    
 4. Upon receiving the instructions, the Arduino forwards them to the laser module to either emit the laser or turn it off.
 
+The following video show the system setting, and explain the workflow with the Orin board as the hub. 
+[![Nvidia Orin board of Unitree Go2 Robot Dog](https://img.youtube.com/vi/O1s2AWpVNLI/hqdefault.jpg)](https://www.youtube.com/watch?v=O1s2AWpVNLI)
+   
 
 # 5. Future work
 
