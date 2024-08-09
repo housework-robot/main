@@ -359,3 +359,39 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 
 ![Figure 3.6 Test the network communication between the computer and the board](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0307_orin_ping.jpg "Figure 3.6 Test the network communication between the computer and the board")
 
+
+# 4. Workflow
+
+After resolving the login and internet access issues for the Orin board, next we will write two segments of code on the computer:
+
+1. **C program**: Write the program on the computer using the Arduino IDE, compile it, and then upload it to the Arduino microcontroller.
+   
+2. **Python program**: Also written on the computer, and then uploaded to the Orin board.
+
+Once both programs are loaded, we can disconnect the Ethernet cable that connects the Orin motherboard to the computer.
+
+Now, let's take a look at the entire system: 
+
+1. The button module and the laser module are connected to the Arduino microcontroller through pins, and the Arduino is connected to the Orin board mounted on the dog's back via USB.
+
+2. When we press the button, the button module sends a signal to the Arduino microcontroller. After receiving the signal, the Arduino forwards the signal to the Orin board.
+
+3. After processing the signal, the Orin board sends instructions to the Arduino microcontroller. 
+   
+4. Upon receiving the instructions, the Arduino forwards them to the laser module to either emit the laser or turn it off.
+
+
+# 5. Future work
+
+Next, we will rewrite the Python program running on the Orin board, to orchestrate the robotic dog, the third-party Arduino microcontroller, with functional modules, and the AI large model running in the cloud. 
+
+The Orin board will be the hub that coordinates the dog, the microcontroller with various functional modules, and the AI large models.
+
+1. The camera built in the robotic dog makes videos, and the Arduino sensors collect environmental signals. 
+   
+2. When the Orin board receives video from the camera, and the environmental signals from the Arduino sensors, it performs preliminary processing on them and then forwards them to the AI large models on the cloud.
+
+3. After the cloud-based AI large model deeply processes these multiple and complex signals, it sends the results back to the Orin board. 
+
+4. Based on the results processed by the AI large model, the Orin board generates motion instructions to make the robotic dog perform various actions such as walking, running, jumping, and rolling. It also directs the third-party Arduino functional modules to carry out actions like high-intensity illumination, shouting and shooting.
+
