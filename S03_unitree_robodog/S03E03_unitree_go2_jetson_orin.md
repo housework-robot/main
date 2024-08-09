@@ -23,7 +23,7 @@ The topic of [the previous note](https://github.com/housework-robot/main/blob/ma
    
 8. The laser module emits or turns off the laser according to the command.
 
-![Figure 1.1 Arduino device connected to a computer](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0101_computer_arduino.png)
+![Figure 1.1 Arduino device connected to a computer](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0101_computer_arduino.png "Figure 1.1 Arduino device connected to a computer")
 
 
 ## 1.2 Final workflow
@@ -31,7 +31,7 @@ The topic of [the previous note](https://github.com/housework-robot/main/blob/ma
 The topic of this note is to replace the computer in figure 1.1 with a Unitree Go2 robotic dog, as shown in the 
 figure 1.2.
 
-![Figure 1.2 Arduino device connected to a unitree dog](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0102_unitree_arduino_standalone.png)
+![Figure 1.2 Arduino device connected to a unitree dog](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0102_unitree_arduino_standalone.png "Figure 1.2 Arduino device connected to a unitree dog")
 
 The Unitree Robotic Dog EDU version comes with an Nvidia Jetson Orin NX board installed on the back of the dog. The operating system running on this Orin board is Ubuntu 20.04.
 
@@ -55,3 +55,164 @@ In the workflow of this article, the technical challenges lie in step 4. The Nvi
 
 1. How to log in to the Orin board and perform various operations without a screen, keyboard, or mouse.
 2. How to enable internet access for the Orin board.
+
+
+
+# 2. Access Orin
+
+The Unitree Go2 EDU version of the robotic dog comes with an Nvidia Jetson Orin NX board mounted on its back. This Orin board does not have a screen, keyboard, or mouse, nor does it have an internet device. However, it has an RJ45 Ethernet port, a USB Type-A port and a USB Type-C port, as well as a 5V-3A|12V-3A DC power port, as shown in  figure 2.1.
+
+How to log in and use the Orin board that lacks a screen, keyboard, and mouse? We have tried three methods.
+
+![Figure 2.1 The orin ports](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_src/0201_jetson_ports.jpg "Figure 2.1 The ports on the Orin board")
+
+## 2.1 SSH to Orin
+
+Using an Ethernet cable, connect the Orin board to a computer, and then upload programs to the Orin board using SCP and log in to the board using SSH to run the programs.
+
+Here are an issue we encountered when connecting an Ethernet cable to the Orin board, and our solution to it:
+
+1. The RJ45 port on the Orin board may have poor contact.
+   
+2. Normally, after the Ethernet cable is connected to both the Orin board and the computer, the signal light on the RJ45 port of the Orin motherboard should blink rapidly. The blinking of the signal light indicates that the data communication between the Orin motherboard and the computer is normal.
+   
+3. If the signal light does not blink, you may try cleaning the dust inside the RJ45 port or replacing the Ethernet cable.
+
+
+### 2.1.1 Setup IP address
+
+When the Unitree Go2 robotic dog is shipped, it comes with several preset private IP addresses. One of the private IP addresses is for the dog's body, 192.168.123.161, and the private IP address for the Orin board is 192.168.123.18.
+
+If you want to log in to the Orin board from a computer using an Ethernet cable, you need to set the IP address of the computer's Ethernet port to 192.168.123.xx, ensuring that it is on the same subnet as the Orin board. Here, "xx" should be replaced with any number between 2 and 254 that is not already in use on the network, to avoid IP conflicts.
+
+~~~
+# Previously the IP address of the computer ethernet port is 10.42.0.1
+$ ifconfig
+docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+        ether 02:42:57:aa:a4:58  txqueuelen 0  (Ethernet)
+        ...
+
+enx207bd51a15b6: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.42.0.1  netmask 255.255.255.0  broadcast 10.42.0.255
+        inet6 fe80::1908:422f:6af:35e6  prefixlen 64  scopeid 0x20<link>
+        ether 20:7b:d5:1a:15:b6  txqueuelen 1000  (Ethernet)
+        RX packets 572  bytes 35263 (35.2 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 252  bytes 42204 (42.2 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        ...
+
+wlo1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.120  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::2585:b1c9:fad1:2c02  prefixlen 64  scopeid 0x20<link>
+        ether 70:d8:23:b8:39:36  txqueuelen 1000  (Ethernet)
+        ...
+
+
+# The following command set the IP address of the computer's ethernet port to 192.168.123.117
+$ sudo ifconfig enx207bd51a15b6 192.168.123.117 netmask 255.255.255.0 up
+
+# Verify that the IP address of the computer's ethernet port has being changed to 192.168.123.117
+$ ifconfig
+docker0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+        ether 02:42:57:aa:a4:58  txqueuelen 0  (Ethernet)
+        ...
+
+enx207bd51a15b6: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.123.117  netmask 255.255.255.0  broadcast 192.168.123.255
+        inet6 fe80::1908:422f:6af:35e6  prefixlen 64  scopeid 0x20<link>
+        ether 20:7b:d5:1a:15:b6  txqueuelen 1000  (Ethernet)
+        RX packets 619  bytes 37425 (37.4 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 263  bytes 44658 (44.6 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        ...
+
+wlo1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.120  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::2585:b1c9:fad1:2c02  prefixlen 64  scopeid 0x20<link>
+        ether 70:d8:23:b8:39:36  txqueuelen 1000  (Ethernet)
+        ...
+~~~
+
+
+After then, verify that the computer can communicate with the Orin board,
+~~~
+# Ping the IP address of the robotic dog's body.
+$ ping 192.168.123.161
+PING 192.168.123.161 (192.168.123.161) 56(84) bytes of data.
+^C
+--- 192.168.123.161 ping statistics ---
+5 packets transmitted, 0 received, 100% packet loss, time 4096ms
+
+# Ping the IP address of the orin board on the back of the dog. 
+$ ping 192.168.123.18
+PING 192.168.123.18 (192.168.123.18) 56(84) bytes of data.
+^C
+--- 192.168.123.18 ping statistics ---
+4 packets transmitted, 0 received, 100% packet loss, time 3066ms
+~~~
+
+
+### 2.1.2 SSH and SCP
+1. Using SSH to access the Orin board, with login name and password: unitree/123
+
+~~~
+$ ssh unitree@192.168.123.18
+unitree@192.168.123.18's password: 
+Welcome to Ubuntu 20.04.5 LTS (GNU/Linux 5.10.104-tegra aarch64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+This system has been minimized by removing packages and content that are
+not required on a system that users do not log into.
+
+To restore this content, you can run the 'unminimize' command.
+
+ * Introducing Expanded Security Maintenance for Applications.
+   Receive updates to over 25,000 software packages with your
+   Ubuntu Pro subscription. Free for personal use.
+
+     https://ubuntu.com/pro
+
+Expanded Security Maintenance for Applications is not enabled.
+
+242 updates can be applied immediately.
+199 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+34 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+Last login: Fri Jan  2 08:30:52 1970 from 192.168.123.117
+ros:foxy(1) noetic(2) ?
+1
+
+unitree@ubuntu:~$ 
+~~~
+
+2. Using SCP to upload files to the Orin board and download files, with login name and password: unitree/123
+
+~~~
+# From a computer, upload a file to the Orin board
+$ scp -r -P22 <file on the computer> unitree@192.168.123.18:~/<file on the board>
+
+# From the Orin board, download a file to the computer 
+$ scp -r -P22 unitree@192.168.123.18:~/<file on the board> <file on the computer>
+~~~
+
+
