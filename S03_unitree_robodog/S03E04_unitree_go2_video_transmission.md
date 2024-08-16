@@ -170,6 +170,8 @@ robot@tensorbook$ python3 imagezmq_client.py
 
 # 7. The demo of the entire video system
 
+    [![See the world through Unitree robotic dog's eyes](https://img.youtube.com/vi/BEfr-7JqaKo/hqdefault.jpg)](https://www.youtube.com/watch?v=BEfr-7JqaKo)
+
 
 
 
