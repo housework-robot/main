@@ -98,5 +98,9 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![Nvidia Orin board of Unitree Go2 Robot Dog](https://img.youtube.com/vi/O1s2AWpVNLI/hqdefault.jpg)](https://www.youtube.com/watch?v=O1s2AWpVNLI)
 
+4. S03E04. [See the world through Unitree robotic dog's eyes](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E04_unitree_go2_video_transmission.md)
+
+   [![See the world through Unitree robotic dog's eyes](https://img.youtube.com/vi/BEfr-7JqaKo/hqdefault.jpg)](https://www.youtube.com/watch?v=BEfr-7JqaKo)
+
    
 ### To be continued ...
