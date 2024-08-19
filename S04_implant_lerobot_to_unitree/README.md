@@ -74,8 +74,6 @@ Different from `teleoperate`, `remote_control` is to control the robotic dog rem
         --plan $USER/unitree_test/motion_plan.yaml
     ~~~
 
-Question: can we remote control the dog with fixed command frequency?
-
 
 ### 3.3 Record the leg movement of the dog
 
