@@ -6,13 +6,17 @@ Why empower Unitree Go2 dog with LeRobot brain?
 
 ### 1.1 Use LeRobot as the brain for the Unitree Go2 robotic dog,
 
-    1. endow the dog with AI models,
-    2. utilize LeRobot's toolkits and APIs off the rack, reducing the cost of learning and development,
-    3. LeRobot/Huggingface is a community and an ecosystem, which already has a large number of available toolkits, and there will be more in the future.
+1. endow the dog with AI models,
+
+2. utilize LeRobot's toolkits and APIs off the rack, reducing the cost of learning and development,
+
+3. LeRobot/Huggingface is a community and an ecosystem, which already has a large number of available toolkits, and there will be more in the future.
 
 ### 1.2 Integrate the Unitree Go2 robotic dog into the LeRobot/Huggingface ecosystem community,
-    1. It can make it easier for users in the community to use the dog, thereby increasing the dog's market,
-    2. It can enable other systems in the ecosystem to interface with the dog, making the dog a component of a larger, more complex, and more intelligent system.
+    
+1. It can make it easier for users in the community to use the dog, thereby increasing the dog's market,
+    
+2. It can enable other systems in the ecosystem to interface with the dog, making the dog a component of a larger, more complex, and more intelligent system.
 
 
 ## 2. Deployments
@@ -25,9 +29,11 @@ We deploy LeRobot on the server, when we want to collect training dataset and tr
 
 We deploy LeRobot on the dog body,  when
   
-    1. the robotic dog operates independently and uses the LeRobot brain locally, 
-    2. a remote server monitors and records the movements of the robotic dog, 
-    3. if necessary, human operators can intervene with the robotic dog through remote control.   
+1. the robotic dog operates independently and uses the LeRobot brain locally, 
+    
+2. a remote server monitors and records the movements of the robotic dog, 
+    
+3. if necessary, human operators can intervene with the robotic dog through remote control.   
 
 
 ## 3. Use cases  
@@ -37,6 +43,7 @@ The detailed usage, especially how to use the APIs in Python program, refers to 
 ### 3.1 Recalibrate the dog
 
 In [Unitree's document](https://support.unitree.com/home/en/developer/sports_services), calibration mode is called "damp" mode. 
+
 ~~~
 $ python lerobot/scripts/control_robot.py calibrate
 ~~~
@@ -47,21 +54,23 @@ To control the follower arm by moving the leader arm, this process known as `tel
 
 Different from `teleoperate`, `remote_control` is to control the robotic dog remotely and manually by human operator. 
 
-* Remote control the unitree robotic dog
+1. Remote control the unitree robotic dog
   
-The highest control frequency is expected to ~200 Hz? 
-To exit with CTRL+C. 
+    The highest control frequency is expected to ~200 Hz? 
+    To exit with CTRL+C. 
 
-~~~
-$ python lerobot/scripts/control_robot.py remote_control
-~~~
+    ~~~
+    $ python lerobot/scripts/control_robot.py remote_control
+    ~~~
 
-* Remote control at a limited frequency of 30 Hz, to simulate data recording frequency
+
+2. Remote control at a limited frequency of 30 Hz, to simulate data recording frequency
   
-~~~
-python lerobot/scripts/control_robot.py remote_control \
-    --fps 30
-~~~
+    ~~~
+    python lerobot/scripts/control_robot.py remote_control \
+        --fps 30
+    ~~~
+
 Question: can we remote control the dog with fixed command frequency?
 
 
@@ -69,60 +78,61 @@ Question: can we remote control the dog with fixed command frequency?
 
 Usually we open 2 terminals, one for remote control, the other for recording. 
 
-* Record one episode in order to test replay
+1. Record one episode in order to test replay
 
-~~~
-python lerobot/scripts/control_robot.py record \
-    --fps 30 \
-    --root tmp/data \
-    --repo-id $USER/unitree_test \
-    --num-episodes 1 \
-    --run-compute-stats 0
-~~~
+    ~~~
+    python lerobot/scripts/control_robot.py record \
+        --fps 30 \
+        --root tmp/data \
+        --repo-id $USER/unitree_test \
+        --num-episodes 1 \
+        --run-compute-stats 0
+    ~~~
+
+
+2. Record a full dataset in order to train a policy
+
+    With 2 seconds of warmup, 30 seconds of recording for each episode, and 10 seconds to reset the environment in between episodes.
+
+    ~~~
+    python lerobot/scripts/control_robot.py record \
+        --fps 30 \
+        --root data \
+        --repo-id $USER/unitree_test \
+        --num-episodes 50 \
+        --warmup-time-s 2 \
+        --episode-time-s 30 \
+        --reset-time-s 10
+    ~~~
 
 Question: can we control the frequency of recording, when the fps of the video uploaded by the dog is out of our control?
 
 
-* Record a full dataset in order to train a policy
-
-With 2 seconds of warmup, 30 seconds of recording for each episode, and 10 seconds to reset the environment in between episodes.
-
-~~~
-python lerobot/scripts/control_robot.py record \
-    --fps 30 \
-    --root data \
-    --repo-id $USER/unitree_test \
-    --num-episodes 50 \
-    --warmup-time-s 2 \
-    --episode-time-s 30 \
-    --reset-time-s 10
-~~~
-
 
 ### 3.4 Visualization
 
-* Visualize dataset
+1. Visualize dataset
 
-~~~  
-python lerobot/scripts/visualize_dataset.py \
-    --root tmp/data \
-    --repo-id $USER/unitree_test \
-    --episode-index 0
-~~~
+    ~~~  
+    python lerobot/scripts/visualize_dataset.py \
+        --root tmp/data \
+        --repo-id $USER/unitree_test \
+        --episode-index 0
+    ~~~
+
+    
+
+2. Replay this test episode
+
+    ~~~
+    python lerobot/scripts/control_robot.py replay \
+        --fps 30 \
+        --root tmp/data \
+        --repo-id $USER/unitree_test \
+        --episode 0
+    ~~~    
 
 Question: Do we need a simulator to display the movement of the dog? Without simulation, we can only display the bare bone data. 
-
-
-* Replay this test episode
-
-~~~
-python lerobot/scripts/control_robot.py replay \
-    --fps 30 \
-    --root tmp/data \
-    --repo-id $USER/unitree_test \
-    --episode 0
-~~~    
-Question: Do we need a simulator to display the movement of the dog? 
 
 
 ### 3.5 Training a policy model
@@ -156,3 +166,9 @@ python lerobot/scripts/control_robot.py record \
 ~~~
 
 Question: Where to find the motion model for quadruped?
+
+
+>
+> Draft, might be modified intensively, Aug 19 2024.
+>
+
