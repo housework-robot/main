@@ -54,21 +54,24 @@ To control the follower arm by moving the leader arm, this process known as `tel
 
 Different from `teleoperate`, `remote_control` is to control the robotic dog remotely and manually by human operator. 
 
-1. Remote control the unitree robotic dog
+1. Remote control the unitree robotic dog step by step manually
   
-    The highest control frequency is expected to ~200 Hz? 
+    Use keyboard to manually remote control the robot's motion. 
     To exit with CTRL+C. 
 
     ~~~
     $ python lerobot/scripts/control_robot.py remote_control
+        --manual 
     ~~~
 
 
-2. Remote control at a limited frequency of 30 Hz, to simulate data recording frequency
+2. Remote control the unitree robotic dog with a pre-defined series of motions.
+
+    The time interval between neighboring motions can be either fixed length or free defined.    
   
     ~~~
-    python lerobot/scripts/control_robot.py remote_control \
-        --fps 30
+    $ python lerobot/scripts/control_robot.py remote_control \
+        --plan $USER/unitree_test/motion_plan.yaml
     ~~~
 
 Question: can we remote control the dog with fixed command frequency?
