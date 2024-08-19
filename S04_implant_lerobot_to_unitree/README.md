@@ -2,9 +2,9 @@
 
 ## 1. Motivation
 
-Why empower Unitree Go2 dog with LeRobot brain?
+Why implant LeRobot as brain to Unitree Go2 robitic dog?
 
-### 1.1 Use LeRobot as the brain for the Unitree Go2 robotic dog,
+### 1.1 Make the dog smarter
 
 1. endow the dog with AI models,
 
@@ -12,7 +12,7 @@ Why empower Unitree Go2 dog with LeRobot brain?
 
 3. LeRobot/Huggingface is a community and an ecosystem, which already has a large number of available toolkits, and there will be more in the future.
 
-### 1.2 Integrate the Unitree Go2 robotic dog into the LeRobot/Huggingface ecosystem community,
+### 1.2 Become a member of LeRobot/Huggingface community
     
 1. It can make it easier for users in the community to use the dog, thereby increasing the dog's market,
     
