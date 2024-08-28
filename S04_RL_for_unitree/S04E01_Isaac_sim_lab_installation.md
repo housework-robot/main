@@ -75,3 +75,78 @@ While Mujoco is easy to use within the Gym framework, its capabilities seem not 
 
 Building upon Isaac Sim, Nvidia has developed [Isaac Lab](https://developer.nvidia.com/isaac/sim#isaac-lab), which makes it easy to use Isaac Sim within the Gym framework.
 
+
+# 2. Install Isaac Sim 
+
+## 2.1 Install Omniverse Launcher
+
+Visit [the official website of Nvidia Isaac Sim](https://developer.nvidia.com/isaac/sim), click on `Download Omniverse`, not `Download Container`.
+
+After filling the user registration information and submitting it, you can download the Omniverse Launcher. The file is not large, only 122MB, and it will be downloaded in a short time.
+
+Be prepared that downloading Isaac Sim will take a long time, and if the network is unstable, you may need to download it repeatedly.
+
+![The official website of Nvidia Isaac Sim](S04E01_asset/2_1_isaac_lab_instruction.png "The official website of Nvidia Isaac Sim")
+
+## 2.2 Install Cache and Nucleus 
+
+Follow the instructions on [the Isaac Sim official website](https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_workstation.html#workstation-setup) to install [Cache](https://docs.omniverse.nvidia.com/utilities/latest/cache/installation/workstation.html) and [Nucleus](https://docs.omniverse.nvidia.com/nucleus/latest/workstation/installation.html). 
+
+The download procedure is quite lengthy, but overall it goes relatively smoothly.
+
+![The screenshot of Omniverse launcher](S04E01_asset/2_2_omniverse_launcher.PNG "The screenshot of Omniverse launcher")
+
+## 2.3 Install Isaac Sim
+
+The first major mistake we made was installing the wrong version of Isaac Sim. 
+
+Initially, we installed version 2023.1.1 of Isaac Sim as recommended by the Omniverse Launcher. 
+
+After the installation, Isaac Sim itself worked properly, but we encountered many confusing errors when we proceeded to install and use Isaac Lab. 
+
+After several trials and errors, we found in the installation guide on [the official Isaac Lab website](https://isaac-sim.github.io/IsaacLab/source/setup/installation/binaries_installation.html) that version 4.0 of Isaac Sim can guarantee that Isaac Lab will work properly.
+
+![The official Isaac Lab website](S04E01_asset/2_3_1_isaac_lab_binary.png "The official Isaac Lab website")
+
+However, the 4.0.0 version of Isaac Sim is hidden in a corner of the Omniverse Launcher, easy to be ignored. 
+
+You need to first click to expand the `Release` option, and then click to expand `All Release Builds` to find the 4.0.0 version of Isaac Sim. 
+
+Installing Isaac Sim requires downloading a file of about 14GB, and you need to be very patient for the time consuming download process.
+
+1. Search for `Sim` in the Omniverse Launcher's `Exchange` tab,
+
+![Search for Sim in the Omniverse Launcher](S04E01_asset/2_3_2_isaac_sim_install_1.png "Search for Sim in the Omniverse Launcher")
+
+2. Click to expand `Release`, and then click to expand `All release builds`,
+
+![Click to expand 'Release', and then 'All release builds'](S04E01_asset/2_3_2_isaac_sim_install_2.png "Click to expand 'Release', and then 'All release builds'")  
+
+3. Click to select `Isaac Sim 4.0.0`,
+
+![Click to select 'Isaac Sim 4.0.0'](S04E01_asset/2_3_2_isaac_sim_install_3.PNG "Click to select 'Isaac Sim 4.0.0'") 
+
+4. Click to select `Isaac Sim`, rather than `Headless` and `WebRTC`,
+
+![Click to select 'Isaac Sim'](S04E01_asset/2_3_2_isaac_sim_install_4.PNG "Click to select 'Isaac Sim'") 
+
+
+## 2.4 Install Isaac Sim Compatibility Checker
+
+It seems optional to install `Isaac Sim Compatibility Checker`. Also it seems optional to install either version 4.1.0 or version 4.0.0.
+
+We installed version 4.1.0. After the installation is complete, running Checker will brings up a window, as shown in the figure below.
+
+1. In the Launcher, click to select `Isaac Sim Compatibility Checker`,
+
+![Click to select 'Isaac Sim Compatibility Checker'](S04E01_asset/2_4_1_isaac_checker_install_1.PNG "Click to select 'Isaac Sim Compatibility Checker'") 
+
+2. Click to select `Release 4.1.0`,
+
+![Click to select 'Release 4.1.0'](S04E01_asset/2_4_1_isaac_checker_install_2.PNG "Click to select 'Release 4.1.0'") 
+
+3. The execution result is a pop-up window containing system information.
+
+![The execution result of the Checker](S04E01_asset/2_4_1_isaac_checker_install_3.PNG "The execution result of the Checker") 
+
+
