@@ -43,64 +43,72 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![S01E02 Affordable housework github robot project, interbotix, on youtube](https://img.youtube.com/vi/2XLhbFUmqrI/hqdefault.jpg)](https://www.youtube.com/watch?v=2XLhbFUmqrI)
 
-3. S01E03. [Manipulate the physical interbotix robotic arm](./S01_anatomy_of_stanford_aloha/S01E03_hardware.md)
+3. S01E03. [Manipulate the physical interbotix robotic arm](S01_anatomy_of_stanford_aloha/S01E03_hardware.md)
 
    [![S01E03 Manipulate the physical interbotix robotic arm, on youtube](https://img.youtube.com/vi/f9kXg28GX2g/hqdefault.jpg)](https://www.youtube.com/watch?v=f9kXg28GX2g)
 
 
-4. S01E04. [Clone Stanford aloha robotic arms hardware architecture](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/S01E04_aloha.md)
+4. S01E04. [Clone Stanford aloha robotic arms hardware architecture](S01_anatomy_of_stanford_aloha/S01E04_aloha.md)
 
    [![S01E04 Clone Stanford aloha robotic arms hardware architecture, on youtube](https://img.youtube.com/vi/D53mRnVwRCs/hqdefault.jpg)](https://www.youtube.com/watch?v=D53mRnVwRCs)
    
-5. S01E05. [Interbotix bug fixing](https://github.com/housework-robot/main/blob/main/S01_anatomy_of_stanford_aloha/S01E05_interbotix_bug.md)
+5. S01E05. [Interbotix bug fixing](S01_anatomy_of_stanford_aloha/S01E05_interbotix_bug.md)
 
    [![S01E05 Interbotix bug fixing, on youtube](https://img.youtube.com/vi/00pYmQL-r34/hqdefault.jpg)](https://www.youtube.com/watch?v=00pYmQL-r34)
 
 
 ## Season 2. Mount LeRobot robot brain
 
-1. S02E01. [Why to learn LeRobot?](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E01_why_to_learn_lerobot.md)
+1. S02E01. [Why to learn LeRobot?](S02_mount_lerobot_brain/S02E01_why_to_learn_lerobot.md)
 
    [![S02E01 Successfully clone Stanford aloha robot, will mount LeRobot robot brain to aloha body, on youtube](https://img.youtube.com/vi/KeyY7mVpCds/hqdefault.jpg)](https://www.youtube.com/watch?v=KeyY7mVpCds)
 
 
-2. S02E02. [The data format of LeRobot brain](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_dataformat_lerobot.md)
+2. S02E02. [The data format of LeRobot brain](S02_mount_lerobot_brain/S02E02_dataformat_lerobot.md)
 
    <img src="https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E02_src/S02E02_image04_github.jpeg" alt="The dataformat of lerobot" width="500" height="300">
 
 
-3. S02E03. [A case study, the data format of the native Stanford aloha robot body](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E03_dataformat_aloha.md)
+3. S02E03. [A case study, the data format of the native Stanford aloha robot body](S02_mount_lerobot_brain/S02E03_dataformat_aloha.md)
 
    [![The evaluation of the model training result](https://img.youtube.com/vi/6vT0V0ciftI/hqdefault.jpg)](https://www.youtube.com/watch?v=6vT0V0ciftI)
 
 
-4. S02E04. [Train leRobot brain](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E04_train_lerobot_brain.md)
+4. S02E04. [Train leRobot brain](S02_mount_lerobot_brain/S02E04_train_lerobot_brain.md)
 
    [![The evaluation of leRobot model training result](https://img.youtube.com/vi/-HI1ylUtpn4/hqdefault.jpg)](https://www.youtube.com/watch?v=-HI1ylUtpn4)
 
 
-5. S02E05. [Transplant leRobot brain to Aloha body](https://github.com/housework-robot/main/blob/main/S02_mount_lerobot_brain/S02E05_brain_%20transplant.md)
+5. S02E05. [Transplant leRobot brain to Aloha body](S02_mount_lerobot_brain/S02E05_brain_%20transplant.md)
 
    [![aloba_body_lerobot brain in simulation](https://img.youtube.com/vi/TeQzS_o9-uo/hqdefault.jpg)](https://www.youtube.com/watch?v=TeQzS_o9-uo)
    
 
-## Season 3. Unitree dog body with LeRobot brain 
+## Season 3. Programming Unitree's Go2 robotic dog 
 
-1. S03E01. [Programming unitree-go2 robodog with python](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E01_unitree_go2_python_programming.md)
+1. S03E01. [Programming unitree-go2 robodog with python](S03_unitree_robodog/S03E01_unitree_go2_python_programming.md)
 
    [![Programming unitree-go2 robodog with python](https://img.youtube.com/vi/GTO08j__9zs/hqdefault.jpg)](https://www.youtube.com/watch?v=GTO08j__9zs)
 
-2. S03E02. [Integrate Arduino into Unitree Go2 Robot Dog](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E02_unitree_go2_arduino.md)
+2. S03E02. [Integrate Arduino into Unitree Go2 Robot Dog](S03_unitree_robodog/S03E02_unitree_go2_arduino.md)
 
    [![Integrate Arduino into Unitree Go2 Robot Dog](https://img.youtube.com/vi/igY2Q1GGN84/hqdefault.jpg)](https://www.youtube.com/watch?v=igY2Q1GGN84)
 
-3. S03E03. [Nvidia Orin board of Unitree Go2 Robot Dog](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E03_unitree_go2_jetson_orin.md)
+3. S03E03. [Nvidia Orin board of Unitree Go2 Robot Dog](S03_unitree_robodog/S03E03_unitree_go2_jetson_orin.md)
 
    [![Nvidia Orin board of Unitree Go2 Robot Dog](https://img.youtube.com/vi/O1s2AWpVNLI/hqdefault.jpg)](https://www.youtube.com/watch?v=O1s2AWpVNLI)
 
-4. S03E04. [See the world through Unitree robotic dog's eyes](https://github.com/housework-robot/main/blob/main/S03_unitree_robodog/S03E04_unitree_go2_video_transmission.md)
+4. S03E04. [See the world through Unitree robotic dog's eyes](S03_unitree_robodog/S03E04_unitree_go2_video_transmission.md)
 
    [![See the world through Unitree robotic dog's eyes](https://img.youtube.com/vi/BEfr-7JqaKo/hqdefault.jpg)](https://www.youtube.com/watch?v=BEfr-7JqaKo)
 
+
+## Season 4. Simulation and RL for Unitree's Go2 robotic dog 
+
+1. S04E01 [Trouble shooting for the installation of Isaac Sim and Lab](S04_RL_for_unitree/S04E01_Isaac_sim_lab_installation.md)
+
+   [![A demo of Isaac Sim with robotic arms](https://img.youtube.com/vi/tWw1G2KQfQw/hqdefault.jpg)](https://www.youtube.com/watch?v=tWw1G2KQfQw)
+
+   
    
 ### To be continued ...
