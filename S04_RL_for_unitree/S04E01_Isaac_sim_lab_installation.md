@@ -1,3 +1,5 @@
+# Trouble shooting for the installation of Isaac Sim and Lab
+
 # 1. Objectives
 
 The content of this article is about how to correctly install and use Nvidia's Isaac Sim and Isaac Lab, including what mistakes to avoid. 
