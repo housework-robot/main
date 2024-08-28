@@ -150,3 +150,67 @@ We installed version 4.1.0. After the installation is complete, running Checker 
 ![The execution result of the Checker](S04E01_asset/2_4_1_isaac_checker_install_3.PNG "The execution result of the Checker") 
 
 
+# 3. Install Isaac Lab
+
+The second major mistake we made was using the wrong method to install Isaac Lab. 
+
+On [the official Isaac Lab website](https://isaac-sim.github.io/IsaacLab/source/setup/installation/binaries_installation.html), there are two installation methods: the first is `pip`, and the second is `binary`. 
+
+Do not use `pip` for installation! It will lead to many errors, the root causes of thoese errors are still under investigation. 
+
+Follow the instructions on the official Isaac Lab website strictly for installation. And pay attention to the following details, to avoid the mistakes we made before. 
+
+## 3.1 Symbolic link
+
+~~~
+# enter the cloned repository
+cd IsaacLab
+
+# create a symbolic link
+ln -s path_to_isaac_sim _isaac_sim
+# For example: ln -s /home/nvidia/.local/share/ov/pkg/isaac-sim-4.1.0 _isaac_sim
+~~~
+
+If you don't take this step, you will not be able to run `./isaaclab.sh` later on. 
+
+## 3.2 Conda
+
+~~~
+conda activate isaaclab  # or "conda activate my_env"
+~~~
+
+We did not set up a conda virtual environment, but still we are able to run `Isaac Lab` normally with `Isaac Sim 4.0.0`. 
+
+However, during the installation process of `Isaac Lab`, many packages such as `torch` need to be installed, and the versions of those packages often do not match the versions of the same packages with `Isaac Sim`. 
+
+Therefore, it is recommended to install and use `Isaac Lab` in a conda virtual environment.
+
+
+## 3.3 No module named pip
+
+~~~
+./isaaclab.sh --install # or "./isaaclab.sh -i"
+~~~
+
+During the installation process of `Isaac Lab`, we also encountered another error with `isaaclab.sh`, which was unable to find `pip`, resulting in the error message "no module named pip3." 
+
+We successfully resolved the issue by uninstalling `pip` first, and then reinstalling it.
+
+~~~
+sudo apt remove python3-pip
+sudo apt install python3-pip
+~~~
+
+## 3.4 Miss Isaac Sim packages
+
+~~~
+./isaaclab.sh --install # or "./isaaclab.sh -i"
+~~~
+
+During the installation process of `Isaac Lab`, we encountered errors with `isaaclab.sh` not being able to find the `Isaac Sim` packages. 
+
+We manually installed the following packages related to `Isaac Sim` and successfully resolved those errors.
+
+~~~
+pip install isaacsim-rl isaacsim-replicator isaacsim-extscache-physics isaacsim-extscache-kit-sdk isaacsim-extscache-kit isaacsim-app --extra-index-url https://pypi.nvidia.com
+~~~
