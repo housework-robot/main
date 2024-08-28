@@ -277,5 +277,21 @@ When running, there might be errors indicating insufficient memory or computing 
 ${ISAACSIM_PYTHON_EXE} /home/robot/IsaacLab/source/standalone/demos/arms.py 
 ~~~
 
+The execution result is shown in the following video, 
+
+   [![A demo of Isaac Sim with robotic arms](https://img.youtube.com/vi/tWw1G2KQfQw/hqdefault.jpg)](https://www.youtube.com/watch?v=tWw1G2KQfQw)
+
+
+# 5. RL training for Unitree Go2 dog
+
+There is a chapter on using reinforcement learning to train unitree go2 robotic dog with `Isaac Sim`, on [Unitree tutorial website](https://support.unitree.com/home/en/developer/rl_example). 
+
+However the tutorial and code relies on [Isaac Gym Preview 4](https://developer.nvidia.com/isaac-gym), and `Isaac Gym Preview 4` has been replaced by `Isaac Lab`. 
+
+Nvidia provides a guide on [the migration from IsaacGymEnvs to IsaacLab](https://isaac-sim.github.io/IsaacLab/source/migration/migrating_from_isaacgymenvs.html).
+
+It is not an easy job to do the migration, because you must be familiar with both `IsaacSim & IsaacLab` and `unitree SDK`, before you start to modify unitree's [unitree_rl_gym code](https://github.com/unitreerobotics/unitree_rl_gym). 
+
+We are waiting for Unitree to update their tutorial and codes. 
 
 
