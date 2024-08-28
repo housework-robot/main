@@ -214,3 +214,68 @@ We manually installed the following packages related to `Isaac Sim` and successf
 ~~~
 pip install isaacsim-rl isaacsim-replicator isaacsim-extscache-physics isaacsim-extscache-kit-sdk isaacsim-extscache-kit isaacsim-app --extra-index-url https://pypi.nvidia.com
 ~~~
+
+
+# 4. Verify Isaac Sim support Isaac Lab
+
+After downloading and installing `Isaac Lab`, we mistakenly assumed that the installation of `Isaac Lab` is finally completed, and didn't pay attention to the details of the section [Verifying the Isaac Sim installation](https://isaac-sim.github.io/IsaacLab/source/setup/installation/verifying_installation.html). 
+
+However, when executing the commands in this section, many errors were encountered.
+
+## 4.1 Set environmental variables
+
+You must set the environment variables; otherwise, subsequent commands cannot be executed properly. 
+
+Note that the version of `Isaac Sim` we installed is `4.0.0`, so the `ISAACSIM_PATH` differs from the official one which is version `4.1.0`.
+
+~~~
+# Isaac Sim root directory
+export ISAACSIM_PATH="${HOME}/.local/share/ov/pkg/isaac-sim-4.0.0"
+
+# Isaac Sim python executable
+export ISAACSIM_PYTHON_EXE="${ISAACSIM_PATH}/python.sh"
+~~~
+
+## 4.2 Launch Isaac Sim
+
+There are two methods to launch `Isaac Sim`, 
+
+1. the one is to select `Isaac Sim` in `Omniverse Launcher`'s `Library`, and then lick `Launch` button.
+
+2. In CLI terminal, execute `isaac-sim.sh` script.
+
+~~~
+# note: you can pass the argument "--help" to see all arguments possible.
+${ISAACSIM_PATH}/isaac-sim.sh
+~~~   
+
+When executing `isaac-sim.sh` script, it will pop up a window as following, 
+
+![The execution result of isaac-sim.sh without parameters](S04E01_asset/4_1_empty_isaac_sim.PNG "The execution result of isaac-sim.sh without parameters") 
+
+## 4.3 Run Isaac Sim's python program
+
+When running `Isaac Sim`'s python programs, you must use `Isaac Sim`'s `python.sh` script, instead of using `python` directly. 
+
+~~~
+${ISAACSIM_PYTHON_EXE} ${ISAACSIM_PATH}/standalone_examples/api/omni.isaac.core/add_cubes.py  
+~~~
+
+The execution result is a pop-up window, with red and white blocks jumping up and down. 
+
+![The execution result of isaac-sim python program](S04E01_asset/4_2_cube_isaac_sim.PNG "The execution result of isaac-sim python program") 
+
+## 4.4 Run Isaac Lab's python program
+
+In the directory `IsaacLab/source/standalone`, there are several Python programs. 
+
+You can run them with `${ISAACSIM_PYTHON_EXE}`, but you cannot run them directly with `python`.
+
+When running, there might be errors indicating insufficient memory or computing power, which is normal and can be ignored. This is because the computer we are using is a Razer laptop, equipped with 16GB DDR5 RAM, as well as an RTX 3070Ti GPU with 8GB GDDR6 RAM, which has limited memory and computing power.
+
+~~~
+${ISAACSIM_PYTHON_EXE} /home/robot/IsaacLab/source/standalone/demos/arms.py 
+~~~
+
+
+
