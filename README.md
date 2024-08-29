@@ -107,7 +107,7 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 1. S04E01 [Trouble shooting for the installation of Isaac Sim and Lab](S04_RL_for_unitree/S04E01_Isaac_sim_lab_installation.md)
 
-   [![A demo of Isaac Sim with robotic arms](https://img.youtube.com/vi/tWw1G2KQfQw/hqdefault.jpg)](https://www.youtube.com/watch?v=tWw1G2KQfQw)
+   [![A demo of Isaac Sim with robotic arms](https://img.youtube.com/vi/UrqeJQCUb4Y/hqdefault.jpg)](https://www.youtube.com/watch?v=UrqeJQCUb4Y)
 
    
    
