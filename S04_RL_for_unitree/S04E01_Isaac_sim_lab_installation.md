@@ -296,4 +296,8 @@ It is not an easy job to do the migration, because you must be familiar with bot
 
 We are waiting for Unitree to update their tutorial and codes. 
 
+An overview of this document is shown in the following video, 
+
+   [![A demo of Isaac Sim with robotic arms](https://img.youtube.com/vi/UrqeJQCUb4Y/hqdefault.jpg)](https://www.youtube.com/watch?v=UrqeJQCUb4Y)
+
 
