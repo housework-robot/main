@@ -20,3 +20,18 @@ On the Isaac Lab's github page, there are [ready-to-use source codes](https://gi
 
 The task at hand is to use [the PPO reinforcement learning algorithm](https://en.wikipedia.org/wiki/Proximal_policy_optimization) with the Isaac Lab simulation platform, to train the Unitree robotic dog Go2 to walk as long as possible, and keep balanced.
 
+
+# 2. Train Cartpole
+
+On [Isaac Lab's github page](https://isaac-sim.github.io/IsaacLab), there are a series of tutorials, one of them is titled "[Training with an RL Agent](https://isaac-sim.github.io/IsaacLab/source/tutorials/03_envs/run_rl_training.html)", that explains how to use reinforcement learning algorithms to train a [cartpole](https://www.youtube.com/watch?v=JNKvJEzuNsc), and how to use the checkpoint of the motion model after training.
+
+[Reinforcement Learning (RL)]https://en.wikipedia.org/wiki/Reinforcement_learning() is a generic principle, there are quite some specific algorithms belonging to RL, such as DQN, A2C, PPO, etc.
+
+There are several open-source packages that implement those reinforcement learning algorithms.
+
+Isaac Lab has provided wrappers for the following open-source packages: [stable-baselines3 (sb3)](https://github.com/DLR-RM/stable-baselines3), [rsl_rl](https://github.com/leggedrobotics/rsl_rl), [skrl](https://skrl.readthedocs.io/en/latest/), and [rl_games](https://github.com/Denys88/rl_games), which reduces the difficulty of learning for the end users. Among them,
+
+- [sb3](https://github.com/DLR-RM/stable-baselines3) implements a larger number of algorithms,
+  
+- [rsl_rl](https://github.com/leggedrobotics/rsl_rl)  only implements the PPO algorithm for the time being, with other algorithms in progress, but rsl_rl can run on GPU, thus more efficient than sb3.
+
