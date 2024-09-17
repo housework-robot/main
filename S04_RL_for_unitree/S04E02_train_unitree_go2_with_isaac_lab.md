@@ -49,7 +49,7 @@ Please note,
 
 1. The command `./isaaclab.sh -p` can be replaced with `${HOME}/.local/share/ov/pkg/isaac-sim-4.0.0/python.sh`.
    
-  `python.sh` is not equivalent to directly executing `python`, it is script that including installation, environmental variables setting, conda virtual environment setting, in addition to executing python.
+    `python.sh` is not equivalent to directly executing `python`, it is script that including installation, environmental variables setting, conda virtual environment setting, in addition to executing python.
   
 2. `--num_envs 64` refers to training 64 cartpoles simultaneously. Users can replace 64 with another number based on the computing power of their computer.
    
@@ -57,6 +57,6 @@ Please note,
    
 4. `--headless` option should not be used. When installing Isaac Lab in binary mode, [using `--headless` will result in an error](https://github.com/isaac-sim/IsaacLab/issues/878), with the following error message. The bug is yet to fix. 
 
-~~~
-No module named 'omni.kit.window.title'
-~~~
+    ~~~
+    No module named 'omni.kit.window.title'
+    ~~~
