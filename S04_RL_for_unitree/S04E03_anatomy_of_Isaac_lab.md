@@ -360,4 +360,173 @@ $ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py --task Isaac-Veloc
 Observation tensor consists of 48 elements, corresponding to 7 physical parameters, like `base_lin_vel`. 
 
 So far, the 2'nd sub-task, to understand the physical meaning of each element of observations, is done. 
-   
+
+&nbsp;
+# 4. The physical meanings of actions
+
+## 4.1 env.step()
+
+Referring to the source code of `play.py`, `actions` come from `policy`, and `policy` comes from `ppo_runner`. 
+
+However, as the output of `policy`, `actions = policy(obs)`, all we know about `action` so far is that it is a tensor, but we don't know yet each element of the `action` tensor corresponds to what physical parameter of the unitree go2 robotic dog. 
+
+Therefore, we reviewed the source code of `env.step(actions)`, to see how to use `action` tensor. 
+
+~~~
+from rsl_rl.runners import OnPolicyRunner
+import omni.isaac.lab_tasks  # noqa: F401
+from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
+from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
+    RslRlOnPolicyRunnerCfg,
+    RslRlVecEnvWrapper,
+    ...
+)
+
+def main():
+    """Play with RSL-RL agent."""
+    # parse configuration
+    env_cfg = parse_env_cfg(
+        args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
+    )
+    agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
+
+    # create isaac environment
+    # args_cli.task == "Isaac-Velocity-Flat-Unitree-Go2-v0"
+    env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)    
+    # wrap around environment for rsl-rl
+    env = RslRlVecEnvWrapper(env)
+
+    ppo_runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
+    ppo_runner.load(resume_path)
+    # obtain the trained policy for inference
+    policy = ppo_runner.get_inference_policy(device=env.unwrapped.device)
+    
+    # reset environment
+    obs, _ = env.get_observations()
+    timestep = 0
+    # simulate environment
+    while simulation_app.is_running():
+        # run everything in inference mode
+        with torch.inference_mode():
+            # agent stepping
+            actions = policy(obs)
+            # env stepping
+            obs, _, _, _ = env.step(actions)
+
+    # close the simulator
+    env.close()
+~~~
+
+&nbsp;
+## 4.2 manager_based_env.py
+
+Starting from the source code of `RslRlVecEnvWrapper`, we traced back to the source code of `ManagerBasedEnv`. Over there, we found that it was `ActionManager` who took charge of executing `env.step(actions)`. 
+
+~~~
+from omni.isaac.lab.managers import ActionManager, EventManager, ObservationManager
+from .manager_based_env_cfg import ManagerBasedEnvCfg
+
+class ManagerBasedEnv:
+    def step(self, action: torch.Tensor) -> tuple[VecEnvObs, dict]:
+        # process actions
+        self.action_manager.process_action(action.to(self.device))
+        
+        # perform physics stepping
+        for _ in range(self.cfg.decimation):
+            # set actions into buffers
+            self.action_manager.apply_action()            
+~~~
+
+The source code of `ManagerBasedEnv` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab/omni/isaac/lab/envs/manager_based_env.py`
+
+&nbsp;
+## 4.3 action_manager.py
+
+~~~
+class ActionTerm(ManagerTermBase):
+    def __init__(self, cfg: ActionTermCfg, env: ManagerBasedEnv):
+        """Initialize the action term.
+        Args:
+            cfg: The configuration object.
+            env: The environment instance.
+        """
+        # call the base class constructor
+        super().__init__(cfg, env)
+        # parse config to obtain asset to which the term is applied
+        self._asset: AssetBase = self._env.scene[self.cfg.asset_name]
+        ...
+        
+    @abstractmethod
+    def process_actions(self, actions: torch.Tensor):
+        """Processes the actions sent to the environment.
+        Args:
+            actions: The actions to process.
+        """
+        raise NotImplementedError       
+
+    @abstractmethod
+    def apply_actions(self):
+        """Applies the actions to the asset managed by the term.
+        Note:
+            This is called at every simulation step by the manager.
+        """
+        raise NotImplementedError    
+
+
+class ActionManager(ManagerBase):  
+    def __init__(self, cfg: object, env: ManagerBasedEnv):
+        """Initialize the action manager.
+
+        Args:
+            cfg: The configuration object or dictionary (``dict[str, ActionTermCfg]``).
+            env: The environment instance.
+        """
+        ...
+         
+    def process_action(self, action: torch.Tensor):
+        """Processes the actions sent to the environment.
+        Note:
+            This function should be called once per environment step.
+        Args:
+            action: The actions to process.
+        """
+        ...
+        # split the actions and apply to each tensor
+        idx = 0
+        for term in self._terms.values():
+            term_actions = action[:, idx : idx + term.action_dim]
+            term.process_actions(term_actions)
+            idx += term.action_dim
+
+    def apply_action(self) -> None:
+        """Applies the actions to the environment/simulation.
+
+        Note:
+            This should be called at every simulation step.
+        """
+        for term in self._terms.values():
+            term.apply_actions()         
+~~~
+
+1. The source code of `action_manager.py` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab/omni/isaac/lab/managers/action_manager.py`,
+
+2. Both `process_actions()` and `apply_actions()` are of abstract method, that means their implementation is actually done by `ActionManager`'s descendant classes.
+
+3. The initialization of instances of `ActionTerm` and `ActionManager` rely on `cfg`, and `cfg` comes from `play.py`.
+
+~~~
+from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
+
+def main():
+    """Play with RSL-RL agent."""
+    # parse configuration
+    env_cfg = parse_env_cfg(
+        args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
+    )
+    agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
+
+    # create isaac environment
+    # args_cli.task == "Isaac-Velocity-Flat-Unitree-Go2-v0"
+    env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
+~~~
+
