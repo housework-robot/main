@@ -25,7 +25,7 @@ Specifically, the first task consists of the following sub-tasks:
 
 1. Read the source code of Isaac Lab to obtain the range of values for observations and actions in the simulation environment, that is, `observation_space` and `action_space`.
    
-2. Since the data types for observations and actions are tensors, it is necessary to understand the physical meaning of each value in the tensors, more specifically, each tensor value corresponds to which joint's what parameter of the robotic dog.
+2. Since the data types for observations and actions are tensors, it is necessary to understand the physical meaning of each element in the tensors, more specifically, each tensor element corresponds to which joint's what parameter of the robotic dog.
    
 3. Read the source code of Isaac Lab to understand how to initialize the motion model and how to load the checkpoint.
 
@@ -33,7 +33,7 @@ As Isaac Lab is under rapid iterative development, for the time being, [its offi
 
 Therefore, if you want to understand Isaac Lab in depth, for now, the only way is to read its source code. 
 
-
+&nbsp;
 # 2. Observation space & action space
 
 ## 2.1 play.py
@@ -239,3 +239,125 @@ $ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py --task Isaac-Veloc
 【Kan】observation_space: 'Dict('policy': Box(-inf, inf, (1, 48), float32))'
 【Kan】action_space: 'Box(-inf, inf, (1, 12), float32)' 
 ~~~
+
+&nbsp;
+# 3. The physical meanings of observations
+
+## 3.1 manager_based_rl_env.py
+
+Referring to the source code of `rsl_rl/vecenv_wrapper.py`, `observations` come from `self.unwrapped.observation_manager.compute()`. 
+
+~~~
+    def get_observations(self) -> tuple[torch.Tensor, dict]:
+        """Returns the current observations of the environment."""
+        if hasattr(self.unwrapped, "observation_manager"):
+            print(f"\n【Kan】 type(self.unwrapped): \n\t'{type(self.unwrapped)}')\n")
+            obs_dict = self.unwrapped.observation_manager.compute()
+        else:
+            obs_dict = self.unwrapped._get_observations()
+        
+        return obs_dict["policy"], {"observations": obs_dict}
+~~~
+
+To understand this piece of code in more depth, we need to know what class `self.unwrapped` is of. Hence, we added a `print` in the source code. 
+
+`self.unwrapped` is an instance of `ManagerBasedRLEnv` class. 
+
+~~~
+$ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py --task Isaac-Velocity-Flat-Unitree-Go2-Play-v0 --num_envs 1
+
+【Kan】 type(self.unwrapped):
+    '<class 'omni.isaac.lab.envs.manager_based_rl_env.ManagerBasedRLEnv'>')
+~~~
+
+&nbsp;
+## 3.2 observation_manager.py
+
+Starting from the source code of `manager_based_rl_env.py`, we traced back its ancestor classes, and found that we needed to read carefully the source code of `observation_manager`. 
+
+~~~
+class ObservationManager(ManagerBase):
+        
+    def compute(self) -> dict[str, torch.Tensor | dict[str, torch.Tensor]]:
+        # create a buffer for storing obs from all the groups
+        obs_buffer = dict()
+        # iterate over all the terms in each group
+        for group_name in self._group_obs_term_names:
+            obs_buffer[group_name] = self.compute_group(group_name)
+        # otherwise return a dict with observations of all groups
+        return obs_buffer
+        
+    def compute_group(self, group_name: str) -> torch.Tensor | dict[str, torch.Tensor]:
+        # iterate over all the terms in each group
+        group_term_names = self._group_obs_term_names[group_name]
+        print(f"\n 【Kan】group_term_names: {group_term_names}")
+        
+        # buffer to store obs per group
+        group_obs = dict.fromkeys(group_term_names, None)
+        # read attributes for each term
+        obs_terms = zip(group_term_names, self._group_obs_term_cfgs[group_name])
+
+        # evaluate terms: compute, add noise, clip, scale, custom modifiers
+        for name, term_cfg in obs_terms:
+            # compute term's value
+            obs: torch.Tensor = term_cfg.func(self._env, **term_cfg.params).clone()
+            print(f" 【Kan】obs: {obs}")
+            
+            # apply post-processing
+            if term_cfg.modifiers is not None:
+                for modifier in term_cfg.modifiers:
+                    obs = modifier.func(obs, **modifier.params)
+            if term_cfg.noise:
+                obs = term_cfg.noise.func(obs, term_cfg.noise)
+            if term_cfg.clip:
+                obs = obs.clip_(min=term_cfg.clip[0], max=term_cfg.clip[1])
+            if term_cfg.scale:
+                obs = obs.mul_(term_cfg.scale)
+            # add value to list
+            group_obs[name] = obs
+            
+        print(f" 【Kan】group_obs: {group_obs}\n")
+        # concatenate all observations in the group together
+        if self._group_obs_concatenate[group_name]:
+            return torch.cat(list(group_obs.values()), dim=-1)
+        else:
+            return group_obs               
+~~~
+
+The source code of `observation_manager` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab/omni/isaac/lab/managers/observation_manager.py`. 
+
+We executed `play.py` again, to print out the content of `group_obs`. 
+
+~~~
+$ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py --task Isaac-Velocity-Flat-Unitree-Go2-Play-v0 --num_envs 1
+
+ 【Kan】group_term_names: [
+        'base_lin_vel', 'base_ang_vel', 'projected_gravity', 
+        'velocity_commands', 'joint_pos', 'joint_vel', 'actions']
+ 【Kan】obs: tensor([[-0.4864, -0.7890,  0.0071]], device='cuda:0')
+ 【Kan】obs: tensor([[-0.5989,  0.0707, -0.0675]], device='cuda:0')
+ 【Kan】obs: tensor([[ 0.0087, -0.0022, -1.0000]], device='cuda:0')
+ 【Kan】obs: tensor([[-0.5736, -0.8130,  0.0198]], device='cuda:0')
+ 【Kan】obs: tensor([[-0.1097,  0.2212,  0.1241, -0.1258,  0.4233, -0.3994,  0.0043, -0.2238,
+         -0.3595, -0.3035, -0.2136, -0.2348]], device='cuda:0')
+ 【Kan】obs: tensor([[-3.1006,  1.2976, -0.0911,  3.1422,  0.3950,  0.1218,  1.1565, -0.5976,
+         -2.6858, -0.1952, -0.2954, -2.3376]], device='cuda:0')
+ 【Kan】obs: tensor([[-1.2007,  0.1980,  0.1681,  0.8183,  1.4110, -0.2133,  0.4731, -1.4501,
+         -1.1923, -0.0632, -0.5582,  0.3421]], device='cuda:0')
+ 【Kan】group_obs: {
+        'base_lin_vel': tensor([[-0.5578, -0.8615, -0.0395]], device='cuda:0'), 
+        'base_ang_vel': tensor([[-0.5672,  0.1676, -0.0858]], device='cuda:0'), 
+        'projected_gravity': tensor([[ 0.0587,  0.0334, -1.0118]], device='cuda:0'), 
+        'velocity_commands': tensor([[-0.5736, -0.8130,  0.0198]], device='cuda:0'), 
+        'joint_pos': tensor([[-0.1076,  0.2249,  0.1174, -0.1215,  0.4330, -0.4039, -0.0043, -0.2249,
+         -0.3630, -0.2957, -0.2046, -0.2444]], device='cuda:0'), 
+        'joint_vel': tensor([[-3.6872,  0.8345,  0.9783,  3.4316,  0.9197,  0.7776, -0.0279, -1.5330,
+         -2.3675,  0.7889, -1.4047, -3.2064]], device='cuda:0'), 
+        'actions': tensor([[-1.2007,  0.1980,  0.1681,  0.8183,  1.4110, -0.2133,  0.4731, -1.4501,
+         -1.1923, -0.0632, -0.5582,  0.3421]], device='cuda:0')}
+~~~
+
+Observation tensor consists of 48 elements, corresponding to 7 physical parameters, like `base_lin_vel`. 
+
+So far, the 2'nd sub-task, to understand the physical meaning of each element of observations, is done. 
+   
