@@ -25,7 +25,7 @@ The task at hand is to use [the PPO reinforcement learning algorithm](https://en
 
 On [Isaac Lab's github page](https://isaac-sim.github.io/IsaacLab), there are a series of tutorials, one of them is titled "[Training with an RL Agent](https://isaac-sim.github.io/IsaacLab/source/tutorials/03_envs/run_rl_training.html)", that explains how to use reinforcement learning algorithms to train a [cartpole](https://www.youtube.com/watch?v=JNKvJEzuNsc), and how to use the checkpoint of the motion model after training.
 
-[Reinforcement Learning (RL)]https://en.wikipedia.org/wiki/Reinforcement_learning() is a generic principle, there are quite some specific algorithms belonging to RL, such as DQN, A2C, PPO, etc.
+[Reinforcement Learning (RL)](https://en.wikipedia.org/wiki/Reinforcement_learning) is a generic principle, there are quite some specific algorithms belonging to RL, such as DQN, A2C, PPO, etc.
 
 There are several open-source packages that implement those reinforcement learning algorithms.
 
