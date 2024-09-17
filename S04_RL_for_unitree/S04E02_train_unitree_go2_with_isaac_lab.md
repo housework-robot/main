@@ -35,7 +35,6 @@ Isaac Lab has provided wrappers for the following open-source packages: [stable-
   
 - [rsl_rl](https://github.com/leggedrobotics/rsl_rl)  only implements the PPO algorithm for the time being, with other algorithms in progress, but rsl_rl can run on GPU, thus more efficient than sb3.
 
-“Training with an RL Agent” 教程中，执行训练任务的指令如下，
 
 Following the instruction of "[Training with an RL Agent](https://isaac-sim.github.io/IsaacLab/source/tutorials/03_envs/run_rl_training.html)", we can execute the following commmand to start the training process, 
 
