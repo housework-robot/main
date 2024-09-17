@@ -33,3 +33,209 @@ As Isaac Lab is under rapid iterative development, for the time being, [its offi
 
 Therefore, if you want to understand Isaac Lab in depth, for now, the only way is to read its source code. 
 
+
+# 2. Observation space & action space
+
+## 2.1 play.py
+
+As mentioned in [the previous article](./S04E02_train_unitree_go2_with_isaac_lab.md), when we use the model's checkpoint generated from simulation training, to control a unitree go2 robotic dog's 3D model walking stably in the simulated environment, we can execute the following command,
+
+~~~
+$ cd ${HOME}/IsaacLab
+
+$ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py --task Isaac-Velocity-Flat-Unitree-Go2-v0 --num_envs 1
+~~~
+
+We can add `print` in the `play.py` code, to display the content of `observations` and `actions`. 
+
+~~~
+from rsl_rl.runners import OnPolicyRunner
+import omni.isaac.lab_tasks  # noqa: F401
+from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
+from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
+    RslRlOnPolicyRunnerCfg,
+    RslRlVecEnvWrapper,
+    ...
+)
+
+def main():
+    """Play with RSL-RL agent."""
+    # parse configuration
+    env_cfg = parse_env_cfg(
+        args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
+    )
+    agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
+
+    # create isaac environment
+    # args_cli.task == "Isaac-Velocity-Flat-Unitree-Go2-v0"
+    env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
+    
+    # wrap around environment for rsl-rl
+    env = RslRlVecEnvWrapper(env)
+
+    ppo_runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
+    ppo_runner.load(resume_path)
+    # obtain the trained policy for inference
+    policy = ppo_runner.get_inference_policy(device=env.unwrapped.device)
+    
+    # reset environment
+    obs, _ = env.get_observations()
+    timestep = 0
+    # simulate environment
+    while simulation_app.is_running():
+        # run everything in inference mode
+        with torch.inference_mode():
+            # agent stepping
+            actions = policy(obs)
+            print(f"\n 【Kan】actions: {actions}\n")
+
+            # env stepping
+            obs, _, _, _ = env.step(actions)
+            print(f"\n 【Kan】obs: {obs}")
+            
+    # close the simulator
+    env.close()
+~~~
+
+1. `play.py` locates in `${HOME}/IsaacLab/source/standalone/workflows/rsl_rl/play.py`
+
+2. `actions` is a list, with 12 elements; `observations` is also a list, with 48 elements. For example,
+
+~~~
+$ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py --task Isaac-Velocity-Flat-Unitree-Go2-Play-v0 --num_envs 1
+
+ 【Kan】actions: tensor([[ 0.8928, -0.4638,  0.2429, -1.2878, -1.2111, -1.2118,  0.8140,  0.8757,
+         -0.9861, -0.4190,  0.1238, -0.6535]], device='cuda:0')
+ 
+ 【Kan】obs: tensor([[ 3.3607e-01,  5.1930e-01,  5.0650e-02, -8.9403e-04, -3.5218e-01,
+         -5.9714e-01,  4.8754e-03, -2.0455e-02, -9.9978e-01,  3.0070e-01,
+          4.8536e-01, -5.9996e-01,  3.2151e-01, -5.0676e-01,  4.1084e-01,
+         -4.9038e-01, -3.7618e-02, -1.9251e-01,  1.1657e-01,  1.6681e-01,
+         -3.3381e-01, -1.0723e-01, -1.1087e-01,  8.0957e-02, -1.3078e+00,
+         -8.5041e-01, -7.8278e-01, -9.9005e-01,  2.8531e+00, -1.9452e-01,
+          1.9639e+00, -1.2273e+00, -1.8131e+00,  2.1571e+00, -9.7164e-01,
+          5.4120e-01, -2.2933e-01, -7.3102e-01,  1.2406e+00, -1.2660e+00,
+         -4.7365e-01, -9.7907e-01,  2.3704e-01,  1.7186e-01, -6.7613e-01,
+         -9.9902e-02, -1.6771e-01,  2.2881e-01]], device='cuda:0')        
+~~~
+
+Although we have got samples of `observations` and `actions`, we have not yet got their value ranges, `observation_space` and `action_space`.
+
+&nbsp;
+## 2.2 rsl_rl.py
+
+Referring to the source code of `play.py`, we know that `observations` come from `env`, and `actions` come from `policy`.
+
+~~~
+from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
+    RslRlVecEnvWrapper, ...
+)
+    
+env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
+env = RslRlVecEnvWrapper(env)
+obs, _ = env.get_observations()
+
+ppo_runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
+ppo_runner.load(resume_path)
+policy = ppo_runner.get_inference_policy(device=env.unwrapped.device)
+actions = policy(obs)
+~~~
+
+Next, we will read into the source code related to `RslRlVecEnvWrapper`, to see if there is any information related to `observation_space` over there.
+
+In case `RslRlVecEnvWrapper` does not have information related to `observation_space`, then we will continue to review the source code of `gym.make()`.
+
+Referring to the source code of `play.py`, we know that `RslRlVecEnvWrapper` is related to `wrappers/rsl_rl/__init__.py`. Tracing back to the ancestor classes of `wrappers/rsl_rl/__init__.py`, we eventually find that the source code for `RslRlVecEnvWrapper` is located in `rsl_rl/vecenv_wrapper.py`.
+
+~~~
+from rsl_rl.env import VecEnv
+
+class RslRlVecEnvWrapper(VecEnv):
+    @property
+    def observation_space(self) -> gym.Space:
+        """Returns the :attr:`Env` :attr:`observation_space`."""
+        return self.env.observation_space
+
+    @property
+    def action_space(self) -> gym.Space:
+        """Returns the :attr:`Env` :attr:`action_space`."""
+        return self.env.action_space
+        
+    def get_observations(self) -> tuple[torch.Tensor, dict]:
+        """Returns the current observations of the environment."""
+        if hasattr(self.unwrapped, "observation_manager"):
+            obs_dict = self.unwrapped.observation_manager.compute()
+        else:
+            obs_dict = self.unwrapped._get_observations()
+        
+        return obs_dict["policy"], {"observations": obs_dict}
+~~~
+
+1. `rsl_rl/vecenv_wrapper.py` locates in `/home/robot/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/utils/wrappers/rsl_rl/vecenv_wrapper.py`,
+
+2. Luckily, `rsl_rl/vecenv_wrapper.py` contains the source code of both `observation_space` and `action_space`.
+
+&nbsp;
+## 2.3 observation_space & action_space
+
+We added two `print` into the source code of `play.py`, to display the content of `observation_space` and `action_space`. 
+
+The first sub-task, finding the range of values for `observation_space` and `action_space`, is done. 
+
+~~~
+from rsl_rl.runners import OnPolicyRunner
+import omni.isaac.lab_tasks  # noqa: F401
+from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
+from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
+    RslRlOnPolicyRunnerCfg,
+    RslRlVecEnvWrapper,
+    ...
+)
+
+def main():
+    """Play with RSL-RL agent."""
+    # parse configuration
+    env_cfg = parse_env_cfg(
+        args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
+    )
+    agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
+
+    # create isaac environment
+    # args_cli.task == "Isaac-Velocity-Flat-Unitree-Go2-v0"
+    env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
+    
+    # wrap around environment for rsl-rl
+    env = RslRlVecEnvWrapper(env)
+
+    ppo_runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
+    ppo_runner.load(resume_path)
+    # obtain the trained policy for inference
+    policy = ppo_runner.get_inference_policy(device=env.unwrapped.device)
+    
+    # reset environment
+    obs, _ = env.get_observations()
+    timestep = 0
+    # simulate environment
+    while simulation_app.is_running():
+        # run everything in inference mode
+        with torch.inference_mode():
+            # agent stepping
+            actions = policy(obs)
+            # env stepping
+            obs, _, _, _ = env.step(actions)
+            
+            print(f"\n【Kan】observation_space: '{env.observation_space}'")
+            print(f"【Kan】action_space: '{env.action_space}' \n")
+            
+    # close the simulator
+    env.close()
+~~~
+
+Following is the execution result,
+
+~~~
+$ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py --task Isaac-Velocity-Flat-Unitree-Go2-Play-v0 --num_envs 1
+
+【Kan】observation_space: 'Dict('policy': Box(-inf, inf, (1, 48), float32))'
+【Kan】action_space: 'Box(-inf, inf, (1, 12), float32)' 
+~~~
