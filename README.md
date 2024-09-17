@@ -105,9 +105,14 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 ## Season 4. Simulation and RL for Unitree's Go2 robotic dog 
 
-1. S04E01 [Trouble shooting for the installation of Isaac Sim and Lab](S04_RL_for_unitree/S04E01_Isaac_sim_lab_installation.md)
+1. S04E01. [Trouble shooting for the installation of Isaac Sim and Lab](S04_RL_for_unitree/S04E01_Isaac_sim_lab_installation.md)
 
    [![A demo of Isaac Sim with robotic arms](https://img.youtube.com/vi/UrqeJQCUb4Y/hqdefault.jpg)](https://www.youtube.com/watch?v=UrqeJQCUb4Y)
+
+
+2. S04E02. [Train Unitree Go2 Robot Dog with Isaac Sim/Lab](S04_RL_for_unitree/S04E02_train_unitree_go2_with_isaac_lab.md)
+
+   [![4096 Unitree go2 walk simultaneously in Isaac Lab simulation environment](https://img.youtube.com/vi/F3nPczXLz9Y/hqdefault.jpg)](https://www.youtube.com/watch?v=F3nPczXLz9Y)
 
    
    
