@@ -156,4 +156,19 @@ gym.register(
 )
 ~~~
 
+This code indicates that, 
 
+1. Isaac Lab has implemented 4 tasks for Unitree Go2, 1) Isaac-Velocity-Flat-Unitree-Go2-v0, 2) Isaac-Velocity-Flat-Unitree-Go2-Play-v0, 3) Isaac-Velocity-Rough-Unitree-Go2-v0, 4) Isaac-Velocity-Rough-Unitree-Go2-Play-v0.
+
+2. For each task, you can use [PPO reinforcement learning algorithm](https://en.wikipedia.org/wiki/Proximal_policy_optimization) to do the training.
+
+    And PPO algorithm is implemented by two packages, [rsl_rl](https://github.com/leggedrobotics/rsl_rl) and [skrl](https://skrl.readthedocs.io/en/latest/), you can select either one of them for your training job.
+
+3. `env_cfg_entry_point` like `flat_env_cfg.UnitreeGo2FlatEnvCfg_PLAY` is implemented by `flat_env_cfg.py` in the same file directory,
+
+   `${HOME}/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/flat_env_cfg.py` 
+
+4. `rsl_rl_cfg_entry_point` like `rsl_rl_ppo_cfg:UnitreeGo2FlatPPORunnerCfg` is implemented by `rsl_rl_ppo_cfg.py` in the sub-directory named `/agents`.
+
+    `${HOME}/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/agents/rsl_rl_ppo_cfg.py`   
+   
