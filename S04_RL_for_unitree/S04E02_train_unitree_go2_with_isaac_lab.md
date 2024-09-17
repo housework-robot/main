@@ -172,3 +172,26 @@ This code indicates that,
 
     `${HOME}/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/agents/rsl_rl_ppo_cfg.py`   
    
+
+# 4. Train Unitree Go2
+
+For the `Isaac-Velocity-Flat-Unitree-Go2-v0` task, we used the `rsl_rl` package, with the `PPO` algorithm, on Isaac Lab platform, to train 4096 Unitree Go2 robotic dogs simultaneously, and record the training process in video.
+
+~~~
+$ cd ${HOME}/IsaacLab
+
+$ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/train.py --task Isaac-Velocity-Flat-Unitree-Go2-v0 --num_envs 4096 --video
+~~~
+
+[![Training Unitree Go2 with Isaac Lab](https://img.youtube.com/vi/clODrsJObLA/hqdefault.jpg)](https://www.youtube.com/watch?v=clODrsJObLA)
+
+
+# 5. Principle 
+
+![Training locomotion robot with Isaac Lab](./S04E02_asset/Isaac_lab_training_workflow.png)
+
+This image is from an NVIDIA blog titled "[Closing the Sim-to-Real Gap: Training Spot Quadruped Locomotion with NVIDIA Isaac Lab](https://developer.nvidia.com/blog/closing-the-sim-to-real-gap-training-spot-quadruped-locomotion-with-nvidia-isaac-lab/)", which discusses how to train Boston Dynamics' Spot robotic dog with Isaac Lab, to keep balance when walking on rough ground.
+
+The basic idea is to first randomly generate some disturbance parameters, including external force to push and pull, and then train a motion model, known as a "Policy Neural Network", using reinforcement learning algorithm.
+
+The input for the motion model is observations of the environment and the status of the robot, and the output is actions to control the joints of the robot, and the reward is the time duration that the robot keeps walking, and the termination is when the dog falls down.
