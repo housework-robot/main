@@ -1141,3 +1141,7 @@ Successfully load the model with checkpoint.
 [INFO] go2_real_env is closed.
 ~~~
 
+Click the following image to see the video of running `go2_play.py`,
+
+[![The execution result of go2_play.py](https://img.youtube.com/vi/Wfvb6__cRRY/hqdefault.jpg)](https://www.youtube.com/watch?v=Wfvb6__cRRY)
+
