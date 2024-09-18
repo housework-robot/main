@@ -530,3 +530,136 @@ def main():
     env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
 ~~~
 
+&nbsp;
+## 4.4 go2/__init__.py
+
+As mentioned above, the initialization of `ActionTerm` and `ActionManager` instances relies on `cfg`, and `cfg` comes from `play.py`, 
+
+~~~
+from omni.isaac.lab_tasks.utils import get_checkpoint_path, parse_env_cfg
+
+env_cfg = parse_env_cfg(
+    args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
+)
+~~~
+
+In the code above, `args_cli.task` indicates that `env_cfg` is decided by the task name, and the task name comes from the CLI command parameter, for example `Isaac-Velocity-Flat-Unitree-Go2-v0`. 
+
+~~~
+$ cd ${HOME}/IsaacLab
+
+$ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py \
+      --task Isaac-Velocity-Flat-Unitree-Go2-v0 --num_envs 1
+~~~
+
+Referring to the Isaac Lab's tutorial "[Registering an Environment](https://isaac-sim.github.io/IsaacLab/source/tutorials/03_envs/register_rl_env_gym.html#manager-based-environments)", 
+
+> For manager-based environments, the following shows the registration call for the cartpole environment in the omni.isaac.lab_tasks.manager_based.classic.cartpole sub-package. 
+
+also according to the source code of `parse_env_cfg.py`, the task `Isaac-Velocity-Flat-Unitree-Go2-v0` is registered in `go2/__init__.py`. 
+
+~~~
+gym.register(
+    id="Isaac-Velocity-Flat-Unitree-Go2-v0",
+    entry_point="omni.isaac.lab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": flat_env_cfg.UnitreeGo2FlatEnvCfg,
+        "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:UnitreeGo2FlatPPORunnerCfg",
+        "skrl_cfg_entry_point": f"{agents.__name__}:skrl_flat_ppo_cfg.yaml",
+    },
+)
+~~~
+
+1. The source code of `go2/__init__.py` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/__init__.py`
+
+2. Based on the registration information of `env`, the content of `env` is decided by `env_cfg_entry_point`, in our case `env_cfg_entry_point` is `flat_env_cfg.UnitreeGo2FlatEnvCfg`.
+
+
+&nbsp;
+## 4.5 go2/rough_env_cfg.py
+
+According to the source code of `UnitreeGo2FlatEnvCfg`, 
+
+`/home/robot/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/flat_env_cfg.py`, 
+
+the super class of `UnitreeGo2FlatEnvCfg` is `UnitreeGo2RoughEnvCfg`. 
+
+Therefore, we review the source code of `UnitreeGo2RoughEnvCfg`, 
+
+~~~
+from omni.isaac.lab_tasks.manager_based.locomotion.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg
+from omni.isaac.lab_assets.unitree import UNITREE_GO2_CFG
+
+@configclass
+class UnitreeGo2RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
+    def __post_init__(self):
+        # post init of parent
+        super().__post_init__()
+
+        self.scene.robot = UNITREE_GO2_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+        ...
+        
+        # reduce action scale
+        self.actions.joint_pos.scale = 0.25
+
+        # event
+        self.events.push_robot = None
+        ...
+
+        # rewards
+        self.rewards.feet_air_time.params["sensor_cfg"].body_names = ".*_foot"
+        ...
+
+        # terminations
+        self.terminations.base_contact.params["sensor_cfg"].body_names = "base"
+~~~
+
+1. The source code of `UnitreeGo2RoughEnvCfg` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/rough_env_cfg.py`
+
+2. In the source code of `UnitreeGo2RoughEnvCfg`, `self.scene.robot` points to the 3D model of unitree go2 robotic dog, hence, we guess that `unitree.UNITREE_GO2_CFG` might have the physical parameters of the unitree go2 dog.
+
+3. The super class of `UnitreeGo2RoughEnvCfg` is `LocomotionVelocityRoughEnvCfg`, we guess that the implementation of `ActionManager` might reside over there. 
+
+
+&nbsp;
+## 4.6 velocity_env_cfg.py
+
+The source code of `LocomotionVelocityRoughEnvCfg` is `velocity_env_cfg.py`, 
+
+~~~
+import omni.isaac.lab_tasks.manager_based.locomotion.velocity.mdp as mdp
+
+@configclass
+class ActionsCfg:
+    """Action specifications for the MDP."""
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names=[".*"], scale=0.5, use_default_offset=True)
+
+@configclass
+class LocomotionVelocityRoughEnvCfg(ManagerBasedRLEnvCfg):
+    """Configuration for the locomotion velocity-tracking environment."""
+    # Scene settings
+    scene: MySceneCfg = MySceneCfg(num_envs=4096, env_spacing=2.5)
+    # Basic settings
+    observations: ObservationsCfg = ObservationsCfg()
+    actions: ActionsCfg = ActionsCfg()
+    commands: CommandsCfg = CommandsCfg()
+    # MDP settings
+    rewards: RewardsCfg = RewardsCfg()
+    terminations: TerminationsCfg = TerminationsCfg()
+    events: EventCfg = EventCfg()
+    curriculum: CurriculumCfg = CurriculumCfg()
+    ...
+~~~
+
+1. `velocity_env_cfg.py` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/velocity_env_cfg.py`.
+
+2. The content of `actions` is decided by `ActionsCfg`.
+
+3. The content of `ActionsCfg` is decided by `mdp.JointPositionActionCfg`.
+
+From the name of `mdp.JointPositionActionCfg`, we guess that `action` tensor's 12 elements might correspond to the joint positions of the robotic dog. Each dog has 4 legs, and each leg has 3 joints, the body joint, the thigh joint, and the calf joint. 
+
+We will verify our guess later on. 
+
+
