@@ -662,4 +662,143 @@ From the name of `mdp.JointPositionActionCfg`, we guess that `action` tensor's 1
 
 We will verify our guess later on. 
 
+&nbsp;
+## 4.7 mdp/actions/joint_actions.py
+
+Starting from `mdp/__init__.py`, we traced back its ancestor classes, until `joint_actions.py`,
+
+~~~
+from omni.isaac.lab.assets.articulation import Articulation
+
+class JointAction(ActionTerm):
+
+    cfg: actions_cfg.JointActionCfg
+    """The configuration of the action term."""
+    _asset: Articulation
+    """The articulation asset on which the action term is applied."""
+
+    def __init__(self, cfg: actions_cfg.JointActionCfg, env: ManagerBasedEnv) -> None:
+        # initialize the action term
+        super().__init__(cfg, env)
+
+        # resolve the joints over which the action term is applied
+        self._joint_ids, self._joint_names = self._asset.find_joints(
+            self.cfg.joint_names, 
+            preserve_order=self.cfg.preserve_order
+        )
+        
+
+class JointPositionAction(JointAction):
+    """Joint action term that applies the processed actions to the articulation's joints as position commands."""
+
+    cfg: actions_cfg.JointPositionActionCfg
+    """The configuration of the action term."""
+
+    def __init__(self, cfg: actions_cfg.JointPositionActionCfg, env: ManagerBasedEnv):
+        # initialize the action term
+        super().__init__(cfg, env)
+        # use default joint positions as offset
+        if cfg.use_default_offset:
+            self._offset = self._asset.data.default_joint_pos[:, self._joint_ids].clone()
+
+    def apply_actions(self):
+        # set position targets
+        self._asset.set_joint_position_target(
+            self.processed_actions, 
+            joint_ids=self._joint_ids
+        )
+   
+        
+class JointVelocityAction(JointAction):
+    ...
+
+class JointEffortAction(JointAction):
+    ...
+~~~
+
+1. The source code of `joint_actions.py` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab/omni/isaac/lab/envs/mdp/actions/joint_actions.py`.
+
+2. `joint_actions.py` implements `JointPositionAction`, as well as `JointVelocityAction` and `JointEffortAction`, even though we don't use the later two for the time being.
+
+3. The implementation of `JointPositionAction.apply_actions()` is quite straightforward.
+
+    The raw inputs are preprocessed into `processed_actions`, and each action of `processed_actions` is applied to each joint `joint_id`.
+
+4. As mentioned above, `action` tensor consists of 12 elements, at the previous moment, we didn't know which element corresponds to which physical parameter of the robotic dog.
+
+    But now, we know for sure that the 12 elements of `action` tensor correspond to the joints of the robotic dog's 4 legs, i.e `joint_id`s. 
+
+    The remaining job is to find out which `joint_id` corresponds to which leg joint specifically. 
+
+
+&nbsp;
+## 4.8 unitree.py
+
+In the previous section, we mentioned that, 
+
+> In the source code of `UnitreeGo2RoughEnvCfg`, `self.scene.robot` points to the 3D model of unitree go2 robotic dog,
+> hence, we guess that `unitree.UNITREE_GO2_CFG` might have the physical parameters of the unitree go2 dog.
+
+~~~
+from omni.isaac.lab_assets.unitree import UNITREE_GO2_CFG
+
+@configclass
+class UnitreeGo2RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
+
+    def __post_init__(self):
+        self.scene.robot = UNITREE_GO2_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+        ...
+~~~
+
+Review the source code of `unitree.py`, 
+
+~~~
+"""Configuration for Unitree robots.
+
+The following configurations are available:
+
+* :obj:`UNITREE_A1_CFG`: Unitree A1 robot with DC motor model for the legs
+* :obj:`UNITREE_GO1_CFG`: Unitree Go1 robot with actuator net model for the legs
+* :obj:`UNITREE_GO2_CFG`: Unitree Go2 robot with DC motor model for the legs
+* :obj:`H1_CFG`: H1 humanoid robot
+* :obj:`G1_CFG`: G1 humanoid robot
+
+Reference: https://github.com/unitreerobotics/unitree_ros
+# 这里只有 Go1 的 config，没有 Go2 的 config
+"""
+
+import omni.isaac.lab.sim as sim_utils
+from omni.isaac.lab.actuators import ActuatorNetMLPCfg, DCMotorCfg, ImplicitActuatorCfg
+from omni.isaac.lab.assets.articulation import ArticulationCfg
+from omni.isaac.lab.utils.assets import ISAACLAB_NUCLEUS_DIR
+
+UNITREE_GO2_CFG = ArticulationCfg(
+    init_state=ArticulationCfg.InitialStateCfg(
+        pos=(0.0, 0.0, 0.4),
+        joint_pos={
+            ".*L_hip_joint": 0.1,
+            ".*R_hip_joint": -0.1,
+            "F[L,R]_thigh_joint": 0.8,
+            "R[L,R]_thigh_joint": 1.0,
+            ".*_calf_joint": -1.5,
+        },
+        joint_vel={".*": 0.0},
+    ),
+    ...
+)
+"""Configuration of Unitree Go2 using DC-Motor actuator model."""
+~~~
+
+1. The source code of `unitree.py` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab_assets/omni/isaac/lab_assets/unitree.py`.
+
+2. `joint_id`s，in sequence, correspond to these dog leg joints,
+
+~~~
+(1) FL_hip_joint, (2) RL_hip_joint, (3) FR_hip_joint, (4) RR_hip_joint,
+(5) FL_thigh_joint, (6) FR_thigh_joint, (7) RL_thigh_joint, (8) RR_thigh_joint,
+(9) FL_calf_joint, (10) FR_calf_joint, (11) RL_calf_joint, (12) RR_calf_joint.
+~~~
+
+In short, the 3'rd sub-task, to understand the physical meaning of each element of actions, is done. 
+
 
