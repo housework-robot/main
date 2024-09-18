@@ -802,3 +802,224 @@ UNITREE_GO2_CFG = ArticulationCfg(
 In short, the 3'rd sub-task, to understand the physical meaning of each element of actions, is done. 
 
 
+&nbsp;
+# 5. Reinforcement learning-based motion model
+
+## 5.1 agent_cfg
+
+In the previous section, we analyzed the source code of `play.py`, and now we add `print()` into it, to display the content of `agent_cfg`, 
+
+~~~
+from rsl_rl.runners import OnPolicyRunner
+from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
+    RslRlOnPolicyRunnerCfg,
+    RslRlVecEnvWrapper,
+    ...
+)
+
+def main():
+    """Play with RSL-RL agent."""
+    # parse configuration
+    env_cfg = parse_env_cfg(
+        args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs, use_fabric=not args_cli.disable_fabric
+    )
+    agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
+
+    # resume_path: /home/robot/IsaacLab/logs/rsl_rl/unitree_go2_flat/2024-09-01_16-32-19/model_299.pt
+    print(f"[INFO]: Loading model checkpoint from resume_path: {resume_path}")
+    # load previously trained model
+    print(f"\n 【Kan】agent_cfg.to_dict(): '{agent_cfg.to_dict()}'\n")
+    
+    ppo_runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
+    ppo_runner.load(resume_path)
+    # obtain the trained policy for inference
+    policy = ppo_runner.get_inference_policy(device=env.unwrapped.device)
+    
+    # reset environment
+    obs, _ = env.get_observations()
+    timestep = 0
+    # simulate environment
+    while simulation_app.is_running():
+        # run everything in inference mode
+        with torch.inference_mode():
+            # agent stepping
+            actions = policy(obs)
+            # env stepping
+            obs, _, _, _ = env.step(actions)
+            
+    # close the simulator
+    env.close()
+~~~
+
+- play.py 具体位置是，
+  ${HOME}/IsaacLab/source/standalone/workflows/rsl_rl/play.py
+- 运行 play.py 后，显示出了 agent_cfg 的结果如下，
+
+1. The source code of `play.py` locates at `/home/robot/IsaacLab/source/standalone/workflows/rsl_rl/play.py`. 
+
+2. The following is the execution result of `play.py`,
+
+~~~
+$ ./isaaclab.sh -p source/standalone/workflows/rsl_rl/play.py --task Isaac-Velocity-Flat-Unitree-Go2-Play-v0 --num_envs 1
+
+[INFO]: Loading model checkpoint from resume_path: /home/robot/IsaacLab/logs/rsl_rl/unitree_go2_flat/2024-09-01_16-32-19/model_299.pt
+
+【Kan】agent_cfg.to_dict(): '{  
+     'seed': 42, 
+     'device': 'cuda:0', 
+     'num_steps_per_env': 24, 
+     'max_iterations': 300, 
+     'empirical_normalization': False, 
+     'policy': {'class_name': 'ActorCritic', 
+                'init_noise_std': 1.0, 
+                'actor_hidden_dims': [128, 128, 128], 
+                'critic_hidden_dims': [128, 128, 128], 
+                'activation': 'elu'}, 
+     'algorithm': {'class_name': 'PPO', 
+                   'value_loss_coef': 1.0, 
+                   'use_clipped_value_loss': True, 
+                   'clip_param': 0.2, 
+                   'entropy_coef': 0.01, 
+                   'num_learning_epochs': 5, 
+                   'num_mini_batches': 4, 
+                   'learning_rate': 0.001, 
+                   'schedule': 'adaptive', 
+                   'gamma': 0.99, 
+                   'lam': 0.95, 
+                   'desired_kl': 0.01, 
+                   'max_grad_norm': 1.0}, 
+     'save_interval': 50, 
+     'experiment_name': 'unitree_go2_flat', 
+     'run_name': '', 
+     'logger': 'tensorboard', 
+     'neptune_project': 'isaaclab', 
+     'wandb_project': 'isaaclab', 
+     'resume': False, 
+     'load_run': '.*', 
+     'load_checkpoint': 'model_.*.pt'
+   }'
+~~~
+
+
+&nbsp;
+## 5.2 rsl_rl_ppo_cfg.py
+
+In the previous section, we analyzed the source code of `go2/__init__.py`, 
+
+~~~
+gym.register(
+    id="Isaac-Velocity-Flat-Unitree-Go2-v0",
+    entry_point="omni.isaac.lab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": flat_env_cfg.UnitreeGo2FlatEnvCfg,
+        "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:UnitreeGo2FlatPPORunnerCfg",
+        "skrl_cfg_entry_point": f"{agents.__name__}:skrl_flat_ppo_cfg.yaml",
+    },
+)
+~~~
+
+1. The source code of `go2/__init__.py` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/__init__.py`.
+
+2. From the registration information of `env`, we know that the content of the reinforcement learning-based motion model is decided by `rsl_rl_cfg_entry_point`, in our case, the entry point is `rsl_rl_ppo_cfg:UnitreeGo2FlatPPORunnerCfg`. 
+
+&nbsp;
+Following is the source code of `rsl_rl_ppo_cfg:UnitreeGo2FlatPPORunnerCfg`, 
+
+~~~
+from omni.isaac.lab.utils import configclass
+from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
+    RslRlOnPolicyRunnerCfg,
+    RslRlPpoActorCriticCfg,
+    RslRlPpoAlgorithmCfg,
+)
+
+@configclass
+class UnitreeGo2RoughPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+    num_steps_per_env = 24
+    max_iterations = 1500
+    save_interval = 50
+    experiment_name = "unitree_go2_rough"
+    empirical_normalization = False
+    policy = RslRlPpoActorCriticCfg(
+        init_noise_std=1.0,
+        actor_hidden_dims=[512, 256, 128],
+        critic_hidden_dims=[512, 256, 128],
+        activation="elu",
+    )
+    algorithm = RslRlPpoAlgorithmCfg(
+        value_loss_coef=1.0,
+        use_clipped_value_loss=True,
+        clip_param=0.2,
+        entropy_coef=0.01,
+        num_learning_epochs=5,
+        num_mini_batches=4,
+        learning_rate=1.0e-3,
+        schedule="adaptive",
+        gamma=0.99,
+        lam=0.95,
+        desired_kl=0.01,
+        max_grad_norm=1.0,
+    )
+
+@configclass
+class UnitreeGo2FlatPPORunnerCfg(UnitreeGo2RoughPPORunnerCfg):
+    def __post_init__(self):
+        super().__post_init__()
+
+        self.max_iterations = 300
+        self.experiment_name = "unitree_go2_flat"
+        self.policy.actor_hidden_dims = [128, 128, 128]
+        self.policy.critic_hidden_dims = [128, 128, 128]
+~~~
+
+1. The source code of `rsl_rl_ppo_cfg:UnitreeGo2FlatPPORunnerCfg` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab_tasks/omni/isaac/lab_tasks/manager_based/locomotion/velocity/config/go2/agents/rsl_rl_ppo_cfg.py`
+
+2. The content of `rsl_rl_ppo_cfg.py` is equivalent to the content of `agent_cfg` which was displayed in the previous section.
+
+   
+&nbsp;
+## 5.3 setup.py
+
+In the source code of `play.py`, it `import` the `rsl_rl` package. 
+
+~~~
+from rsl_rl.runners import OnPolicyRunner
+~~~
+
+Where does the `rsl_rl` package come from? We review the source code of `setup.py`. 
+
+~~~
+# Extra dependencies for RL agents
+EXTRAS_REQUIRE = {
+    "sb3": ["stable-baselines3>=2.1"],
+    "skrl": ["skrl>=1.2.0"],
+    "rl-games": ["rl-games==1.6.1", "gym"],  # rl-games still needs gym :(
+    "rsl-rl": ["rsl-rl@git+https://github.com/leggedrobotics/rsl_rl.git"],
+    "robomimic": [],
+}
+
+# Add the names with hyphens as aliases for convenience
+EXTRAS_REQUIRE["rl_games"] = EXTRAS_REQUIRE["rl-games"]
+EXTRAS_REQUIRE["rsl_rl"] = EXTRAS_REQUIRE["rsl-rl"]
+~~~
+
+- setup.py 的具体位置是，
+  ${HOME}/IsaacLab/source/extensions/omni.isaac.lab_tasks/setup.py
+- rsl_rl package 是从 rsl_rl github 上下载的，网址是，
+  https://github.com/leggedrobotics/rsl_rl/
+- 我们需要在 Isaac Lab 系统外，重新安装 rsl_rl package，因为后续工作，将脱离 Isaac Lab 系统，
+
+1. The source code of `setup.py` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab_tasks/setup.py`
+
+2. The `rsl_rl` package is downloaded from rsl_rl's github page, and its URL is `https://github.com/leggedrobotics/rsl_rl`
+
+3. We need to install the `rsl_rl` package outside of Isaac Lab system.
+
+    Because later on we will run the `rsl_rl` package on the body of the robotic dog, and we will not install Isaac Lab system on the dog body.
+
+~~~
+$ git clone https://github.com/leggedrobotics/rsl_rl
+$ cd rsl_rl
+$ pip install -e .
+~~~
