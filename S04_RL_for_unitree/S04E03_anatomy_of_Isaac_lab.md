@@ -1057,13 +1057,13 @@ After finishing the research on `observations` and `actions`, and installing the
 
     Inside the source code of `go2_real_env.py`, `self.rl_cfg` is used for the configuration of the reinforcement learning-based motion model.
 
-    The source code of `go2_real_env.py` locates at [the /asset sub-directory of this github repo](./S04E03_asset/go2_real_env.py). 
+    The source code of [`go2_real_env.py`](./S04E03_asset/go2_real_env.py) locates at the `S04E03_asset` sub-directory of this github repo. 
 
 2. rsl_rl_ppo_cfg.json
 
     As mentioned above, `self.rl_cfg` is used for the configuration of RL motion model, and its content comes from `rl_cfg_file`, which is a json file.
 
-    We create [a sample RL configuration json file](./S04E03_asset/rsl_rl_ppo_cfg.json) in this repo.
+    We create a sample RL configuration json file, [`rsl_rl_ppo_cfg.json`](./S04E03_asset/rsl_rl_ppo_cfg.json), locating at the `S04E03_asset` sub-directory of this github repo.
 
     The content of `rsl_rl_ppo_cfg.json` is copied and pasted from the `agent_cfg` and `rsl_rl_ppo_cfg.py` as mentioned in the previous sections. 
 
@@ -1077,7 +1077,9 @@ After finishing the research on `observations` and `actions`, and installing the
 
     [`go2_play.py`](./S04E03_asset/go2_play.py) locates at the `S04E03_asset` sub-directory of this repo.
 
+
 &nbsp;
+
 We created a file directory in our GPU computer, and downed `go2_play.py`，`rsl_rl_ppo_cfg.json`，and `go2_play.py` into this directory.  
 
 After that, we executed `go2_play.py`, and the execution result displayed that, when inputing the exactly same observations to both our `go_env` and Isaac Lab's `env`, their output actions. 
