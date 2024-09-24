@@ -102,6 +102,12 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![See the world through Unitree robotic dog's eyes](https://img.youtube.com/vi/BEfr-7JqaKo/hqdefault.jpg)](https://www.youtube.com/watch?v=BEfr-7JqaKo)
 
+5. S03E05. [Low-level Motion Control of Unitree Go2 Robotic Dog in Python](S03_unitree_robodog/S03E05_unitree_go2_low_level_motion_contron_in_python.md)
+
+   [![running go2_stand_example.py](https://img.youtube.com/vi/0Q9SRtAixJc/hqdefault.jpg)](https://www.youtube.com/watch?v=0Q9SRtAixJc)
+   
+   
+
 
 ## Season 4. Simulation and RL for Unitree's Go2 robotic dog 
 
