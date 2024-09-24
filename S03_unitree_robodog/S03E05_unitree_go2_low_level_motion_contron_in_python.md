@@ -68,3 +68,38 @@ Click "device", then click "service status", then click "sport_mode", to switch 
 
 [![Switch off unitree go2's sport mode](https://img.youtube.com/vi/iAFIqVQT9VM/hqdefault.jpg)](https://www.youtube.com/watch?v=iAFIqVQT9VM)
 
+
+&nbsp;
+# 3. Source code and execution result
+
+## 3.1 go2_low_level.py
+
+We implemented a python code, [`go2_low_level.py`](S03E05_src/go2_low_level.py) following the same workflow of the c++ version, [`go2_low_level.cpp`](https://github.com/unitreerobotics/unitree_sdk2/blob/main/example/go2/go2_low_level.cpp). 
+
+Execute this command in a CLI terminal and the execution result is displayed in the following video. 
+
+~~~
+$ cd /home/robot/unitree/unitree_sdk2_python
+
+$ python3 example/low_level/go2_low_level.py enx207bd51a15b6
+~~~
+
+[![Running go2_low_level.py](https://img.youtube.com/vi/Tf62JpjGhJ4/hqdefault.jpg)](https://www.youtube.com/watch?v=Tf62JpjGhJ4)
+
+
+&nbsp;
+## 3.1 go2_low_level.py
+
+We implemented another python code, [`go2_stand_example.py`](S03E05_src/go2_stand_example.py) following the same workflow of the c++ version, [`go2_stand_example.cpp`](https://github.com/unitreerobotics/unitree_sdk2/blob/main/example/go2/go2_stand_example.cpp). 
+
+Execute this command in a CLI terminal and the execution result is displayed in the following video. 
+
+~~~
+$ cd /home/robot/unitree/unitree_sdk2_python
+
+$ python3 example/low_level/go2_stand_example.py enx207bd51a15b6
+~~~
+
+[![Running go2_low_level.py](https://img.youtube.com/vi/0Q9SRtAixJc/hqdefault.jpg)](https://www.youtube.com/watch?v=0Q9SRtAixJc)
+
+
