@@ -267,7 +267,7 @@ build                CMakeCPack.cmake  compat           docs                    
 CHANGELOG.rst        CMakeLists.txt    CONTRIBUTING.md  etc                                hooks     PackageConfig.cmake.in  ports            scripts     WiX
 $ cd build/
 
-$ cmake .. -DCMAKE_INSTALL_PREFIX=../install
+$ cmake .. -DCMAKE_INSTALL_PREFIX=../install -DBUILD_DDSPERF=OFF
 -- The C compiler identification is GNU 11.4.0
 -- The CXX compiler identification is GNU 11.4.0
 ...
