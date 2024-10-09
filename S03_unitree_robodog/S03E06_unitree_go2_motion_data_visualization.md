@@ -102,3 +102,64 @@ The [`(x, y, z)` 3-axis directions](https://support.unitree.com/home/en/develope
 If more scatter plots need to be added, or if the data displayed in the scatter plots needs to be changed, or if need to change the range and scale of the horizontal and vertical axes of the scatter plots, you need to modify the source code of `go2_supervisor.py`, to do these jobs for the time being.
 
 In the future, we may develop a website where data to be displayed, and the range and scale of the coordinate axes, can be changed by the control knobs on the web page.
+
+
+&nbsp;
+# 4. Execution
+
+First, open a CLI terminal on the computer and start the server-side `go2_supervisor.py`.
+
+At this point, an interface will appear on the computer screen, which includes the left and right sides, each with 3 blank scatter plots.
+
+    ~~~
+    $ cd /home/robot/unitree/unitree_sdk2_python   # ${home_unitree}/unitree_sdk2_python
+
+    $ python3 /example/sim_real/go2_supervisor.py
+    ~~~
+
+If the client-side `go2_motion.py` and `unitree_legged_const.py` are deployed on a computer, follow these steps:
+
+1. Connect the computer to the robotic dog with an Ethernet cable.
+
+2. Press and hold briefly, and then press and hold for a longer time, to start the robotic dog. After starting, the robotic dog will be in a standing position.
+
+3. Open a second CLI terminal on the computer, and start `go2_motion.py`.
+
+    ~~~
+    $ cd /home/robot/unitree/unitree_sdk2_python   # ${home_unitree}/unitree_sdk2_python
+
+    $ python3 /example/sim_real/go2_motion.py
+    ~~~   
+
+
+If the client-side `go2_motion.py` and `unitree_legged_const.py` are deployed on the robotic dog, and the robotic dog communicates with the computer via wifi wirelessly, follow these steps:
+
+1. Press and hold briefly, and then press and hold for a longer time, to start the robotic dog. After starting, the robotic dog will be in a standing position.
+
+2. Find another set of computer peripherals, including a screen, mouse, and keyboard, and connect those peripherals to the robotic dog using a USB hub, as shown in the figure 4.1 below.
+
+    ![Figure 4.1 Connect screen, keyboard and mouse to the Orin board with a USB hub](./S03E06_src/unitree_go2_peripheral.jpg)
+
+3. On the Orin board peripherals, log in to the Nvidia Orin board that comes with the robotic dog. The login name/password is unitree/123.
+
+4. On the Orin board peripherals, start `go2_motion.py `on the Nvidia Orin board that comes with the robotic dog.
+
+    ~~~~
+    $ cd /home/unitree/unitree_sdk2_python   # ${home_unitree}/unitree_sdk2_python
+
+    $ python3 /example/sim_real/go2_motion.py
+    ~~~~
+
+5. Keep the USB hub connected to the Orin board, until the robotic dog can transmit low-level or high-level motion control data to the computer where runs the server side `go2_supervisor.py`, in real-time via wifi, and display the data in the scatter plot.
+
+6. Unplug the USB hub from the robotic dog to allow it to move freely. At this point, the computer should be able to continue receiving real-time motion control data from the robotic dog via wifi and display it in the scatter plot.
+
+7. Use the Unitree robotic dog remote control on your mobile phone to remotely control the robotic dog to walk. 
+
+    The usage of the mobile phone remote control is shown in the figure below. At this time, on the computer, you can see `go2_supervisor.py` continuously receiving motion control data from the robotic dog and continuously displaying acceleration and velocity in the scatter plot.
+    
+    ![Figure 4.2 The remote controller APP of the unitree robotic dog on a mobile phone](./S03E06_src/unitree_mobile_controller.png)
+
+&nbsp;
+The following video shows the actual execution of the above 6 steps.
+
