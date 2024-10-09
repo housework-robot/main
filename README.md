@@ -132,7 +132,14 @@ Here is a set of repositories, containing 3 kinds of contents,
 5. S03E05. [Low-level Motion Control of Unitree Go2 Robotic Dog in Python](S03_unitree_robodog/S03E05_unitree_go2_low_level_motion_contron_in_python.md)
 
    [![running go2_stand_example.py](https://img.youtube.com/vi/0Q9SRtAixJc/hqdefault.jpg)](https://www.youtube.com/watch?v=0Q9SRtAixJc)
-   
+
+&nbsp;
+
+6. S03E06. [Retrieval and Visualization of Unitree's Go2 Robotic Dog's Motion Control Data](/S03_unitree_robodog/S03E06_unitree_go2_motion_data_visualization.md)
+
+    [![Retrieval and visualization of the motion control data from Unitree go2 robotic dog](https://img.youtube.com/vi/r-sH_290A60/hqdefault.jpg)](https://www.youtube.com/watch?v=r-sH_290A60)
+
+
    
 &nbsp;
 ## Season 4. Simulation and RL for Unitree's Go2 robotic dog 
@@ -153,7 +160,6 @@ Here is a set of repositories, containing 3 kinds of contents,
 
    [![Anatomy of Isaac Lab](https://img.youtube.com/vi/Wfvb6__cRRY/hqdefault.jpg)](https://www.youtube.com/watch?v=Wfvb6__cRRY)
    
-
 &nbsp;
 
 &nbsp;
