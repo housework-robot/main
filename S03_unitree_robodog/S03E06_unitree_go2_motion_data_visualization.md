@@ -41,7 +41,7 @@ We wrote 3 python scripts to visualize the low-level or high-level motion contro
 
 2. `unitree_legged_const.py`
 
-    This is deployed on the client side, provides the assignment of constant variables for `go2_motion.py`, including LegID, etc. This script is copied from the open-source project on [Unitree's gitHub repo](https://github.com/unitreerobotics/unitree_sdk2_python/blob/master/example/low_level/unitree_legged_const.py).
+    This is deployed on the client side, provides the assignment of constant variables for `go2_motion.py`, including LegID, etc. This script is copied from the open-source project on [Unitree's github repo](https://github.com/unitreerobotics/unitree_sdk2_python/blob/master/example/low_level/unitree_legged_const.py).
 
 3. `go2_supervisor.py`
 
@@ -83,4 +83,22 @@ Additionally, you must install and deploy the relevant toolkits:
 
 4. The guide for installing unitree_sdk2_python is clearly described in its GitHub README.md. If you encounter any problems, you can also refer to [this note in this repo](./S03E01_unitree_go2_python_programming.md) to find solutions.
 
-   
+
+&nbsp;
+# 3. UI Design
+
+![Figure 3.1 Matplot UI design](./S03E06_src/matplot_UI.png)
+
+We have implemented a simple data visualization tool using Matplotlib. Due to the limited size of the computer screen, we have divided the interface into only two columns, left and right.
+
+The scatter plot on the left displays the acceleration in the `(x, y, z)` 3-axis directions of the robotic dog. The data comes from the accelerometer within the robotic dog's built-in inertial measurement unit (IMU).
+
+The scatter plot on the right displays the velocity in the `(x, y, z)` 3-axis directions of the robotic dog. The data comes from the robotic dog's high-level motion control data interface. It is said that the velocity is calculated by Unitree engineers using the accelerometer and gyroscope in the IMU with Kalman filtering, hence it is speculated that there may be cumulative errors in the velocity.
+
+![Figure 3.2 The orientations of the 3 axes of the go2 robotic dog](./S03E06_src/unitree_go2_orientation.png)
+
+The [`(x, y, z)` 3-axis directions](https://support.unitree.com/home/en/developer/about_Go2), as shown in the above figure 3.2, have red for the x-axis, green for the y-axis, and blue for the z-axis. The positive direction of rotation conforms to the right-hand rule.
+
+If more scatter plots need to be added, or if the data displayed in the scatter plots needs to be changed, or if need to change the range and scale of the horizontal and vertical axes of the scatter plots, you need to modify the source code of `go2_supervisor.py`, to do these jobs for the time being.
+
+In the future, we may develop a website where data to be displayed, and the range and scale of the coordinate axes, can be changed by the control knobs on the web page.
