@@ -161,5 +161,33 @@ If the client-side `go2_motion.py` and `unitree_legged_const.py` are deployed on
     ![Figure 4.2 The remote controller APP of the unitree robotic dog on a mobile phone](./S03E06_src/unitree_mobile_controller.png)
 
 &nbsp;
-The following video shows the actual execution of the above 6 steps.
+The following video shows the actual execution of the above 6 steps, 
 
+   [![Retrieval and visualization of the motion control data from Unitree go2 robotic dog](https://img.youtube.com/vi/r-sH_290A60/hqdefault.jpg)](https://www.youtube.com/watch?v=r-sH_290A60)
+
+
+&nbsp;
+# 5. Source code
+
+## 5.1  [go2_motion.py](./S03E06_src/go2_motion.py)
+
+To read the low_state motion status from a Unitree robotic dog go2, and then send it to a supervisor script like `go_supervisor.py` using [zeroMQ (zmq)](https://zeromq.org/).
+
+Usually we put this script in the `example/sim_real` file directory, 
+
+/home/robot/unitree/unitree_sdk2_python/example/sim_real/go2_motion.py
+
+## 5.2  [unitree_legged_const.py](./S03E06_src/unitree_legged_const.py)
+
+This code is copied from [Unitree's github repo](https://github.com/unitreerobotics/unitree_sdk2_python/blob/master/example/low_level/unitree_legged_const.py)
+
+Usually we put this script in the `example/sim_real` file directory, 
+
+/home/robot/unitree/unitree_sdk2_python/example/unitree_legged_const.py
+
+
+## 5.3  [go2_supervisor.py](./S03E06_src/go2_supervisor.py)
+
+Usually we put this script in the `example/sim_real` file directory, 
+
+/home/robot/unitree/unitree_sdk2_python/example/sim_real/go2_supervisor.py
