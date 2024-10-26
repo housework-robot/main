@@ -1,0 +1,55 @@
+{
+  "name": "robodog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "core-js": "^3.8.3",
+    "echarts": "^5.5.1",
+    "element-ui": "^2.15.14",
+    "vue": "^2.6.14",
+    "webrtc-streamer": "^0.8.7-4-gaad9f99",
+    "webrtc-streamer-helper": "^1.4.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {
+        "generator-star-spacing": "off",
+        "no-tabs": "off",
+        "no-unused-vars": "off",
+        "no-console": "off",
+        "no-irregular-whitespace": "off",
+        "no-debugger": "off",
+        "no-mixed-spaces-and-tabs":0
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
