@@ -2,7 +2,7 @@
   <div id="app">
     <div
       class="knob-container"
-      @mousedown="handleClick()"
+      @mousedown="handleClick"
       @mouseup="handleMouseUp"
     >
       <div class="knob" :style="knobStyle"></div>
