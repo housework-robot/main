@@ -48,6 +48,12 @@ The following screen snapshot shows the running result in a ubuntu CLI terminal,
 
 Referring to [EasyDarwin's github repo](https://github.com/EasyDarwin/EasyDarwin), for installation and running. 
 
+~~~
+$ cd ~/easy_darwin/
+
+$ sudo ./EasyDarwin
+~~~
+
 The following screen snapshot shows the running result in a ubuntu CLI terminal. 
 
 Notice, the EasyDarwin engine listens to the RTSP at port 10054. 
@@ -74,12 +80,53 @@ So far, we have setup a communication channel,
 
 2. A `VLC media player` pulls the video stream from the `EasyDarwin engine`.
 
-The webcam video stream is displayed in the VLC player, shown in the following video clip. 
+The webcam video stream is displayed in the VLC player, shown in [the following video clip](https://www.youtube.com/watch?v=zmGPoJj8emc). 
+
+Click the following image to view the video clip. 
 
 [![A video stream channel from ffmpeg to EasyDarwin to VLC player](https://img.youtube.com/vi/zmGPoJj8emc/hqdefault.jpg)](https://www.youtube.com/watch?v=zmGPoJj8emc)
 
 
+&nbsp;
+## 5. A WebRTC_streamer engine pulls the video stream from the EasyDarwin engine
+
+Referring to [webrtc-streamer github repo](webrtc-streamer), to download and install `webrtc-streamer`. 
+
+We downloaded `webrtc-streamer-v0.8.7-Linux-x86_64-Release.tar.gz` for our ubuntu computer. 
+
+No need to install the `webrtc-streamer`, instead, simply unzip the tar.gz file. 
+
+~~~
+$ tar -xvzf webrtc-streamer-v0.8.7-Linux-x86_64-Release.tar.gz
+~~~
+
+To test run it, execute the following command, after then visit `http://localhost:8000` in browser. 
+
+~~~
+$ cd ~/webrtc_streamer/webrtc-streamer-v0.8.7-Linux-x86_64-Release/webrtc-streamer
+
+$ ./webrtc-streamer -C config.json
+~~~
+
+In the browser, we can see the webcam video streams from various cities in the world, as in [the following video clip](https://www.youtube.com/watch?v=LZmBpPczl98). 
+
+Click the following image to view the video clip. 
+
+[![WebRTC-streamer displays the webcam video streams from various cities in the world](https://img.youtube.com/vi/LZmBpPczl98/hqdefault.jpg)](https://www.youtube.com/watch?v=LZmBpPczl98)
+
+When the EasyDarwin engine is running, it pushes the video stream in a broadacasting way. 
+
+Therefore, when we startup the webrtc-streamer, it will automatically discover the video stream pushed from EasyDarwin, with this URL `rtsp://127.0.0.1:10054/hls/test`, shown in the following screensnap. 
+
+~~~
+$ cd ~/webrtc_streamer/webrtc-streamer-v0.8.7-Linux-x86_64-Release/webrtc-streamer
+
+$ ./webrtc-streamer 
+~~~
+
+![The webrtc-streamer automatically discovers the video stream pushed by the EasyDarwin](./S05E01_src/webrtc_streamer.png)
 
 
+&nbsp;
+## 6. The WebRTC_streamer pushes the video stream to a VUE website via WebRTC protocol
 
-   
