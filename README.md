@@ -163,5 +163,16 @@ Here is a set of repositories, containing 3 kinds of contents,
 &nbsp;
 
 &nbsp;
+
+## Season 5. Communication among robots, webserver, database, AI models. 
+
+1. S05E01. [Video streaming with Computer Webcam](./S05_communication/S05E01_video_streaming_webcam.md)
+
+   [![A VUE website displays the webcam video stream origined from ffmpeg through EasyDarwin and WebRTC-streamer](https://img.youtube.com/vi/Naeh0X3GGxE/hqdefault.jpg)](https://www.youtube.com/watch?v=Naeh0X3GGxE)
+
+   
+&nbsp;
+
+&nbsp;
    
 ### To be continued ...
