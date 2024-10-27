@@ -95,7 +95,7 @@ Click the following image to view the screen snapshot video clip, notice that in
 
 ### 5.1 Install and test run webrtc-streamer
 
-Referring to [webrtc-streamer github repo](webrtc-streamer), to download and install `webrtc-streamer`. 
+Referring to [webrtc-streamer github repo](https://github.com/mpromonet/webrtc-streamer), to download and install `webrtc-streamer`. 
 
 We downloaded `webrtc-streamer-v0.8.7-Linux-x86_64-Release.tar.gz` for our ubuntu computer. 
 
