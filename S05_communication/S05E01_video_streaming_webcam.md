@@ -1,5 +1,10 @@
 # Video streaming with Computer Webcam
 
+   by Yujie Wang, Kan Deng, Yaoxuan Wang, Octo.26.2024
+
+&nbsp;
+--------------------------
+
 ##  1. Objectives
 
 The objective of this article is an experiment, rather than a final product. In the experiment, we setup the communication channel from a computer's webcam to a website, to practice the related techniques. 
