@@ -45,3 +45,38 @@ To implement this video streaming system, we need to accomplish the following ta
 &nbsp;
 ## 2. RTMP sender
 
+On the robot side, we developed a system consisting of 3 tiers, up_tier, core_tier and down_tier. 
+
+### 2.1 up_tier
+
+In the up_tier, so far we implemented [`rtmp_sender.py`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robot_side/up_tier/rtmp_sender.py) and [`webrtc_send.py`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robot_side/up_tier/webrtc_sender.py), that push the video stream from robot to remote video streaming servers. 
+
+For the time being, we use `rtmp_sender.py` to push the video stream. 
+
+But we also implemented `webrtc_send.py` as well as [`webrtc_receiver.py`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robot_side/up_tier/webrtc_receiver.py) for testing purpose. 
+
+The scripts in the up_tier are shared by various robots, to provide communication service.
+
+In the future, we will add more shareable services to the up_tier.
+
+
+### 2.2 down_tier
+
+In the down_tier, so far we implemented [`go2_channel.py`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robot_side/down_tier/unitree_go2/go2_channel.py), that initializes the channel to communicate with unitree Go2 robotic dog.
+
+With this communication channel, [`go2_media.py`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robot_side/down_tier/unitree_go2/go2_media.py) read video stream from Go2 dog, and decode the stream into [numpy array](https://numpy.org/devdocs/reference/generated/numpy.ndarray.html).
+
+For the time being, `go2_media.py` only reads and decodes video stream. And in the future, we will add more functions to `go2_media.py`, to enable reading and decoding, encoding and writing audio stream.
+
+In addition, we will add more scripts into the down_tier to provide motion control and other functionalities.
+
+Besides unitree's Go2 robotic dog, we will provide services for other robots, and all those specific robot related scripts will be added into the down_tier.
+    
+
+### 2.3 core_tier
+
+In the core_tier, so far we implemented [`go2_core.py`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robot_side/core_tier/go2_core.py), and in the future we will implement more scripts to serve other robots.
+
+`go2_core.py` behaves as an workflow and dataflow organizer. It reads video stream from `down_tier/unitree_go2/go2_media.py` which is specific for go2 robotic dog, and sends the stream to `up_tier/rtmp_sender.py` which is shareable among various robots.
+
+In addition to organize the video dataflow, `go2_core.py` will integrate other data and organize them into more complex workflow.
