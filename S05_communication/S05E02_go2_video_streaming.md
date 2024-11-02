@@ -110,8 +110,104 @@ In addition to organize the video dataflow, `go2_core.py` will integrate other d
 >
 > In the WebRTC field, SRS supports protocols like WebRTC, WHIP, and WHEP. SRS facilitates protocol conversion for both Live streaming and WebRTC.
 
+&nbsp;
 The most convenient way to run SRS is to use docker. 
 
 ~~~
 $ docker run --rm -it -p 1935:1935 -p 1985:1985 -p 8080:8080 \ registry.cn-hangzhou.aliyuncs.com/ossrs/srs:6
 ~~~
+
+
+&nbsp;
+## 4. WebRTC empowered VUE website
+
+We used VUE3 framework to construct a sample website [`robodog`](https://github.com/housework-robot/main/tree/main/S05_communication/S05E02_src/robodog), which used `webrtc-player` to display the video stream from SRS server. 
+
+The most important code in `robodog` is [`src/robodog/VideoWebRtc.vue`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robodog/src/robodog/VideoWebRtc.vue)
+
+~~~
+...
+<script>
+import WebRtcStreamer from "./webrtcstreamer.js";
+import WebrtcPlayer from "../components/jswebrtc/webrtcPlayer.vue";
+
+export default {
+  name: "VideoWebRtc",
+  components: { 
+    WebrtcPlayer
+  },
+  data() {
+    return {
+      easyPlayerFlag: "webrtcplayer",
+      webRtcServer: null,
+      camera_ip: "127.0.0.1:8000", //  depends on your need, can be this local machine, or a remote different computer. 
+      ifeData: "",
+      videoSrc: "webrtc://127.0.0.1:1935/live/livestream",
+    };
+  },
+  ...
+</script>
+...
+~~~
+
+Notice, 
+
+[`videoSrc: "webrtc://127.0.0.1:1935/live/livestream"`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robodog/src/robodog/VideoWebRtc.vue#L66) must be consistent with the URL in [`self.rtmp_server_url = f"rtmp://{self.ip_addr}:{self.port}/live/livestream"`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robot_side/up_tier/rtmp_sender.py#L11)
+
+
+&nbsp;
+## 5. Run the system
+
+1. Open a CLI termina in ubuntu computer, execute the following command to startup the SRS streaming server,
+
+   ~~~
+   $ docker run --rm -it -p 1935:1935 -p 1985:1985 -p 8080:8080 \ registry.cn-hangzhou.aliyuncs.com/ossrs/srs:6
+   ~~~
+
+
+2. Connect an ethernet cable from a ubuntu computer to the Go2 robot dog, and open another CLI termina in the ubuntu computer, execute the following command to push the video stream from the Go2 dog to the SRS streaming server,
+
+    ~~~
+    $ cd /home/robot/unitree/unitree_sdk2_python
+
+    $ python3 example/robot_side/core_tier/go2_core.py
+    ~~~
+
+    Notice that we must run `go2_core.py` in the specific directory for the time being, in order to use `unitree_sdk2_python`.
+
+
+3. Open a chrome browser, and visit the following URL, to use SRS's `rtc_player` to display the video stream, 
+
+    ~~~
+    http://127.0.0.1:8080/players/rtc_player.html
+    ~~~
+
+    In the rare case that you need to input the webrtc source URL, type in the following URL into the input box in the `RTC player` tab,
+
+    ~~~
+    webrtc://127.0.0.1/live/livestream
+    ~~~
+
+    The following image is a screen snapshot of the WebRTC player's webpage
+
+    ![A screen snapshot of the WebRTC player's webpage]()
+
+
+4. Startup the VUE website, either in a CLI terminal or VSCode, 
+
+   ~~~
+   $ npm install     // Setup the website
+
+   $ npm run serve    // Startup the website. 
+   ~~~
+
+
+5. Open a chrome browser, and visit the following URL, to see the entire `robodog` sample VUE website,
+
+   ~~~
+   http://127.0.0.1:8080
+   ~~~
+
+   The following image is a screen snapshot of the `robodog` webpage
+
+   ![A screen snapshot of the robodog website]()
