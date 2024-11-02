@@ -53,6 +53,17 @@ In the up_tier, so far we implemented [`rtmp_sender.py`](https://github.com/hous
 
 For the time being, we use `rtmp_sender.py` to push the video stream. 
 
+~~~
+class RtmpSender:
+    def __init__(self):
+        self.ip_addr = "127.0.0.1"
+        self.port = 1935
+        self.rtmp_server_url = f"rtmp://{self.ip_addr}:{self.port}/live/livestream"
+~~~
+
+Notice, in `rtmp_server_url`, `/live` is mandatory, while `/livestream` is self-defined. For example, you can replace `/live/livestream` with `/live/go2_stream/456/789`. 
+
+
 But we also implemented `webrtc_send.py` as well as [`webrtc_receiver.py`](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robot_side/up_tier/webrtc_receiver.py) for testing purpose. 
 
 The scripts in the up_tier are shared by various robots, to provide communication service.
@@ -80,3 +91,27 @@ In the core_tier, so far we implemented [`go2_core.py`](https://github.com/house
 `go2_core.py` behaves as an workflow and dataflow organizer. It reads video stream from `down_tier/unitree_go2/go2_media.py` which is specific for go2 robotic dog, and sends the stream to `up_tier/rtmp_sender.py` which is shareable among various robots.
 
 In addition to organize the video dataflow, `go2_core.py` will integrate other data and organize them into more complex workflow.
+
+
+&nbsp;
+## 3. Simple Realtime Server (SRS)
+
+[Simple Realtime Server (SRS)](https://ossrs.net/lts/en-us/docs/v6/doc/introduction) is one of the top open source video streaming server in the world. 
+
+> SRS supporting RTMP, WebRTC, HLS, HTTP-FLV, SRT, MPEG-DASH, and GB28181.
+> 
+> SRS media server works with clients like FFmpeg, OBS, VLC, and WebRTC to provide the ability to receive and distribute streams in a typical publish (push) and subscribe (play) server model.
+>
+> SRS supports widely used internet audio and video protocol conversions, such as converting RTMP or SRT to HLS, HTTP-FLV, or WebRTC.
+
+> SRS is primarily used in the Live streaming and WebRTC fields.
+>
+> In the live streaming domain, SRS supports typical protocols such as RTMP, HLS, SRT, MPEG-DASH, and HTTP-FLV.
+>
+> In the WebRTC field, SRS supports protocols like WebRTC, WHIP, and WHEP. SRS facilitates protocol conversion for both Live streaming and WebRTC.
+
+The most convenient way to run SRS is to use docker. 
+
+~~~
+$ docker run --rm -it -p 1935:1935 -p 1985:1985 -p 8080:8080 \ registry.cn-hangzhou.aliyuncs.com/ossrs/srs:6
+~~~
