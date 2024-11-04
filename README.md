@@ -173,6 +173,10 @@ Here is a set of repositories, containing 3 kinds of contents,
    
 &nbsp;
 
+2. S05E02. [Transmit video streaming from robotic dogs, to streaming server, finally to viewers' browsers](.S05_communication/S05E02_go2_video_streaming.md)
+
+   [![The entire process to transmit video stream from robotic dogs, to streaming server, to browsers](https://img.youtube.com/vi/4fRKJJbSyww/hqdefault.jpg)](https://www.youtube.com/watch?v=4fRKJJbSyww)
+
 &nbsp;
    
 ### To be continued ...
