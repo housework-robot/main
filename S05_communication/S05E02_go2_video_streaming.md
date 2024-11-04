@@ -190,7 +190,7 @@ Notice,
 
     The following image is a screen snapshot of the WebRTC player's webpage
 
-    ![A screen snapshot of the WebRTC player's webpage]()
+    ![A screen snapshot of the WebRTC player's webpage](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/webrpc_player.png)
 
 
 4. Startup the VUE website, either in a CLI terminal or VSCode, 
@@ -210,4 +210,4 @@ Notice,
 
    The following image is a screen snapshot of the `robodog` webpage
 
-   ![A screen snapshot of the robodog website]()
+   ![A screen snapshot of the robodog website](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_src/robodog_webpage.png)
