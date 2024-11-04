@@ -214,4 +214,5 @@ Notice,
 
 &nbsp;
 Finally, click the following image to view the video of the entire process. 
+
 [![The entire process to transmit video stream from robotic dogs, to streaming server, to browsers](https://img.youtube.com/vi/4fRKJJbSyww/hqdefault.jpg)](https://www.youtube.com/watch?v=4fRKJJbSyww)
