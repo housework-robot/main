@@ -1,10 +1,10 @@
-# Programming 2-wheel Balancing Robot
+# Programming 2-wheel Balancing Bot
 
 by Kan Deng, Yujie Wang, Yaoxuan Wang, Nov. 16, 2024
 
 ----------------------------------------------------------
 
-# 1. Objectives
+## 1. Objectives
 
 [Arduino SimpleFOCBalancer](https://github.com/simplefoc/Arduino-FOC-balancer) is an open source project that builds a two wheel balancing robot 
 based on 2 BLDC motors, 1 [MPU6050 IMU](https://en.wikipedia.org/wiki/Inertial_measurement_unit), 1 ESP32 module for Bluetooth communication, 
@@ -19,11 +19,11 @@ To migrate it from windows to ubuntu, there are a few technical challenges.
 This document records the steps we took to migrate `Balance_Bot_DengFOC` source code from windows to ubuntu. 
 
 &nbsp;
-# 2. Arduino libraries
+## 2. Arduino libraries
 
 To migrate `Balance_Bot_DengFOC` from windows to ubuntu, we have to manually install the related libraries in Arduino IDE.  
 
-## 2.1 Network proxy
+### 2.1 Network proxy
 
 Before installing the libraries, we need to setup the network proxy, to make it convenient to download the libraries especially those resides in Github. 
 
@@ -31,7 +31,7 @@ The challenge is that there are only a few VPNs available for ubuntu, e.g. [lant
 
 Our solution is to use two computer, one is Ubuntu, the other is either Macbook or Windows. 
 
-1. Find out the IP address and proxy port of the Macbook.
+#### 1. Find out the IP address and proxy port of the Macbook.
 
    In the CLI terminal, use `ifconfig` to find the IP address of the macbook. In our case, it is `192.168.0.118`
 
@@ -50,7 +50,7 @@ Our solution is to use two computer, one is Ubuntu, the other is either Macbook 
    </p>
 
 
-2. Configure the proxy of the Ubuntu.
+#### 2. Configure the proxy of the Ubuntu.
 
    Open ubuntu's `System Settings`, navigate to `Network`, and configure it using Macbook's IP address and proxy port, shown in the following screen snapshots.
 
@@ -62,10 +62,21 @@ Our solution is to use two computer, one is Ubuntu, the other is either Macbook 
 
 
 &nbsp;
-## 2.2 ESP32
+### 2.2 ESP32
 
-## 2.3 I2CDev
+Following [the official installation guide of ESP32](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html), 
+fill in the `Stable release link` in the `Additional Board Manager URLs` field in Arduino IDE's preference window.
 
-## 2.4 MPU6050_tockn
+   <p align="center">
+     <img alt="ESP32 board link" src="./S06E01_src/ESP32_setting.png" width="50%">
+   </p>
 
-## 2.5 SimpleFOC
+
+&nbsp;
+### 2.3 I2CDev
+
+&nbsp;
+### 2.4 MPU6050_tockn
+
+&nbsp;
+### 2.5 SimpleFOC
