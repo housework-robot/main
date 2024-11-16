@@ -178,5 +178,13 @@ Here is a set of repositories, containing 3 kinds of contents,
    [![The entire process to transmit video stream from robotic dogs, to streaming server, to browsers](https://img.youtube.com/vi/4fRKJJbSyww/hqdefault.jpg)](https://www.youtube.com/watch?v=4fRKJJbSyww)
 
 &nbsp;
+
+&nbsp;
+
+## Season 6. Robot side
+
+1. S06E01. [Setup the Arduino IDE programming environment to dissect DengFOC's balancing bot](./S06_robot_side/S06E01_two_wheel_balancing_robot.md)
+
+   [![Setup Arduino IDE to program DengFOC's balancing bot](https://img.youtube.com/vi/WwpEb_d7BzI/hqdefault.jpg)](https://www.youtube.com/watch?v=WwpEb_d7BzI)
    
 ### To be continued ...
