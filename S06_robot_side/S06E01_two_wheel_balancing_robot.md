@@ -64,12 +64,38 @@ Our solution is to use two computer, one is Ubuntu, the other is either Macbook 
 &nbsp;
 ### 2.2 ESP32
 
+#### 1. Additional Board Manager URLs
+
 Following [the official installation guide of ESP32](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html), 
 fill in the `Stable release link` in the `Additional Board Manager URLs` field in Arduino IDE's preference window.
 
+After then, restart the Arduino IDE, you will see the various ESP32 boards listed in the Arduino IDE. 
+
    <p align="center">
-     <img alt="ESP32 board link" src="./S06E01_src/ESP32_setting.png" width="50%">
+     <img alt="ESP32 board link" src="./S06E01_src/ESP32_setting.png" width="48%">
+     &nbsp;  
+     <img alt="ESP32 board list" src="./S06E01_src/ESP32_boards.png" width="48%">
    </p>
+
+
+#### 2. Install ESP32 libraries
+
+With different board, there are related libraries. To install ESP32 libraries, we selected `Arduino Nano ESP32` board. Then, we opened the `board manager` and search `esp32`. 
+
+We installed the ESP32 libraries related to the `Arduino Nano ESP32` board, one by one. 
+
+The latest version of `esp32` library is `3.0.5`, but for unknown reason, we failed to install `esp 3.0.5`. Hence, we installed an earlier version, `3.0.3`. 
+
+To check the success of ESP32 library installation, we can open the examples, if successful, we will see many examples related to ESP32. 
+
+   <p align="center">
+     <img alt="ESP32 library installation" src="./S06E01_src/ESP32_library01.png" width="48%">
+     &nbsp;  
+     <img alt="ESP32 examples" src="./S06E01_src/ESP32_library02.png" width="48%">
+   </p>
+
+
+
 
 
 &nbsp;
