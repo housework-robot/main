@@ -129,6 +129,8 @@ Following its installation guide,
      ArduinoHttpClient            Ethernet  I2Cdev   Mouse          Robot_Control  SD             Simple_FOC     Stepper
    ~~~
 
+   Notice that we may not need `MPU6050` library, but it doesn't hurt to install redundant libraries. 
+
 4. Restart Arduino IDE, then we will see those two I2C libraries. 
 
    <p align="center">
@@ -139,5 +141,33 @@ Following its installation guide,
 &nbsp;
 ### 2.4 MPU6050_tockn
 
+1. Download a .zip archive of [the MPU6050_tockn's github repo](https://github.com/tockn/MPU6050_tockn)
+
+2. Open Arduino IDE, and click `Sketch` > `Include Library` > `Add .ZIP Library`, then select the downloaded `MPU6050_tockn-master.zip` github archive.
+
+   <p align="center">
+     <img alt="Add MPU6050_tockn zip in the Arduino IDE" src="./S06E01_src/MPU6050_add_zip.png" width="48%">
+     &nbsp; 
+     <img alt="Select MPU6050_tockn-master.zip as the library source" src="./S06E01_src/MPU6050_file_selection.png" width="48%">
+   </p>
+
+3. Restart Arduino IDE, then we will see the `MPU6050_tockn` library. 
+
+
+
 &nbsp;
 ### 2.5 SimpleFOC
+
+Following [the SimpleFOC official installation guide](https://docs.simplefoc.com/library_download), 
+
+1. Click the `library` icon on the left side bar on the Arduino IDE.
+
+2. Search for `simplefoc`, and install the latest versions of `Simple FOC`, `SimpleDCMotor`, and `SimpleFOCDrivers`.
+
+   <p align="center">
+     <img alt="Click the library icon on the left side bar" src="./S06E01_src/simplefoc_navigation.png" width="48%">
+     &nbsp; 
+     <img alt="search for simplefoc libraries and install them" src="./S06E01_src/simplefoc_search_install.png" width="48%">
+   </p>   
+
+
