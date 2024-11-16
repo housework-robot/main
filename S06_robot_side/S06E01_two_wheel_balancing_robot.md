@@ -96,10 +96,45 @@ To check the success of ESP32 library installation, we can open the examples, if
 
 
 
-
-
 &nbsp;
 ### 2.3 I2CDev
+
+[The I2C Device Library (i2cdevlib)](https://github.com/jrowberg/i2cdevlib) is a collection of libraries to provide simple and intuitive interfaces to I2C devices.
+
+Following its installation guide, 
+
+1. Find the Arduino IDE library file directory, by clicking Arduino IDE's `File` > `Preference`,
+
+   then you will see the Arduino IDE library file directory in the Preference window.
+
+   <p align="center">
+     <img alt="Arduino IDE library file directory" src="./S06E01_src/Arduino_library_directory.png" width="50%">
+   </p>
+   
+
+2. We downloaded a .zip archive of [the I2C Device github repo](https://github.com/jrowberg/i2cdevlib).
+
+3. Copied two relevant libraries, [I2CDev](https://github.com/jrowberg/i2cdevlib/tree/master/Arduino/I2Cdev) and [MPU6050](https://github.com/jrowberg/i2cdevlib/tree/master/Arduino/MPU6050), into our Arduino IDE library subfolder.
+
+   ~~~
+   $ cd /home/robot/Software/
+   $ unzip i2cdevlib-master.zip
+   $ cd /home/robot/Software/i2cdevlib-master/Arduino
+
+   $ cp -r I2Cdev/  /home/robot/Arduino/libraries/.
+   $ cp -r MPU6050 /home/robot/Arduino/libraries/.
+   $ ls /home/robot/Arduino/libraries/
+     Adafruit_Circuit_Playground  Bridge    Firmata  Keyboard       MPU6050        RobotIRremote  Servo          SimpleFOCDrivers  Temboo
+     Arduino_ESP32_OTA            Esplora   GSM      LiquidCrystal  MPU6050_tockn  Robot_Motor    SimpleDCMotor  SpacebrewYun      TFT
+     ArduinoHttpClient            Ethernet  I2Cdev   Mouse          Robot_Control  SD             Simple_FOC     Stepper
+   ~~~
+
+4. Restart Arduino IDE, then we will see those two I2C libraries. 
+
+   <p align="center">
+     <img alt="Installed I2C libraries in the Arduino IDE" src="./S06E01_src/I2C_library.png" width="50%">
+   </p>
+   
 
 &nbsp;
 ### 2.4 MPU6050_tockn
