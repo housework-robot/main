@@ -21,10 +21,46 @@ This document records the steps we took to migrate `Balance_Bot_DengFOC` source 
 &nbsp;
 # 2. Arduino libraries
 
-## 2.1 ESP32
+To migrate `Balance_Bot_DengFOC` from windows to ubuntu, we have to manually install the related libraries in Arduino IDE.  
 
-## 2.2 I2CDev
+## 2.1 Network proxy
 
-## 2.3 MPU6050_tockn
+Before installing the libraries, we need to setup the network proxy, to make it convenient to download the libraries especially those resides in Github. 
 
-## 2.4 SimpleFOC
+The challenge is that there are only a few VPNs available for ubuntu, e.g. [lantern.io](https://lantern.io/), and they are not stable and quite slow for downloading. 
+
+Our solution is to use two computer, one is Ubuntu, the other is either Macbook or Windows. 
+
+1. Find out the IP address and proxy port of the Macbook.
+
+   In the CLI terminal, use `ifconfig` to find the IP address of the macbook. In our case, it is `192.168.0.118`
+
+   ~~~
+   $ ifconfig
+     wlo1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+           inet 192.168.0.118  netmask 255.255.255.0  broadcast 192.168.0.255
+           ...
+   ~~~
+
+   Open macbook's `System Preference`, navigate to `Network`, click `Advanced...` at the lower right corner, then select `proxy` tab, here you can find the proxy port.
+   In our case, it is `7897`, shown in the following screen snapshot.
+
+   ![Macbook network proxy wizard](./S06E01_src/macbook_proxy.png)
+
+
+3. Configure the proxy of the Ubuntu.
+
+   Open ubuntu's `System Settings`, navigate to `Network`, and configure it using Macbook's IP address and proxy port, shown in the following screen snapshots.
+
+   ![Ubuntu network setting](./S06E01_src/ubuntu_proxy01.png)
+
+   ![Ubuntu network proxy](./S06E01_src/ubuntu_proxy02.png)
+   
+
+## 2.2 ESP32
+
+## 2.3 I2CDev
+
+## 2.4 MPU6050_tockn
+
+## 2.5 SimpleFOC
