@@ -171,3 +171,19 @@ Following [the SimpleFOC official installation guide](https://docs.simplefoc.com
    </p>   
 
 
+&nbsp;
+## 3. Test run
+
+### 3.1 Source code modification
+
+To migrate the source code from Windows to Ubuntu, the 
+
+&nbsp;
+### 3.2 Electronics assembly
+
+
+&nbsp;
+### 3.3 Baud rate
+
+
+### 3.4 Demo video
