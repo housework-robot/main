@@ -172,18 +172,80 @@ Following [the SimpleFOC official installation guide](https://docs.simplefoc.com
 
 
 &nbsp;
-## 3. Test run
+## 3. Software
 
-### 3.1 Source code modification
+Since we use a ubuntu computer, and install an Arduino IDE from scratch, the arduino compiler might be different from that one 
+used by [Balance_Bot_DengFOC](https://github.com/ToanTech/Balance_Bot_DengFOC)'s author. 
 
-To migrate the source code from Windows to Ubuntu, the 
+When compiling we encountered some minor error, mainly syntax error. We modified the original source code, and compiled successfully. Our modification refers to the following,
+
+~~~
+// velocity pid 速度PID P初始值1.5
+// PIDController pid_vel{.P = 2, .I = 0, .D = 0.11, .ramp = 10000, .limit = 6};
+PIDController pid_vel(2, 0, 0.11, 10000, 6);
+
+// velocity control filtering 速度控制滤波，滤波时间常数为0.07
+// LowPassFilter lpf_pitch_cmd{.Tf = 0.07};
+LowPassFilter lpf_pitch_cmd(0.07);
+
+// low pass filters for user commands - throttle and steering 油门和转向滤波
+// LowPassFilter lpf_throttle{.Tf = 0.5}; //初始值0.5
+LowPassFilter lpf_throttle(0.5); //初始值0.5
+// LowPassFilter lpf_steering{.Tf = 0.1}; //初始值0.1
+LowPassFilter lpf_steering(0.1);
+
+class MyCallbacks: public BLECharacteristicCallbacks {
+    void onWrite(BLECharacteristic *pCharacteristic) {
+      // std::string rxValue = pCharacteristic->getValue();
+      String rxValue = pCharacteristic->getValue();
+~~~
+
+
+[Our source code](./S06E01_src/balancing_bot.ino) has been uploaded onto this repo.
+
 
 &nbsp;
-### 3.2 Electronics assembly
+## 4. Electronics assembly
+
+We used a white USB cable connecting our ubuntu computer to the ESP32 module, referring to the white cable in the left image below. 
+
+Inside the white box, there is a board similar to Arduino, that is self-made by the author of [Balance_Bot_DengFOC](https://github.com/ToanTech/Balance_Bot_DengFOC). 
+
+More specifically, the ESP32 module is `WEMOS LOLIN32 Lite`. It is used as a shield on top of DengFOC board. 
+
+Therefore, even though we only connect to the ESP32 module, but also we can access the underneath DengFOC board. 
+
+   <p align="center">
+     <img alt="USB cable connects a computer to the ESP32 module" src="./S06E01_src/balancing_bot_wiring.jpg" width="48%">
+     &nbsp; 
+     <img alt="DengFOC board pinout" src="./S06E01_src/DengFOC_board.png" width="48%">
+   </p>  
+
+More details of the electronics assembly refers to [the github repo of DengFOC](https://github.com/ToanTech/Balance_Bot_DengFOC), 
+which provides a step-by-step guide for the assembly. 
 
 
 &nbsp;
-### 3.3 Baud rate
+## 5. Loading from Arduino IDE
+
+After connecting our ubuntu computer, where an Arduino IDE is running, to the balancing bot using a USB cable, now it is time to the load our source code to the bot. 
+
+One detail is that the baud rate must be `115200`, because in the source code, we set the Serial to be with `115200` baud rate. 
+
+~~~
+void setup(){
+    Serial.begin(115200);
+~~~
+
+   <p align="center">
+     <img alt="USB cable connects a computer to the ESP32 module" src="./S06E01_src/baud_rate.png" width="50%">
+   </p>  
 
 
-### 3.4 Demo video
+&nbsp;
+## 5 Demo video
+
+Click the following image and display a video hosted in Youtube. 
+
+   [![Setup Arduino IDE to program DengFOC's balancing bot](https://img.youtube.com/vi/WwpEb_d7BzI/hqdefault.jpg)](https://www.youtube.com/watch?v=WwpEb_d7BzI)
+
