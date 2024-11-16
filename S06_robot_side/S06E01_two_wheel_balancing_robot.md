@@ -45,18 +45,23 @@ Our solution is to use two computer, one is Ubuntu, the other is either Macbook 
    Open macbook's `System Preference`, navigate to `Network`, click `Advanced...` at the lower right corner, then select `proxy` tab, here you can find the proxy port.
    In our case, it is `7897`, shown in the following screen snapshot.
 
-   ![Macbook network proxy wizard](./S06E01_src/macbook_proxy.png)
+   <p align="center">
+     <img alt="Macbook proxy port" src="./S06E01_src/macbook_proxy.png" width="50%">
+   </p>
 
 
-3. Configure the proxy of the Ubuntu.
+2. Configure the proxy of the Ubuntu.
 
    Open ubuntu's `System Settings`, navigate to `Network`, and configure it using Macbook's IP address and proxy port, shown in the following screen snapshots.
 
-   ![Ubuntu network setting](./S06E01_src/ubuntu_proxy01.png)
+   <p align="center">
+     <img alt="Ubuntu network setting" src="./S06E01_src/ubuntu_proxy01.png" width="48%">
+     &nbsp;  
+     <img alt="Ubuntu proxy" src="./S06E01_src/ubuntu_proxy02.png" width="48%">
+   </p>
 
-   ![Ubuntu network proxy](./S06E01_src/ubuntu_proxy02.png)
-   
 
+&nbsp;
 ## 2.2 ESP32
 
 ## 2.3 I2CDev
