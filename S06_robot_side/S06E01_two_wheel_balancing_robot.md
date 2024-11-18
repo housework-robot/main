@@ -174,7 +174,9 @@ Following [the SimpleFOC official installation guide](https://docs.simplefoc.com
 &nbsp;
 ## 3. Software
 
-The original source code is provided by [Balance_Bot_DengFOC](https://github.com/ToanTech/Balance_Bot_DengFOC). 
+### 3.1 System architecture
+
+The original source code is provided by [Balance_Bot_DengFOC](https://github.com/ToanTech/Balance_Bot_DengFOC) as an open source project. 
 
 We rebuilt the original code to be a system consisting of 3 tiers, up_tier, core_tier and down_tier.
 
@@ -190,42 +192,53 @@ We rebuilt the original code to be a system consisting of 3 tiers, up_tier, core
 
 The objectives to split the system into up-core-down tiers, are that, 
 
-1. We will use reinforcement learning to make the robot smarter. In order to make it more convenient to use reinforcement learning, we will ask the down_tier to handle `obs = get_observation()`, the up_tier to handle `cmd = receive_command()`, and the core_tier to handle `action = policy(obs, cmd)`.
+1. We will use reinforcement learning to make the robot smarter. In order to make it more convenient to use reinforcement learning, we will ask
 
-2. 
+   * the down_tier to handle `obs = get_observation()`,
+     
+   * the up_tier to handle `cmd = receive_command()`,
+     
+   * the core_tier to handle `action = policy(obs, cmd)`,
+     
+   * finally the down_tier to handle `step(action)`
 
-Since Arduino doesn't support subfolder file structure stably, we store all the source codes in one file folder.    
+2. Make it easy for the engineers to maintain the source code for various robots. 
+  
+3. Make it easy to integrate more peripherals, like camera etc.
 
+4. Make it easy to collaborate with the remote AI large models to do visual navigation etc.
 
+5. Make it easy for the remote supervisor server to orchestrate hundreds and thousands robots to work together.
 
-Since we use a ubuntu computer, and install an Arduino IDE from scratch, the arduino compiler might be different from that one 
-used by [Balance_Bot_DengFOC](https://github.com/ToanTech/Balance_Bot_DengFOC)'s author. 
-
-When compiling we encountered some minor error, mainly syntax error. We modified the original source code, and compiled successfully. Our modification refers to the following,
-
-~~~
-// velocity pid 速度PID P初始值1.5
-// PIDController pid_vel{.P = 2, .I = 0, .D = 0.11, .ramp = 10000, .limit = 6};
-PIDController pid_vel(2, 0, 0.11, 10000, 6);
-
-// velocity control filtering 速度控制滤波，滤波时间常数为0.07
-// LowPassFilter lpf_pitch_cmd{.Tf = 0.07};
-LowPassFilter lpf_pitch_cmd(0.07);
-
-// low pass filters for user commands - throttle and steering 油门和转向滤波
-// LowPassFilter lpf_throttle{.Tf = 0.5}; //初始值0.5
-LowPassFilter lpf_throttle(0.5); //初始值0.5
-// LowPassFilter lpf_steering{.Tf = 0.1}; //初始值0.1
-LowPassFilter lpf_steering(0.1);
-
-class MyCallbacks: public BLECharacteristicCallbacks {
-    void onWrite(BLECharacteristic *pCharacteristic) {
-      // std::string rxValue = pCharacteristic->getValue();
-      String rxValue = pCharacteristic->getValue();
-~~~
+   The supervisor only needs to send command to the up_tier, and be agnostic to the core_tier and down_tier of the heterogeneous robots.
 
 
-[Our source code](./S06E01_src/balancing_bot.ino) has been uploaded onto this repo.
+### 3.2 Source code
+
+This repo contains our source codes, that are openned and no charge for all purpose, including business. 
+
+1. The [balancing_bot.h](./S06E01_src/robot_gateway/balancing_bot.h) and [balancing_bot.cpp](./S06E01_src/robot_gateway/balancing_bot.cpp) are for the down_tier. 
+
+   It controls the motor motion, collects the pitch、yaw and roll angles of the robot body from the IMU, and collects motor velocities from the motor sensors, etc. 
+
+2. The [robot_gateway.ino](./S06E01_src/robot_gateway/robot_gateway.ino) is the core_tier,
+
+   It takes charge of the reinforcement learning loop, including `get_observation()`, `receive_command()`, `policy()`, and `step()`.
+
+3. The up_tier is not yet implemented.
+
+
+Notice that,
+
+1. Since Arduino doesn't support subfolder file structure stably, we store all the source codes in one file folder.
+
+2. For the time being, the `action = policy(obs, cmd)` doesn't involve complex input, like video analysis.
+
+   To keep simple, we implement `action = policy(obs, cmd)` in the down_tier in the down_tier. 
+
+3. The original source code provided by [Balance_Bot_DengFOC](https://github.com/ToanTech/Balance_Bot_DengFOC), has been modified to be compilable in our environment.
+
+   The modified original code is also uploaded to this repo, referring to [balancing_bot.ino](./S06E01_src/balancing_bot.ino).
 
 
 &nbsp;
@@ -267,7 +280,7 @@ void setup(){
 
 
 &nbsp;
-## 5 Demo video
+## 6 Demo video
 
 Click the following image and display a video hosted in Youtube. 
 
