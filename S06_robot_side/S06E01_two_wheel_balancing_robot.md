@@ -1,6 +1,6 @@
 # Programming 2-wheel Balancing Bot
 
-by Kan Deng, Yujie Wang, Yaoxuan Wang, Nov. 16, 2024
+by Kan Deng, Yujie Wang, Yaoxuan Wang, Nov. 18, 2024
 
 ----------------------------------------------------------
 
