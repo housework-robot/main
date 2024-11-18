@@ -174,6 +174,30 @@ Following [the SimpleFOC official installation guide](https://docs.simplefoc.com
 &nbsp;
 ## 3. Software
 
+The original source code is provided by [Balance_Bot_DengFOC](https://github.com/ToanTech/Balance_Bot_DengFOC). 
+
+We rebuilt the original code to be a system consisting of 3 tiers, up_tier, core_tier and down_tier.
+
+1. The up_tier provides shareable services for various robots.
+
+   For example, the up_tier will provide wifi communication, pushing the video captured by the balancing bot's camera to the remote streaming server, and receiving commands from the remote supervisor server. 
+
+2. The down_tier provide specific services for specific robots.
+
+   The down_tier handles motion control, motion status collection, sensor data collection, video capture, and audio playing services.
+
+3. The core_tier behaves as an workflow and dataflow organizer, to make the up_tier and the down_tier working together.
+
+The objectives to split the system into up-core-down tiers, are that, 
+
+1. We will use reinforcement learning to make the robot smarter. In order to make it more convenient to use reinforcement learning, we will ask the down_tier to handle `obs = get_observation()`, the up_tier to handle `cmd = receive_command()`, and the core_tier to handle `action = policy(obs, cmd)`.
+
+2. 
+
+Since Arduino doesn't support subfolder file structure stably, we store all the source codes in one file folder.    
+
+
+
 Since we use a ubuntu computer, and install an Arduino IDE from scratch, the arduino compiler might be different from that one 
 used by [Balance_Bot_DengFOC](https://github.com/ToanTech/Balance_Bot_DengFOC)'s author. 
 
