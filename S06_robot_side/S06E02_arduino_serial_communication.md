@@ -56,6 +56,14 @@ In this article, we implemented UART serial communication, sending and receiving
 &nbsp;
 ## 2. Hardware assembly
 
+Take a look inside the balancing bot, where the DengFOC driver board is installed. 
+
+   <p align="center">
+     <img alt="the DengFOC driver board inside the white box" src="./S06E02_src/DengFOC_inside.jpg" width="48%">
+     &nbsp;  
+     <img alt="the pins of DengFOC driver are used for ESP32 shield" src="./S06E02_src/DengFOC_pins.jpg" width="48%">
+   </p>
+
 &nbsp;
 ## 3. Source code
 
