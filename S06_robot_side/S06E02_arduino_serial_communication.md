@@ -259,14 +259,18 @@ sendStr = '{'cnt': 3988, 'throttle': 40.00000000000061, 'steer': 40.110000000000
 
 Click the following image to view the video of the balancing bot. 
 
+   [![The balancing bot doesn't run smoothly because its USB port is occupied](https://img.youtube.com/vi/_8OrdSzhsWY/hqdefault.jpg)](https://www.youtube.com/watch?v=_8OrdSzhsWY)
+   
 Obviously, the balancing bot didn't run smoothly, and it couldn't keep balanced when running on ground. 
 
 This unexpected behavior is caused by the two `send_json()` in the arduino sketch.
 If deleting those `send_json()`, the balancing bot will be capable of moving straight on ground and keep balanced. 
 
-This means that we cannot use the USB port, as the serial communication channel between the RDK board and the ESP32 module. 
+This means that we can’t use the USB port, as the serial communication channel between the RDK board and the ESP32 module. 
 
 Therefore, we will change the hardware structure of the simple balancing bot, to empower it with RDK board and various peripheral like camera, to be capable of doing more complex tasks. 
 
-   [![The balancing bot doesn't run smoothly because its USB port is occupied](https://img.youtube.com/vi/_8OrdSzhsWY/hqdefault.jpg)](https://www.youtube.com/watch?v=_8OrdSzhsWY)
+Even though the USB port doesn't work for the serial communication, but our `send_json()` and `receive_json()` on both python tier and arduino tier work fine, and can be ported to UART/I2C/SPI serial communication. 
+
+
    
