@@ -176,9 +176,82 @@ void loop() {
 So far there is only 1 python script [`serial_channel.py`](./S06E02_src/rdk_tier/serial_channel.py). 
 In the future, there will be more scripts added to the RDK tier. 
 
+1. In the loop, the python script sends a JSON message to the arduino tier, by calling `send_json(send_data)`.
+
+   To distinct the different loop, `cnt` increases 1 for every loop, `throttle` increases 0.11, and `steer` increases 0.22.  
+
+2. Also in the loop, the python script receives the JSON messages from the arduino tier, by calling `receive_json()`.
+
+   Notice that, since the arduino sketch sends two kinds of messages, one for `send_json(cmd)`, the other for `send_json(obs)`,
+   the python script receives these two kinds of messages, in an interleaved manner. 
+   
+~~~
+def testrun_serial():
+    channel = SerialChannel()
+
+    cnt = 0
+    send_data = {
+        "cnt": cnt, 
+        "throttle": 0.11,
+        "steer": 0.22
+    }
+    status = channel.send_json(send_data)
+
+    while True:
+        print(f"[{cnt}]")
+        receive_data = channel.receive_json()
+   
+        if "ERROR" in receive_data:
+            ...
+        else:
+            print(f"receive_data: {receive_data}")
+        
+        send_data["cnt"] = cnt
+        send_data["throttle"] = send_data["throttle"] + 0.01
+        send_data["steer"] = send_data["steer"] + 0.01
+
+        channel.send_json(send_data)
+        print(f"sendStr = '{send_data}' \n ")
+
+        cnt += 1
+~~~
 
 
 
 &nbsp;
 ## 4. Run and results
 
+1. In a computer, we startup an Arduino IDE, opening the arduino-tier's sketches.
+
+   And then using a USB cable, connect the computer to the ESP32 module,
+   load the arduino sketches, from the Arduino IDE to the ESP32 module installed on the balancing bot.
+
+2. Push the button on the balancing bot, to start the DengFOC driver board and also the motors etc.
+
+3. In the computer, open a CLI terminal, and run the python script,
+
+   ~~~
+   $ python3 serial_channel.py
+   ~~~
+
+Following image is a screen snapshot of the CLI terminal, displaying the running result of `serial_channel.py`. 
+
+   <p align="center">
+     <img alt="the running result of the python tier" src="./S06E02_src/python_tier_running_result.png" width="50%">
+   </p>
+
+The indices in the square brackets are the number of loops. 
+
+It receives two kinds of messages from the arduino tier, one for command echo, the other for observation. For example, 
+
+~~~
+...
+[3980]
+receive_data: {'pitch_angle': 29.80859, 'motor0_velocity': 0, 'motor1_velocity': 0}
+sendStr = '{'cnt': 3980, 'throttle': 39.92000000000063, 'steer': 40.030000000000605}' 
+...
+[3988]
+receive_data: {'cnt': 3980, 'throttle': 39.92, 'steer': 40.03}
+sendStr = '{'cnt': 3988, 'throttle': 40.00000000000061, 'steer': 40.11000000000059}' 
+...
+~~~
