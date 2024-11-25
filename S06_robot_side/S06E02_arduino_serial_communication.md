@@ -259,7 +259,7 @@ sendStr = '{'cnt': 3988, 'throttle': 40.00000000000061, 'steer': 40.110000000000
 
 Click the following image to view the video of the balancing bot. 
 
-Obviously, the balancing bot didn't run smoothly, and it could keep balanced when running on ground. 
+Obviously, the balancing bot didn't run smoothly, and it couldn't keep balanced when running on ground. 
 
 This unexpected behavior is caused by the two `send_json()` in the arduino sketch.
 If deleting those `send_json()`, the balancing bot will be capable of moving straight on ground and keep balanced. 
