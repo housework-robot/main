@@ -1,6 +1,6 @@
 # Serial Communication between Arduino and Python
 
-              by Kan Deng, Nov 25, 2024
+by Kan Deng, Nov 25, 2024
 
 -------------------
 
