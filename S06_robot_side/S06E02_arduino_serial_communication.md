@@ -242,7 +242,8 @@ Following image is a screen snapshot of the CLI terminal, displaying the running
 
 The indices in the square brackets are the number of loops. 
 
-It receives two kinds of messages from the arduino tier, one for command echo, the other for observation. For example, 
+It receives two kinds of messages from the arduino tier, one for command echo, the other for observation. 
+This behavior is the correct one as expected. For example, 
 
 ~~~
 ...
@@ -255,3 +256,17 @@ receive_data: {'cnt': 3980, 'throttle': 39.92, 'steer': 40.03}
 sendStr = '{'cnt': 3988, 'throttle': 40.00000000000061, 'steer': 40.11000000000059}' 
 ...
 ~~~
+
+Click the following image to view the video of the balancing bot. 
+
+Obviously, the balancing bot didn't run smoothly, and it could keep balanced when running on ground. 
+
+This unexpected behavior is caused by the two `send_json()` in the arduino sketch.
+If deleting those `send_json()`, the balancing bot will be capable of moving straight on ground and keep balanced. 
+
+This means that we cannot the USB port, as the serial communication channel between the RDK board and the ESP32 module. 
+
+Therefore, we will change the hardware structure of the simple balancing bot, to empower it with RDK board and various peripheral like camera, to be capable of doing more complex tasks. 
+
+   [![The balancing bot doesn't run smoothly because its USB port is occupied](https://img.youtube.com/vi/_8OrdSzhsWY/hqdefault.jpg)](https://www.youtube.com/watch?v=_8OrdSzhsWY)
+   
