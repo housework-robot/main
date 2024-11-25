@@ -42,7 +42,7 @@ Since both the RDK-X5 board and the ESP32 module have wifi and bluetooth, wirele
 
 Another option is to use cable, especially for serial communication. 
 
-Look into the pinouts of ESP32 wemos lolin32 lite module and the RDK-X5 board, UART, I2C, I2S and SPI are all solution candidates. 
+Look into the pinouts of [the ESP32 wemos lolin32 lite module](https://mischianti.org/esp32-wemos-lolin32-lite-high-resolution-pinout-and-specs/) and [the RDK-X5 board](https://archive.d-robotics.cc/downloads/hardware/rdk_x5/RDK_X5_Product_Brief_V1.0.pdf), UART, I2C, I2S and SPI are all candidate solutions. 
 
    <p align="center">
      <img alt="the pinouts of ESP32 wemos lolin32 lite module" src="./S06E02_src/ESP32-WeMos-LOLIN32-Lite-pinout-mischianti.png" width="48%">
