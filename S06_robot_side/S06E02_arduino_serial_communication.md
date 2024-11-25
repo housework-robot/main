@@ -56,13 +56,23 @@ In this article, we implemented UART serial communication, sending and receiving
 &nbsp;
 ## 2. Hardware assembly
 
-Take a look inside the balancing bot, where the DengFOC driver board is installed. 
+Take a look inside the balancing bot, where the DengFOC driver board is installed. The DengFOC driver board is used as a shield of the ESP32 module, so that all the pins of ESP32 module are plugged into DengFOC driver board, and not available for other usage. 
 
    <p align="center">
      <img alt="the DengFOC driver board inside the white box" src="./S06E02_src/DengFOC_inside.jpg" width="48%">
      &nbsp;  
      <img alt="the pins of DengFOC driver are used for ESP32 shield" src="./S06E02_src/DengFOC_pins.jpg" width="48%">
    </p>
+
+Now that we cannot connect the RDK-X5 board to ESP32 module, how about connecting RDK-X5 to the DengFOC driver board? The DengFOC driver board has a few pins for external communication, but they are used for [the I2C connection for the AS5600 motor sensors](https://github.com/ToanTech/Balance_Bot_DengFOC). Therefore, it is not feasible to connect the RDK-X5 board to DengFOC driver board. 
+
+   <p align="center">
+     <img alt="the DengFOC driver board's pins for the I2C with the AS5600 motor sensors" src="./S06E02_src/DengFOC_driver_board.png" width="50%">
+   </p>
+
+If we want to use cable to connect the RDK-X5 board to the ESP32 module, and don't want to change the hardware structure of the balancing bot, the only candidate solution is to use USB cable. 
+
+However, since there is only one USB port in the ESP32 module, it must be the `/dev/ttyUSB0`, which is usually reserved for testing purpose. What will happen if we use `/dev/ttyUSB0` for the serial communication, for production? 
 
 &nbsp;
 ## 3. Source code
