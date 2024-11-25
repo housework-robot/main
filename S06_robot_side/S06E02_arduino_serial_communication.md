@@ -264,7 +264,7 @@ Obviously, the balancing bot didn't run smoothly, and it couldn't keep balanced 
 This unexpected behavior is caused by the two `send_json()` in the arduino sketch.
 If deleting those `send_json()`, the balancing bot will be capable of moving straight on ground and keep balanced. 
 
-This means that we cannot the USB port, as the serial communication channel between the RDK board and the ESP32 module. 
+This means that we cannot use the USB port, as the serial communication channel between the RDK board and the ESP32 module. 
 
 Therefore, we will change the hardware structure of the simple balancing bot, to empower it with RDK board and various peripheral like camera, to be capable of doing more complex tasks. 
 
