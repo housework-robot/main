@@ -169,7 +169,6 @@ Here is a set of repositories, containing 3 kinds of contents,
 1. S05E01. [Video streaming with Computer Webcam](./S05_communication/S05E01_video_streaming_webcam.md)
 
    [![A VUE website displays the webcam video stream origined from ffmpeg through EasyDarwin and WebRTC-streamer](https://img.youtube.com/vi/Naeh0X3GGxE/hqdefault.jpg)](https://www.youtube.com/watch?v=Naeh0X3GGxE)
-
    
 &nbsp;
 
@@ -186,5 +185,13 @@ Here is a set of repositories, containing 3 kinds of contents,
 1. S06E01. [Setup the Arduino IDE programming environment to dissect DengFOC's balancing bot](./S06_robot_side/S06E01_two_wheel_balancing_robot.md)
 
    [![Setup Arduino IDE to program DengFOC's balancing bot](https://img.youtube.com/vi/WwpEb_d7BzI/hqdefault.jpg)](https://www.youtube.com/watch?v=WwpEb_d7BzI)
+
+&nbsp;
+
+2. S06E02. [Serial Communication between Arduino and Python](./S06_robot_side/S06E02_arduino_serial_communication.md)
+
+   [![The balancing bot doesn't run smoothly because its USB port is occupied](https://img.youtube.com/vi/_8OrdSzhsWY/hqdefault.jpg)](https://www.youtube.com/watch?v=_8OrdSzhsWY)
    
+
+&nbsp;
 ### To be continued ...
