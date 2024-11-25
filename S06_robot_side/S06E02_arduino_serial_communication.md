@@ -119,6 +119,66 @@ Suppose we use a USB cable to connect the RDK-X5 board with the ESP32 module, ho
 
 ### 3.2 Source code
 
+We upload our source codes to this repo, which consist of 2 tiers, 
+one for Arduino running on ESP32 module, 
+the other for Python which will run on RDK-X5 board, but for testing purpose, it runs in a ubuntu computer temporarily. 
+
+#### 1. [The arduino tier](./S06E02_src/arduino_tier)
+
+There are 3 sketches on the arduino tier.
+
+1. `arduino_tier/arduino_tier.ino` is for the gateway, which runs the serial communication.
+
+2. `arduino_tier/balancing_bot.h` and `arduino_tier/balancing_bot.cpp` for the control of the balancing bot, to make it moving and keep balanced. 
+
+In the loop of `arduino_tier.ino`, 
+
+1. First it checks if there is any JSON message from the python tier, by calling `receive_json()`. 
+
+2. Once receiving the JSON message, it sends it back to the python tier like echoing, by calling `send_json(cmd)`. 
+
+3. The arduino sketch collects the motion status of the balancing bot, including the 2 motor speeds, and the roll/pitch/yaw angles of the bot body, by calling `get_observation()`. 
+
+4. It sends part of the observations to the python tier, by calling `send_json(obs)`.
+
+5. After then, the arduino sketch makes decision of the next action by calling `policy(obs, cmd)`, and take step to control the motion of the bot by `step(action)`. 
+
+6. The arduino code also writes some log information into the serial, using `Serial.printf(...)`. 
+
+~~~
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  // remote command is received by the upper_tier from the remote server.
+  JsonDocument cmd = receive_json();
+  send_json(cmd);
+
+  JsonDocument obs = blc_bot.get_observation();
+  send_json(obs);
+  JsonDocument action = blc_bot.policy(obs, cmd);
+
+  /*
+  Serial.printf("pitch_angle: %f, motor0_velocity: %f, motor1_velocity: %f, motor0_target: %f, motor1_target: %f \n", 
+    obs["pitch_angle"], obs["motor0_velocity"], obs["motor1_velocity"], action["motor0_target"], action["motor1_target"]
+  );
+  */
+  Serial.printf("%f %f %f %f %f\n", 
+    obs["pitch_angle"], obs["motor0_velocity"], obs["motor1_velocity"], action["motor0_target"], action["motor1_target"]
+  );
+  blc_bot.step(action);
+  // delay(500);
+}
+~~~
+
+&nbsp;
+#### 2. [The RDK tier](./S06E02_src/rdk_tier)
+
+So far there is only 1 python script [`serial_channel.py`](./S06E02_src/rdk_tier/serial_channel.py). 
+In the future, there will be more scripts added to the RDK tier. 
+
+
+
+
 &nbsp;
 ## 4. Run and results
 
