@@ -260,6 +260,7 @@ sendStr = '{'cnt': 3988, 'throttle': 40.00000000000061, 'steer': 40.110000000000
 Click the following image to view the video of the balancing bot. 
 
    [![The balancing bot doesn't run smoothly because its USB port is occupied](https://img.youtube.com/vi/_8OrdSzhsWY/hqdefault.jpg)](https://www.youtube.com/watch?v=_8OrdSzhsWY)
+
    
 Obviously, the balancing bot didn't run smoothly, and it couldn't keep balanced when running on ground. 
 
