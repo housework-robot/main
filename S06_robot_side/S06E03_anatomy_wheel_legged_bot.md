@@ -470,6 +470,8 @@ It is not very difficult to implement the 4 control modes from scratch. For conv
 Of course, the `SF_Motor` library is only useful for BLDC motors, 
 and the motors must be wired to the Stack-force's motor driver board, in the way mentioned in the previous section. 
 
+The usage of the `SF_Motor` library refers to the sample code in the previous section ["Stack-force BLDC motor control code"](https://github.com/housework-robot/main/blob/main/S06_robot_side/S06E03_anatomy_wheel_legged_bot.md#22-stack-force-bldc-motor-control-code).
+
 
 &nbsp;
 ## 2.4 SF_Motor serial communication
