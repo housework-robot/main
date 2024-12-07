@@ -526,17 +526,17 @@ shows how to usage the MT6701 motor position sensors.
 #define MT6701 1
 #define AS5600 2
 
-SPIClass vspi(VSPI);  // 如果用到 MT6701 编码器，采用 SPI 通信，需要实例化 SPI 总线
+// If using MT6701 position sensor, we need to initialize an instance of SPI class. 
+SPIClass vspi(VSPI);  
 
-SF_Motor M0 = SF_Motor(0);   // 实例化电机类
+SF_Motor M0 = SF_Motor(0);   // Get an instance of Motor. 
 SF_Motor M1 = SF_Motor(1);
 
-float Vbus = 12.0;   // 设置供电电压值
-float alignVoltage = 3;  // 电机-编码器校准时的电压值
+float Vbus = 12.0;   // The voltage for the motor to start. 
+float alignVoltage = 3;  // The voltage for the calibration between motor and the position sensor. 
 
 void setup()
 {
-    // 为 MT6701 编码器的初始化
     // https://github.com/espressif/arduino-esp32/blob/master/libraries/SPI/src/SPI.h#L64
     // vspi.begin(int8_t sck = -1, int8_t miso = -1, int8_t mosi = -1, int8_t ss = -1);
     // scl - Clock signal. Each data bit is clocked out or in on the positive or negative edge of this signal
@@ -549,35 +549,54 @@ void setup()
     M0.initEncoder(MT6701, vspi);
     M1.initEncoder(MT6701, vspi);
 
-    //电机初始化，传入电压值
     M0.init(Vbus);
     M1.init(Vbus);
-    //电机-编码器的校准，传入校准时的电压值
+
+    // Calibrate the motor with the position sensor. 
     M0.AlignSensor(alignVoltage);
     M1.AlignSensor(alignVoltage);
 }
 
 void loop()
 {
-  // 电机的循环控制执行
   M0.run();
   M1.run();
 
-  //传感器数据获取
-  M0_angle = M0.getAnlge();  //获取电机角度 单位rad
-  M1_angle = M1.getAnlge();  //获取电机角度 单位rad
-
-  M0_velocity = M0.getVelocity();  //获取电机速度 单位rad
-  M1_velocity = M1.getVelocity();  //获取电机速度 单位rad
+  // Get the position related data from the MT6701 position sensors. 
+  M0_angle = M0.getAnlge();  // Stack-force's typo
+  M1_angle = M1.getAnlge();  
+  M0_velocity = M0.getVelocity();  
+  M1_velocity = M1.getVelocity();  
 }
 ~~~
-
 
 
 &nbsp;
 ## 3.2 INA240A2 motor current sensor
 
-1. INA240A2 current sensor: inline
+An INA240A2 motor current sensor chip is embedded in the motor driver board. 
+
+The usage of the INA240A2 motor current sensor is wrapped in the SF_Motor library. 
+
+~~~
+void loop()
+{
+  M0.run();
+  M1.run();
+
+  // Get the position related data from the MT6701 position sensors. 
+  M0_angle = M0.getAnlge();  // Stack-force's typo
+  M1_angle = M1.getAnlge();  
+  M0_velocity = M0.getVelocity();  
+  M1_velocity = M1.getVelocity();
+
+  // Get the current related data from the INA240A2 current sensors.
+  M0_current = M0.getCurrent();   // Current
+  M1_current = M1.getCurrent();  
+  M0_velocity = M0.getElecAngle();  // Electrical angle
+  M1_velocity = M1.getElecAngle();
+}
+~~~
 
 
 &nbsp;
