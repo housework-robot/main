@@ -295,9 +295,7 @@ except it hides some details, including wrapping up the motor driver in Stack-fo
 
 
 &nbsp;
-## 2.3 SF_Motor library and PWM driver
-
-### 2.3.1 Motor assembly
+## 2.3 Motor assembly 
 
 Let us take a look at how to assemble motors to the controller board.
 
@@ -325,21 +323,26 @@ The left image below is the outlook of the master controller board, and the righ
 Notice that on the top edge of the master controller board, with label `4`, there are 2*10 pins which are used for the connection with the motor driver board. 
 
 The program running in the master controller board can send its commands to the motors through these pins. 
-In details, there are 2 groups of pins, the `2, 4, 13` are for `M0` motor, and `14, 12, 27` are for `M1` motor. 
+In details, there are 2 groups of pins, the `4, 2, 13` are for `M0` motor, and `12, 14, 27` are for `M1` motor. 
 
    <p align="center">
      <img alt="the 2 pin groups for motor control" src="./S06E03_src/images/stackforce_motor_pins.png" width="85%">
    </p>
 
 
+&nbsp;
+## 2.4 PWM-based motor driver 
 
-### 2.3.2 
-PWM code, https://dengfoc.com/#/dengfoc/%E7%81%AF%E5%93%A5%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%86%99FOC%E7%AE%97%E6%B3%95/4.2FOC%E5%BC%80%E7%8E%AF%E9%80%9F%E5%BA%A6%E4%BB%A3%E7%A0%81%E7%9A%84%E6%92%B0%E5%86%99
+It is quite straightforward to implement a PWM-based driver to control the motion of the motors. 
+
+Following [the Stack-force tutorial's sample code](https://dengfoc.com/#/dengfoc/%E7%81%AF%E5%93%A5%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%86%99FOC%E7%AE%97%E6%B3%95/4.2FOC%E5%BC%80%E7%8E%AF%E9%80%9F%E5%BA%A6%E4%BB%A3%E7%A0%81%E7%9A%84%E6%92%B0%E5%86%99), 
+we can use the following program to make the M0 motor or M1 motor rotating at a constant speed 15. 
+
+Notice that in the program, `pwmA, pwmB, pwmC` correspond to the `4, 2, 13` pins for `M0` motor, and `12, 14, 27` pins for `M1` motor, as mentioned in last section.
 
 ~~~
 #include <Arduino.h>
 
-// /home/robot/stack_force/SF-轮足机器人资料/2校准调试/BLDC_Control/lib/SF_Motor/Pins_Specify.h
 int pwmA = 4;
 int pwmB = 2;
 int pwmC = 13;
@@ -348,19 +351,18 @@ int pwmC = 13;
 // int pwmC = 27;
 
 
-//初始变量及函数定义
+// 初始变量及函数定义
+// 宏定义实现的一个约束函数,用于限制一个值的范围。
 #define _constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
-//宏定义实现的一个约束函数,用于限制一个值的范围。
-//具体来说，该宏定义的名称为 _constrain，接受三个参数 amt、low 和 high，分别表示要限制的值、最小值和最大值。该宏定义的实现使用了三元运算符，根据 amt 是否小于 low 或大于 high，返回其中的最大或最小值，或者返回原值。
-//换句话说，如果 amt 小于 low，则返回 low；如果 amt 大于 high，则返回 high；否则返回 amt。这样，_constrain(amt, low, high) 就会将 amt 约束在 [low, high] 的范围内。
+
 float voltage_power_supply=12.6;
 float shaft_angle=0,open_loop_timestamp=0;
 float zero_electric_angle=0,Ualpha,Ubeta=0,Ua=0,Ub=0,Uc=0,dc_a=0,dc_b=0,dc_c=0;
 
-
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
+
   //PWM设置
   pinMode(pwmA, OUTPUT);
   pinMode(pwmB, OUTPUT);
@@ -368,10 +370,12 @@ void setup() {
   ledcAttachPin(pwmA, 0);
   ledcAttachPin(pwmB, 1);
   ledcAttachPin(pwmC, 2);
-  ledcSetup(0, 30000, 8);  //pwm频道, 频率, 精度
-  ledcSetup(1, 30000, 8);  //pwm频道, 频率, 精度
-  ledcSetup(2, 30000, 8);  //pwm频道, 频率, 精度
+
+  ledcSetup(0, 30000, 8);  // pwm频道, 频率, 精度
+  ledcSetup(1, 30000, 8);  // pwm频道, 频率, 精度
+  ledcSetup(2, 30000, 8);  // pwm频道, 频率, 精度
   Serial.println("完成PWM初始化设置");
+
   delay(3000);
   pinMode(25, OUTPUT);     //使能引脚设置高电平
 }
@@ -382,13 +386,9 @@ float _electricalAngle(float shaft_angle, int pole_pairs) {
 }
 
 // 归一化角度到 [0,2PI]
-float _normalizeAngle(float angle){
+float _normalizeAngle(float angle) {
   float a = fmod(angle, 2*PI);   //取余运算可以用于归一化，列出特殊值例子算便知
   return a >= 0 ? a : (a + 2*PI);  
-  //三目运算符。格式：condition ? expr1 : expr2 
-  //其中，condition 是要求值的条件表达式，如果条件成立，则返回 expr1 的值，否则返回 expr2 的值。可以将三目运算符视为 if-else 语句的简化形式。
-  //fmod 函数的余数的符号与除数相同。因此，当 angle 的值为负数时，余数的符号将与 _2PI 的符号相反。也就是说，如果 angle 的值小于 0 且 _2PI 的值为正数，则 fmod(angle, _2PI) 的余数将为负数。
-  //例如，当 angle 的值为 -PI/2，_2PI 的值为 2PI 时，fmod(angle, _2PI) 将返回一个负数。在这种情况下，可以通过将负数的余数加上 _2PI 来将角度归一化到 [0, 2PI] 的范围内，以确保角度的值始终为正数。
 }
 
 
@@ -401,7 +401,7 @@ void setPwm(float Ua, float Ub, float Uc) {
   dc_b = _constrain(Ub / voltage_power_supply, 0.0f , 1.0f );
   dc_c = _constrain(Uc / voltage_power_supply, 0.0f , 1.0f );
 
-  //写入PWM到PWM 0 1 2 通道
+  //写入到 PWM 的 0 1 2 通道
   ledcWrite(0, dc_a*255);
   ledcWrite(1, dc_b*255);
   ledcWrite(2, dc_c*255);
@@ -409,6 +409,7 @@ void setPwm(float Ua, float Ub, float Uc) {
 
 void setPhaseVoltage(float Uq,float Ud, float angle_el) {
   angle_el = _normalizeAngle(angle_el + zero_electric_angle);
+
   // 帕克逆变换
   Ualpha =  -Uq*sin(angle_el); 
   Ubeta =   Uq*cos(angle_el); 
@@ -431,7 +432,6 @@ float velocityOpenloop(float target_velocity){
   //由于 micros() 函数返回的时间戳会在大约 70 分钟之后重新开始计数，在由70分钟跳变到0时，TS会出现异常，因此需要进行修正。如果时间间隔小于等于零或大于 0.5 秒，则将其设置为一个较小的默认值，即 1e-3f
   if(Ts <= 0 || Ts > 0.5f) Ts = 1e-3f;
   
-
   // 通过乘以时间间隔和目标速度来计算需要转动的机械角度，存储在 shaft_angle 变量中。在此之前，还需要对轴角度进行归一化，以确保其值在 0 到 2π 之间。
   shaft_angle = _normalizeAngle(shaft_angle + target_velocity*Ts);
   //以目标速度为 10 rad/s 为例，如果时间间隔是 1 秒，则在每个循环中需要增加 10 * 1 = 10 弧度的角度变化量，才能使电机转动到目标速度。
@@ -444,17 +444,20 @@ float velocityOpenloop(float target_velocity){
   setPhaseVoltage(Uq,  0, _electricalAngle(shaft_angle, 7));
   
   open_loop_timestamp = now_us;  //用于计算下一个时间间隔
-
   return Uq;
 }
 
 
 void loop() {
-  digitalWrite(25, HIGH);
+  digitalWrite(25, HIGH);   //使能引脚设置高电平
   // put your main code here, to run repeatedly:
   velocityOpenloop(15);
 }
 ~~~
+
+
+&nbsp;
+## 2.5 SF_Motor library
 
 &nbsp;
 ## 2.4 SF_Motor serial communication
