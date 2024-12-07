@@ -481,7 +481,7 @@ It is not very difficult to implement the 4 control modes from scratch. For conv
 Of course, the `SF_Motor` library is only useful for BLDC motors, 
 and the motors must be wired to the Stack-force's motor driver board, in the way mentioned in the previous section. 
 
-The usage of the `SF_Motor` library refers to the sample code in the previous section ["Stack-force BLDC motor control code"](https://github.com/housework-robot/main/blob/main/S06_robot_side/S06E03_anatomy_wheel_legged_bot.md#22-stack-force-bldc-motor-control-code).
+The usage of the `SF_Motor` library refers to the sample code in the previous section ["Stack-force BLDC motor control code"](./S06E03_anatomy_wheel_legged_bot.md#22-stack-force-bldc-motor-control-code).
 
 
 
@@ -490,8 +490,89 @@ The usage of the `SF_Motor` library refers to the sample code in the previous se
 
 ## 3.1 MT6701 motor position sensor
 
-1. MT6701 position sensor: SPI
-    hardware wiring
+Let's take a look at how the MT6701 motor position sensor are wired to the master controller board. 
+
+The left diagram below illustrates the structure of the master controller board. 
+The lower edge contains 2 SCDGV sockets, labelled as `14` for `M0` motor and `13` for `M1` motor.  
+
+Notice that each socket has 5 internal pins, that are used for the connection to the MT6701 motor position sensors. 
+The pin numbers are shown in the right digram below, 
+where pin `23` for CLK, `19` for DO, and `18` and `22` for the 2 chip select (CS) of M0 and M1 motors.
+
+   <p align="center">
+     <img alt="the diagram of the structure of the master controller board" src="./S06E03_src/images/stackforce_master_board_diagram.jpg" width="48%">
+     &nbsp;  
+     <img alt="the 2 pin groups for MT6701 motor position sensors" src="./S06E03_src/images/MT6701_SSI_pin.png" width="48%">
+   </p>
+
+The usage of the MT6701 motor position sensors refers to the sample code in the previous section ["Stack-force BLDC motor control code"](./S06E03_anatomy_wheel_legged_bot.md#22-stack-force-bldc-motor-control-code).
+
+To be convenient, the following code snippet from ["Stack-force BLDC motor control code"](./S06E03_anatomy_wheel_legged_bot.md#22-stack-force-bldc-motor-control-code) 
+shows how to usage the MT6701 motor position sensors. 
+
+~~~
+#include <Arduino.h>
+#include <SPI.h>
+#include <Wire.h>
+#include <EEPROM.h>
+#include "SF_Motor.h"
+#include "Pins_Specify.h"
+
+#define MT6701_CS0 18
+#define MT6701_CS1 22
+#define MT6701_CLK 23
+#define MT6701_DO 19
+
+#define MT6701 1
+#define AS5600 2
+
+SPIClass vspi(VSPI);  // 如果用到 MT6701 编码器，采用 SPI 通信，需要实例化 SPI 总线
+
+SF_Motor M0 = SF_Motor(0);   // 实例化电机类
+SF_Motor M1 = SF_Motor(1);
+
+float Vbus = 12.0;   // 设置供电电压值
+float alignVoltage = 3;  // 电机-编码器校准时的电压值
+
+void setup()
+{
+    // 为 MT6701 编码器的初始化
+    // https://github.com/espressif/arduino-esp32/blob/master/libraries/SPI/src/SPI.h#L64
+    // vspi.begin(int8_t sck = -1, int8_t miso = -1, int8_t mosi = -1, int8_t ss = -1);
+    // scl - Clock signal. Each data bit is clocked out or in on the positive or negative edge of this signal
+    // miso - Also known as q, this is the input of the serial stream into the ESP32
+    // mosi - Also known as d, this is the output of the serial stream from the ESP32
+    // ss - quadwp for write protect signal, quadhd for hold signal.
+
+    vspi.begin(MT6701_CLK, MT6701_DO, 0, -1);
+
+    M0.initEncoder(MT6701, vspi);
+    M1.initEncoder(MT6701, vspi);
+
+    //电机初始化，传入电压值
+    M0.init(Vbus);
+    M1.init(Vbus);
+    //电机-编码器的校准，传入校准时的电压值
+    M0.AlignSensor(alignVoltage);
+    M1.AlignSensor(alignVoltage);
+}
+
+void loop()
+{
+  // 电机的循环控制执行
+  M0.run();
+  M1.run();
+
+  //传感器数据获取
+  M0_angle = M0.getAnlge();  //获取电机角度 单位rad
+  M1_angle = M1.getAnlge();  //获取电机角度 单位rad
+
+  M0_velocity = M0.getVelocity();  //获取电机速度 单位rad
+  M1_velocity = M1.getVelocity();  //获取电机速度 单位rad
+}
+~~~
+
+
 
 &nbsp;
 ## 3.2 INA240A2 motor current sensor
