@@ -467,17 +467,23 @@ Stack-force gave [a series of tutorial on 4 motor control modes](https://dengfoc
 
 It is not very difficult to implement the 4 control modes from scratch. For convenience, Stack-force provides a [SF_Motor library](./S06E03_src/dengfoc_bipedal_bot/BLDC_Control/lib/SF_Motor). 
 
+~~~
+// SF_Motor.h
+
+#define VELOCITY_MODE 1
+#define FORCE_ANGLE_MODE 2
+#define VEL_ANGLE_MOED 3
+#define TORQUE_MODE 4
+
+...
+~~~
+
 Of course, the `SF_Motor` library is only useful for BLDC motors, 
 and the motors must be wired to the Stack-force's motor driver board, in the way mentioned in the previous section. 
 
 The usage of the `SF_Motor` library refers to the sample code in the previous section ["Stack-force BLDC motor control code"](https://github.com/housework-robot/main/blob/main/S06_robot_side/S06E03_anatomy_wheel_legged_bot.md#22-stack-force-bldc-motor-control-code).
 
 
-&nbsp;
-## 2.4 SF_Motor serial communication
-
-ONBOARD uart:  hardware wiring
-Serial USB
 
 &nbsp;
 # 3. Motor sensors
@@ -494,7 +500,9 @@ Serial USB
 
 
 &nbsp;
-## 3.3 SF_BLDC library and 4 control modes
+&nbsp;
+## 3.3 SF_Motor serial communication
 
-4 modes,
+ONBOARD uart:  hardware wiring
+Serial USB
 
