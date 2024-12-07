@@ -170,7 +170,7 @@ we developers should take the following steps to control the BLDC motors with Si
   `motor.loopFOC()` for FOC algorithm execution,
    and `motor.move(target)` for motion control.
 
-
+&nbsp;
 ## 2.2 Stack-force BLDC motor control code
 
 Following source code is copied and pasted from [Stack-force toolkit for motor calibration](./S06E03_src/dengfoc_bipedal_bot/BLDC_Control/src/main.cpp). 
@@ -289,3 +289,33 @@ Comparing Stack-force's motor control with SimpleFOC's,
 
    *Stack-force uses M0.run() for the loop, without explicity calling loopFOC(),
    similar but not exactly the same with SimpleFOC.*
+
+
+&nbsp;
+## 2.3 SF_Motor library and PWM driver
+
+Hardware wiring
+
+PWM code, https://dengfoc.com/#/dengfoc/%E7%81%AF%E5%93%A5%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%86%99FOC%E7%AE%97%E6%B3%95/4.2FOC%E5%BC%80%E7%8E%AF%E9%80%9F%E5%BA%A6%E4%BB%A3%E7%A0%81%E7%9A%84%E6%92%B0%E5%86%99
+
+
+&nbsp;
+## 2.4 SF_Motor serial communication
+
+ONBOARD uart:  hardware wiring
+Serial USB
+
+&nbsp;
+## 2.5 MT6701 motor sensors
+
+1. MT6701 position sensor: SPI
+    hardware wiring
+   
+3. INA240A2 current sensor: inline
+
+
+&nbsp;
+## 2.6 SF_BLDC library and 4 control modes
+
+4 modes,
+
