@@ -35,4 +35,26 @@ In details, [Stack-force bipedal wheeled robot](https://gitee.com/StackForce/bip
 
 4. Four `DS041MG` servos.
 
+   The four `DS041MG` servos control the four legs.
+
+   They are linked to a Stack-force self-made servo and IMU board, via [I2C serial communication](https://en.wikipedia.org/wiki/I%C2%B2C).
+
+5. One `MPU6050` IMU chip.
+
+   The `MPU6050` IMU chip is embedded in the Stack-force self-made servo and IMU board.
+
+6. Three Stack-force self-made boards.
+
+   A low-power BLDC motor driver board, a master control board, and a servo and IMU board.
+   They are stacked together from bottom to top, in the way of Arduino shields.
+
+   The master control board contains two ESP32 chips, `S1` and `S3`.
+   `S1` is in charge of controlling the motors, and `S3` for servos and the IMU. 
+
+7. The wheel-legged robot also contains a wireless controller and its receiver module.
+
+   This article will not discuss the wireless controller and its receiver in details.
+
+
+
    
