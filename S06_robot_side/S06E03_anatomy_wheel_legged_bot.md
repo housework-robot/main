@@ -302,12 +302,35 @@ except it hides some details, including wrapping up the motor driver in Stack-fo
 Let us take a look at how to assemble motors to the controller board.
 
 Actually there are 3 boards in the wheel-legged robot. 
+From bottom to the top, they are the motor driver board, the master controller board, and the servo and IMU board. 
+These 3 boards are stacked together in the way of Arduino shields, shown in the left image below. 
+
+The right image below is the motor driver board. 
+Notice that there are 2*10 pins on the top edge of the driver board, they are used for connection with the master controller board.
 
    <p align="center">
-     <img alt="the frontside of the balancing bot" src="./S06E03_src/images/Stackforce_stack.png" width="48%">
+     <img alt="the stack of stack-force boards" src="./S06E03_src/images/Stackforce_stack.png" width="48%">
      &nbsp;  
-     <img alt="the backside of the balancing bot" src="./S06E03_src/images/stackforce_motor_driver_board.png" width="48%">
+     <img alt="the outlook of the motor driver board" src="./S06E03_src/images/stackforce_motor_driver_board.png" width="48%">
    </p>
+
+The left image below is the outlook of the master controller board, and the right diagram below illustrates the structure of the board. 
+
+   <p align="center">
+     <img alt="the outlook of the master controller board" src="./S06E03_src/images/stackforce_master_board.png" width="48%">
+     &nbsp;  
+     <img alt="the diagram of the structure of the master controller board" src="./S06E03_src/images/stackforce_master_board_diagram.jpg" width="48%">
+   </p>
+
+Notice that on the top edge of the master controller board, with label `4`, there are 2*10 pins which are used for the connection with the motor driver board. 
+
+The program running in the master controller board can send its commands to the motors through these pins. 
+In details, there are 2 groups of pins, the `2, 4, 13` are for `M0` motor, and `14, 12, 27` are for `M1` motor. 
+
+   <p align="center">
+     <img alt="the 2 pin groups for motor control" src="./S06E03_src/images/stackforce_motor_pins.png" width="85%">
+   </p>
+
 
 
 ### 2.3.2 
