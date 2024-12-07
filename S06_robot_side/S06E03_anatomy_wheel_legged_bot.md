@@ -459,6 +459,18 @@ void loop() {
 &nbsp;
 ## 2.5 SF_Motor library
 
+In last section, we implemented a PWM-based motor driver, that keeps the motors rotating at a constant speed. 
+
+Suppose we want to change the motor speed to a target speed, in addition we want to make the changing process efficient and stable. 
+
+Stack-force gave [a series of tutorial on 4 motor control modes](https://dengfoc.com/#/dengfoc/%E7%81%AF%E5%93%A5%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%86%99FOC%E7%AE%97%E6%B3%95/1%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E6%BA%90%E6%97%A0%E5%88%B7%E7%94%B5%E6%9C%BA%E6%A6%82%E8%AE%BA). 
+
+It is not very difficult to implement the 4 control modes from scratch. For convenience, Stack-force provides a [SF_Motor library](./S06E03_src/dengfoc_bipedal_bot/BLDC_Control/lib/SF_Motor). 
+
+Of course, the `SF_Motor` library is only useful for BLDC motors, 
+and the motors must be wired to the Stack-force's motor driver board, in the way mentioned in the previous section. 
+
+
 &nbsp;
 ## 2.4 SF_Motor serial communication
 
