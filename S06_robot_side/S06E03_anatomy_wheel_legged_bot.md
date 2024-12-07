@@ -51,9 +51,8 @@ In details, [Stack-force bipedal wheeled robot](https://gitee.com/StackForce/bip
    The master control board contains two ESP32 chips, `S1` and `S3`.
    `S1` is in charge of controlling the motors, and `S3` for servos and the IMU. 
 
-7. The wheel-legged robot also contains a wireless controller and its receiver module.
-
-   This article will not discuss the wireless controller and its receiver in details.
+In addition, the Stack-force wheel-legged robot also contains a wireless controller and its receiver module. 
+But in this article, we will not discuss the wireless controller and its receiver in details.
 
 
 
