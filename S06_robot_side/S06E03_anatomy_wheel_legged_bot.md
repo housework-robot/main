@@ -297,8 +297,20 @@ except it hides some details, including wrapping up the motor driver in Stack-fo
 &nbsp;
 ## 2.3 SF_Motor library and PWM driver
 
-Hardware wiring
+### 2.3.1 Motor assembly
 
+Let us take a look at how to assemble motors to the controller board.
+
+Actually there are 3 boards in the wheel-legged robot. 
+
+   <p align="center">
+     <img alt="the frontside of the balancing bot" src="./S06E03_src/images/Stackforce_stack.png" width="48%">
+     &nbsp;  
+     <img alt="the backside of the balancing bot" src="./S06E03_src/images/stackforce_motor_driver_board.png" width="48%">
+   </p>
+
+
+### 2.3.2 
 PWM code, https://dengfoc.com/#/dengfoc/%E7%81%AF%E5%93%A5%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%86%99FOC%E7%AE%97%E6%B3%95/4.2FOC%E5%BC%80%E7%8E%AF%E9%80%9F%E5%BA%A6%E4%BB%A3%E7%A0%81%E7%9A%84%E6%92%B0%E5%86%99
 
 
@@ -309,16 +321,21 @@ ONBOARD uart:  hardware wiring
 Serial USB
 
 &nbsp;
-## 2.5 MT6701 motor sensors
+# 3. Motor sensors
+
+## 3.1 MT6701 motor position sensor
 
 1. MT6701 position sensor: SPI
     hardware wiring
-   
-3. INA240A2 current sensor: inline
+
+&nbsp;
+## 3.2 INA240A2 motor current sensor
+
+1. INA240A2 current sensor: inline
 
 
 &nbsp;
-## 2.6 SF_BLDC library and 4 control modes
+## 3.3 SF_BLDC library and 4 control modes
 
 4 modes,
 
