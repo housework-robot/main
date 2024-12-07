@@ -290,6 +290,9 @@ Comparing Stack-force's motor control with SimpleFOC's,
    *Stack-force uses M0.run() for the loop, without explicity calling loopFOC(),
    similar but not exactly the same with SimpleFOC.*
 
+In summary, Stack-force's motor control is consistent with the standord SimpleFOC's routine, 
+except it hides some details, including wrapping up the motor driver in Stack-force's library. 
+
 
 &nbsp;
 ## 2.3 SF_Motor library and PWM driver
