@@ -825,3 +825,30 @@ Stack-force's master controller board is a custom Arduino board. Following is a 
 5. [Arduino IDE: Creating Custom Boards](https://www.instructables.com/Arduino-IDE-Creating-Custom-Boards/)
 
 Therefore，Stack-force's boards have their custom settings, and also redefine some Arduino default settings, including `Serial2` and `Wire` etc. 
+
+
+&nbsp;
+# 5. Servos
+
+## 5.1 Servo assembly
+
+   <p align="center">
+     <img alt="the outlook of the Stack-force servo_imu_board" src="./S06E03_src/images/SF_servo_imu_board.png" width="48%">
+     &nbsp;  
+     <img alt="how the servos wired to the Stack-force servo_imu_board" src="./S06E03_src/images/SF_servo_board_wiring.png" width="48%">
+   </p>
+
+
+   <p align="center">
+     <img alt="the pins connect servo_imu_shield_board to the master board below" src="./S06E03_src/images/SF_servo_imu_board_pin.png" width="48%">
+     &nbsp;  
+     <img alt="the servo_imu_board as a shield stacked on the master board" src="./S06E03_src/images/stackforce_servo_imu_board.png" width="48%">
+   </p>
+
+
+   <p align="center">
+     <img alt="the diagram of the structure of the master controller board" src="./S06E03_src/images/stackforce_master_board_diagram.jpg" width="48%">
+     &nbsp;  
+     <img alt="the pins of the master board connecting to the servo_imu_shield_board" src="./S06E03_src/images/stackforce_S3_pin_for_servos.png" width="48%">
+   </p>
+   
