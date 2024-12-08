@@ -750,6 +750,8 @@ private:
 #endif
 ~~~
 
+&nbsp;
+
 [The calibration code of the BLDC motors](./S06E03_src/dengfoc_bipedal_bot/BLDC_Control/src/main.cpp) is an example 
 for the usage of the `SF_Communication` library.
 
@@ -784,6 +786,14 @@ void loop()
   M0.run();
   M1.run();
 }
+~~~
+
+When running this code, the `SF_Communication` library will output the motors status to the `Serial`. 
+
+In addition, if we initialize the SF_Communication as `USB`, `com.init(USB)`, we can input the following commmand in the Serial, 
+to make both M0 and M1 motors rotating at speed 10rad/s.
+~~~
+T10,10,1,1,0B
 ~~~
 
 
