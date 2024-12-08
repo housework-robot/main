@@ -680,7 +680,7 @@ As we know, `SF_BLDC` is a library wrapping up `SF_Motor` library, plus motor se
 Among those tools, there is a [`SF_Communication` library](./S06E03_src/dengfoc_bipedal_bot/BLDC_Control/lib/SF_Communication).  
 
 
-### 4.2.1 SF_Communication functionality
+**1. SF_Communication functionality**
 
 Following is the header file of the `SF_Communication` library,
 
@@ -754,7 +754,7 @@ private:
 ~~~
 
 &nbsp;
-### 4.2.2 SF_Communication usage
+**2. SF_Communication usage**
 
 [The calibration code of the BLDC motors](./S06E03_src/dengfoc_bipedal_bot/BLDC_Control/src/main.cpp) is an example 
 for the usage of the `SF_Communication` library.
