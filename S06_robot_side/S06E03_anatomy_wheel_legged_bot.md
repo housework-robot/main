@@ -832,12 +832,25 @@ Therefore，Stack-force's boards have their custom settings, and also redefine s
 
 ## 5.1 Servo assembly
 
+Stack-force's wheel-legged robot has 4 servos, in charge of controlling the hip joints of its 4 legs. 
+The 4 servos are linked to Stack-force self-made servo and imu board, shown in the left image below. 
+
+The 4 servos are controlled by [a PCA9685 chip](https://www.instructables.com/Mastering-Servo-Control-With-PCA9685-and-Arduino/), which provides multiple PWM outputs.
+
+The servo and imu board is stacked on the top of a Stack-force self-made master controller board, 
+in the way of a Arduino shield, shown in the right image below. 
+
+Notice that the 4 servos are linked to the pins at position `3`, `4`, `5`, and `6`. 
+
    <p align="center">
      <img alt="the outlook of the Stack-force servo_imu_board" src="./S06E03_src/images/SF_servo_imu_board.png" width="48%">
      &nbsp;  
      <img alt="how the servos wired to the Stack-force servo_imu_board" src="./S06E03_src/images/SF_servo_board_wiring.png" width="48%">
    </p>
 
+The servo and imu board is like a shield on the top of the master board. 
+The communication between these 2 boards is implemented with I2C at pin `1` for SDA and pin `2` for SCL,
+of the servo and imu board shown in the left image below. 
 
    <p align="center">
      <img alt="the pins connect servo_imu_shield_board to the master board below" src="./S06E03_src/images/SF_servo_imu_board_pin.png" width="48%">
@@ -845,10 +858,197 @@ Therefore，Stack-force's boards have their custom settings, and also redefine s
      <img alt="the servo_imu_board as a shield stacked on the master board" src="./S06E03_src/images/stackforce_servo_imu_board.png" width="48%">
    </p>
 
+On the master controller board, the I2C serial communication to the servo and imu board
+uses pin `1` for SDA and pin `2` for SCL, shown in the right image below. 
 
    <p align="center">
      <img alt="the diagram of the structure of the master controller board" src="./S06E03_src/images/stackforce_master_board_diagram.jpg" width="48%">
      &nbsp;  
      <img alt="the pins of the master board connecting to the servo_imu_shield_board" src="./S06E03_src/images/stackforce_S3_pin_for_servos.png" width="48%">
    </p>
+
    
+&nbsp;
+## 5.2 SF_Servo library
+
+The following code snippet is extracted from [the `main.cpp` of Stack-force wheel-legged robot](./S06E03_src/dengfoc_bipedal_bot/bipedal/src/main.cpp), 
+which gives an example for the usage of `SF_Servo` library. 
+
+~~~
+#include <Arduino.h>
+#include "SF_Servo.h"
+#include "bipedal_data.h"
+
+SF_Servo servos = SF_Servo(Wire); 
+
+void setServoAngle(uint16_t servoLeftFront, uint16_t servoLeftRear, uint16_t servoRightFront, uint16_t servoRightRear);
+void inverseKinematics();
+
+void setup() {
+  Wire.begin(1, 2, 400000UL);
+  servos.init();
+  servos.setAngleRange(0,300);
+  servos.setPluseRange(500,2500);
+
+  delay(6000);
+}
+
+void loop() {
+  ...
+  inverseKinematics();
+}
+
+void setServoAngle(uint16_t servoLeftFront, uint16_t servoLeftRear, uint16_t servoRightFront, uint16_t servoRightRear){
+  servos.setAngle(3, 90+LFSERVO_OFFSET+servoLeftFront);
+  servos.setAngle(4, 90+LRSERVO_OFFSET+servoLeftRear);
+  servos.setAngle(5, 270+RFSERVO_OFFSET-servoRightFront);
+  servos.setAngle(6, 270+RFSERVO_OFFSET-servoRightRear);
+}
+
+void inverseKinematics(){
+  ...
+  alpha1ToAngle = (int)((IKParam.alpha1 / 6.28) * 360);
+  beta1ToAngle = (int)((IKParam.beta1 / 6.28) * 360);
+  alpha2ToAngle = (int)((IKParam.alpha2 / 6.28) * 360);//todo
+  beta2ToAngle = (int)((IKParam.beta2 / 6.28) * 360);
+
+  if(robotMode.servoEnable){
+    setServoAngle(beta1ToAngle, alpha1ToAngle, beta2ToAngle, alpha2ToAngle);
+  }
+}
+~~~
+
+Notice that, 
+
+1. `SF_Servo servos = SF_Servo(Wire); `
+
+   Instantiate an SF_Servo instance, with I2C communication.
+
+2. `Wire.begin(1, 2, 400000UL);`
+
+   Start I2C communication with SDA at pin `1`, SCL at pin `2`, and frequency as 400000.
+
+   The `Wire.begin()` API refers to [the ESP32 library](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/i2c.html#i2c-master-apis) in master mode. 
+
+4. `servos.setAngle(3, ...);` 
+
+   The first servo is linked to the PWM chip at position `3`.
+   The second at position `4`, the third at `5`, and the fourth at `6`.
+   Take a look at the servo assembly images in the previous section.
+
+
+&nbsp;
+## 5.3 PCA9685 multi-PWM driver
+
+It is interesting to look into the cpp code of SF_Servo library, 
+especially how to work with [the PCA9685 chip](https://www.instructables.com/Mastering-Servo-Control-With-PCA9685-and-Arduino/), 
+which provides multiple PWM outputs.
+
+~~~
+#include "SF_Servo.h"
+
+#define SERVO_ENABLE_PIN 42
+#define PCA9685_ADDR 0x40
+
+#define PCA9685_MODE1 0x00     
+#define PCA9685_MODE2 0x01  
+#define FREQUENCY_OSCILLATOR 25000000
+
+#define MODE1_RESTART 0x80 /**< Restart enabled */
+#define MODE1_SLEEP 0x10   /**< Low power mode. Oscillator off */
+#define MODE1_AI 0x20      /**< Auto-Increment enabled */
+
+#define PCA9685_PRESCALE 0xFE     /**< Prescaler for PWM output frequency */
+#define PCA9685_LED0_ON_L 0x06  /**< LED0 on tick, low byte*/
+#define PCA9685_LED0_ON_H 0x07  /**< LED0 on tick, high byte*/
+#define PCA9685_LED0_OFF_L 0x08 /**< LED0 off tick, low byte */
+#define PCA9685_LED0_OFF_H 0x09 /**< LED0 off tick, high byte */
+
+
+SF_Servo::SF_Servo(TwoWire &i2c)
+    :  _i2c(&i2c), freq(50){}
+
+void SF_Servo::init(){
+    _i2c->begin();
+    reset();
+
+    setPWMFreq(freq);
+    enable();
+}
+
+void SF_Servo::setPWMFreq(float freq){
+    float prescaleval = ((FREQUENCY_OSCILLATOR / (freq * 4096.0)) + 0.5) - 1;
+    uint8_t prescale = (uint8_t)prescaleval;
+
+    uint8_t oldmode = readFromPCA(PCA9685_MODE1);
+    uint8_t newmode = (oldmode & ~MODE1_RESTART) | MODE1_SLEEP;  // sleep
+    writeToPCA(PCA9685_MODE1, newmode);                    // go to sleep
+    writeToPCA(PCA9685_PRESCALE, prescale);             
+    writeToPCA(PCA9685_MODE1, oldmode);
+
+    delay(5);
+    writeToPCA(PCA9685_MODE1, oldmode | MODE1_RESTART | MODE1_AI);
+}
+
+void SF_Servo::enable(){
+    pinMode(SERVO_ENABLE_PIN, OUTPUT);
+    digitalWrite(SERVO_ENABLE_PIN, HIGH);
+}
+
+void SF_Servo::disable(){
+    pinMode(SERVO_ENABLE_PIN, OUTPUT);
+    digitalWrite(SERVO_ENABLE_PIN, LOW);
+}
+
+void SF_Servo::reset(){
+    writeToPCA(PCA9685_MODE1, MODE1_RESTART);
+    delay(10);
+}
+
+void SF_Servo::sleep(){
+    uint8_t awake = readFromPCA(PCA9685_MODE1);
+    uint8_t sleep = awake | MODE1_SLEEP;  // 睡眠位调高
+    writeToPCA(PCA9685_MODE1, sleep);
+    delay(5);
+}
+
+void SF_Servo::wakeup(){
+  uint8_t sleep = readFromPCA(PCA9685_MODE1);
+  uint8_t wakeup = sleep & ~MODE1_SLEEP;  // 睡眠位调低
+  writeToPCA(PCA9685_MODE1, wakeup);
+}
+
+void SF_Servo::setAngle(uint8_t num, uint16_t angle){
+    if(angle < angleMin || angle > angleMax)
+        return;
+    uint16_t offTime = (int)(pluseMin + pluseRange * angle / angleRange);
+    uint16_t off = (int)(offTime * 4096 / 20000);
+    setPWM(num, 0, off);
+}
+
+void SF_Servo::setPWM(uint8_t num, uint16_t on, uint16_t off){
+    _i2c->beginTransmission(PCA9685_ADDR);
+    _i2c->write(PCA9685_LED0_ON_L + 4 * num);
+    _i2c->write(on);
+    _i2c->write(on >> 8);
+    _i2c->write(off);
+    _i2c->write(off >> 8);
+    _i2c->endTransmission();
+}
+
+void SF_Servo::writeToPCA(uint8_t addr, uint8_t data){
+    _i2c->beginTransmission(PCA9685_ADDR);
+    _i2c->write(addr);
+    _i2c->write(data);
+    _i2c->endTransmission();
+}
+
+uint8_t SF_Servo::readFromPCA(uint8_t addr){
+    _i2c->beginTransmission(PCA9685_ADDR);
+    _i2c->write(addr);
+    _i2c->endTransmission();
+
+    _i2c->requestFrom((uint8_t)PCA9685_ADDR, (uint8_t)1);
+    return _i2c->read();
+}
+~~~
