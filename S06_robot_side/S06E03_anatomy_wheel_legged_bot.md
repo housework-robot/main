@@ -619,26 +619,16 @@ Following is the code snippet of `main.cpp` that is related with `SF_BLDC` libra
 ~~~
 #include <Arduino.h>
 #include "SF_BLDC.h"
-
-SF_BLDC motors = SF_BLDC(Serial2);
-
-#define _constrain(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt))) // 限幅函数
+#define _constrain(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
 
 robotposeparam robotPose;
-robotmotionparam robotMotion;
 robotmode robotMode;
 motorstatus motorStatus;
 controlparam controlTarget;
-coordinate coordTarget;
-
 motorstarget motorsTarget;
-float robotLastHeight;
-
 float targetVoltage;
 
-LowPassFilter LPFPitch{0.03 };  // 速度低通滤波
-LowPassFilter LPFRoll{0.05 };
-
+SF_BLDC motors = SF_BLDC(Serial2);
 
 void setup() {
   motors.init();
@@ -658,8 +648,6 @@ void getMotorValue(){
 
 void robotRun(){ 
   ...
-
-  // 初始代码
   motorsTarget.motorLeft = motorStatus.M0Dir * (targetVoltage + controlTarget.differVel);
   motorsTarget.motorRight = motorStatus.M1Dir * (targetVoltage - controlTarget.differVel);
 
@@ -667,9 +655,9 @@ void robotRun(){
     motorsTarget.motorLeft = _constrain(motorsTarget.motorLeft, -5.7, 5.7);
     motorsTarget.motorRight = _constrain(motorsTarget.motorRight, -5.7, 5.7);
 
-    motors.setTargets(motorsTarget.motorLeft,motorsTarget.motorRight);
+    motors.setTargets(motorsTarget.motorLeft, motorsTarget.motorRight);
   } else {
-    motors.setTargets(0,0);
+    motors.setTargets(0, 0);
   }
 }
 ~~~
