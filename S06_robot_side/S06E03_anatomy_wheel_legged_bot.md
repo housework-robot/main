@@ -537,24 +537,24 @@ float alignVoltage = 3;  // The voltage for the calibration between motor and th
 
 void setup()
 {
-    // https://github.com/espressif/arduino-esp32/blob/master/libraries/SPI/src/SPI.h#L64
-    // vspi.begin(int8_t sck = -1, int8_t miso = -1, int8_t mosi = -1, int8_t ss = -1);
-    // scl - Clock signal. Each data bit is clocked out or in on the positive or negative edge of this signal
-    // miso - Also known as q, this is the input of the serial stream into the ESP32
-    // mosi - Also known as d, this is the output of the serial stream from the ESP32
-    // ss - quadwp for write protect signal, quadhd for hold signal.
+  // https://github.com/espressif/arduino-esp32/blob/master/libraries/SPI/src/SPI.h#L64
+  // vspi.begin(int8_t sck = -1, int8_t miso = -1, int8_t mosi = -1, int8_t ss = -1);
+  // scl - Clock signal. Each data bit is clocked out or in on the positive or negative edge of this signal
+  // miso - Also known as q, this is the input of the serial stream into the ESP32
+  // mosi - Also known as d, this is the output of the serial stream from the ESP32
+  // ss - quadwp for write protect signal, quadhd for hold signal.
 
-    vspi.begin(MT6701_CLK, MT6701_DO, 0, -1);
+  vspi.begin(MT6701_CLK, MT6701_DO, 0, -1);
 
-    M0.initEncoder(MT6701, vspi);
-    M1.initEncoder(MT6701, vspi);
+  M0.initEncoder(MT6701, vspi);
+  M1.initEncoder(MT6701, vspi);
 
-    M0.init(Vbus);
-    M1.init(Vbus);
+  M0.init(Vbus);
+  M1.init(Vbus);
 
-    // Calibrate the motor with the position sensor. 
-    M0.AlignSensor(alignVoltage);
-    M1.AlignSensor(alignVoltage);
+  // Calibrate the motor with the position sensor.
+  M0.AlignSensor(alignVoltage);
+  M1.AlignSensor(alignVoltage);
 }
 
 void loop()
@@ -600,8 +600,81 @@ void loop()
 
 
 &nbsp;
-&nbsp;
-## 3.3 SF_Motor serial communication
+# 4. SF_BLDC library
+
+Stack-force wraps up the PMW driver of the BLDC motors, PID control, as well as the 4 control modes etc, into a library `SF_Motor`. 
+
+With `SF_Motor` library, it is easier to control the motors. However, the limitation is that `SF_Motor` library is only useful for
+Stack-force's motor driver board and master controller board, 
+with motors to the boards in the specific way described in the previous sections. 
+
+Furthermore, Stack-force wraps up `SF_Motor` library, motor sensors, as well as other related functionality, into a bigger library `SF_BLDC`. 
+
+## 4.1 SF_BLDC library usage
+
+The [`main.cpp`](./S06E03_src/dengfoc_bipedal_bot/bipedal/src/main.cpp) is a good example, for the usage of `SF_BLDC` library. 
+
+Following is the code snippet of `main.cpp` that is related with `SF_BLDC` library.
+
+~~~
+#include <Arduino.h>
+#include "SF_BLDC.h"
+
+SF_BLDC motors = SF_BLDC(Serial2);
+
+#define _constrain(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt))) // 限幅函数
+
+robotposeparam robotPose;
+robotmotionparam robotMotion;
+robotmode robotMode;
+motorstatus motorStatus;
+controlparam controlTarget;
+coordinate coordTarget;
+
+motorstarget motorsTarget;
+float robotLastHeight;
+
+float targetVoltage;
+
+LowPassFilter LPFPitch{0.03 };  // 速度低通滤波
+LowPassFilter LPFRoll{0.05 };
+
+
+void setup() {
+  motors.init();
+  motors.setModes(4,4);
+}
+
+void loop() {
+  getMotorValue();
+  robotRun();
+}
+
+void getMotorValue(){
+  BLDCData = motors.getBLDCData();
+  motorStatus.M0Speed = BLDCData.M0_Vel;
+  motorStatus.M1Speed = BLDCData.M1_Vel;
+}
+
+void robotRun(){ 
+  ...
+
+  // 初始代码
+  motorsTarget.motorLeft = motorStatus.M0Dir * (targetVoltage + controlTarget.differVel);
+  motorsTarget.motorRight = motorStatus.M1Dir * (targetVoltage - controlTarget.differVel);
+
+  if (robotMode.motorEnable == 1 && robotPose.pitch <= 40 && robotPose.pitch >= -35) {
+    motorsTarget.motorLeft = _constrain(motorsTarget.motorLeft, -5.7, 5.7);
+    motorsTarget.motorRight = _constrain(motorsTarget.motorRight, -5.7, 5.7);
+
+    motors.setTargets(motorsTarget.motorLeft,motorsTarget.motorRight);
+  } else {
+    motors.setTargets(0,0);
+  }
+}
+~~~
+
+
 
 ONBOARD uart:  hardware wiring
 Serial USB
