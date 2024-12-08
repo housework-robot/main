@@ -801,4 +801,27 @@ T10,10,1,1,0B
 ~~~
 
 
+&nbsp;
+## 4.3 Stack-force custom board
 
+Back to `SF_BLDC` library, that is a wrapper of `SF_Communication` and `SF_Motor` etc.
+
+SF_BLDC's `SF_BLDC(Serial2)` is equivalent to SF_Communication's `SF_Communication.init(ONBOARD)`.
+
+SF_BLDC's `Serial2` is a custom HardwareSerial instance, for the UART serial communication between the S1 chip and the S3 chip on Stack-force's master driver board.
+
+   <p align="center">
+     <img alt="the diagram of the master controller board with S1 and S3 chip" src="./S06E03_src/images/master_board_diagram_S1_S3.png" width="48%">
+     &nbsp;  
+     <img alt="the UART serial communication between S1 chip and S3 chip" src="./S06E03_src/images/S1_S3_serial.png" width="48%">
+   </p>
+
+Stack-force's master controller board is a custom Arduino board. Following is a list of tutorials how to make a custom Arduino board. 
+
+1. [DIY Arduino UNO | How to Make Your Own Arduino Uno Board](https://www.instructables.com/DIY-Arduino-UNO-How-to-Make-Your-Own-Arduino-Uno-B/)
+2. [How to Build an Arduino Uno on a BreadBoard](https://www.instructables.com/How-to-Build-an-Arduino-Uno-on-a-BreadBoard/)
+3. [Building an Arduino on a Breadboard](https://docs.arduino.cc/retired/hacking/hardware/building-an-arduino-on-a-breadboard/)
+4. [How to Burn Bootloader on ATmega328 using Arduino UNO?](https://www.electronicshub.org/burn-bootloader-on-atmega328/)
+5. [Arduino IDE: Creating Custom Boards](https://www.instructables.com/Arduino-IDE-Creating-Custom-Boards/)
+
+Therefore，Stack-force's boards have their custom settings, and also redefine some Arduino default settings, including `Serial2` and `Wire` etc. 
