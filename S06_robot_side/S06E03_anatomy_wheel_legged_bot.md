@@ -606,9 +606,12 @@ Stack-force wraps up the PMW driver of the BLDC motors, PID control, as well as 
 
 With `SF_Motor` library, it is easier to control the motors. However, the limitation is that `SF_Motor` library is only useful for
 Stack-force's motor driver board and master controller board, 
-with motors to the boards in the specific way described in the previous sections. 
+and the motors must be wired to the boards in the specific way described in the previous sections. 
 
 Furthermore, Stack-force wraps up `SF_Motor` library, motor sensors, as well as other related functionality, into a bigger library `SF_BLDC`. 
+Again, `SF_BLDC` library is only useful for
+Stack-force's motor driver board and master controller board, 
+and the motors and the sensors must be wired to the boards in the specific way described in the previous sections. 
 
 ## 4.1 SF_BLDC library usage
 
@@ -662,8 +665,126 @@ void robotRun(){
 }
 ~~~
 
+&nbsp;
+## 4.2 SF_Communication library 
+
+In the sample code of the previous section, an instance of `SF_BLDC` is initialized in the following way. 
+
+~~~
+SF_BLDC motors = SF_BLDC(Serial2);
+~~~
+
+What is `Serial2`? And what functionality does it provide to the `SF_BLDC` instance?
+
+As we know, `SF_BLDC` is a library wrapping up `SF_Motor` library, plus motor sensors, plus some other tools. 
+Among those tools, there is a [`SF_Communication` library](./S06E03_src/dengfoc_bipedal_bot/BLDC_Control/lib/SF_Communication).  
+
+Following is the header file of the `SF_Communication` library,
+
+~~~
+#ifndef SF_COMMUNICATION_H
+#define SF_COMMUNICATION_H
+#include <Arduino.h>
+
+/*-----通信方式说明-------------
+T[M0目标值],[M1目标值],[M0控制模式],[M1控制模式],0B  举例：T10,10,1,1,0B M0M1电机在速度模式下以10rad/s旋转
+C[设置的对象电机],[电流环P值],[电流环I值],[电流环D值],[电流环限幅值]T
+V[设置的对象电机],[速度环P值],[速度环I值],[速度环D值],[速度限幅值]Y
+A[设置的对象电机],[位置环P值],[位置环I值],[位置环D值],[位置环限幅值]E
+U[M0校准电压值],[M1校准电压值],0,0,0V
+-----------------------------*/
+class SF_Motor;
+
+#define NOCONTACT 0
+#define USB 1
+#define ONBOARD 2
+
+class SF_Communication
+{
+public:
+    SF_Communication();
+    void setUSBBaud(uint32_t baud);
+
+    // When initializing, must take a Serial communication object as input. 
+    void init(uint8_t contactSerial);  
+    void stop();
+    void start();
+
+    void linkMotor(SF_Motor &motor0, SF_Motor &motor1);
+    void linkMotor(SF_Motor &motor0);
+
+private:
+    HardwareSerial *_serial;
+    uint8_t _contactSerial;
+    SF_Motor *M0, *M1;
+    uint32_t _USBbaud;
+    bool _startFlag;
+    char _recCommand1,  _recCommand7;
+    float _recCommand2, _recCommand3, _recCommand4, _recCommand5, _recCommand6;
+    int _commaPosition;
+    uint16_t sendLoopCount;
+
+    static void taskFunction(void *parameter)
+    {
+        SF_Communication *instance = static_cast<SF_Communication *>(parameter);
+
+        while (true)
+        {
+            instance->appCpuLoop();
+            vTaskDelay(1); 
+        }
+    }
+
+    void appCpuLoop();
+
+    // Each appCpuLoop will executes the following functions in sequence.
+    void sendMotorStatus0();
+    void sendMotorStatus1();
+    void sendMotorStatus2();
+    void recCommand();
+    void calRecCommand();
+
+    TaskHandle_t taskHandle; 
+};
+
+#endif
+~~~
+
+[The calibration code of the BLDC motors](./S06E03_src/dengfoc_bipedal_bot/BLDC_Control/src/main.cpp) is an example 
+for the usage of the `SF_Communication` library.
+
+~~~
+#include <Arduino.h>
+#include "SF_Motor.h"
+#include "SF_Communication.h"
+
+SF_Motor M0 = SF_Motor(0);
+SF_Motor M1 = SF_Motor(1);
+
+SF_Communication com = SF_Communication();
+
+void setup()
+{
+  Serial.begin(115200);
+
+  // Link M0, or M1, or both motors to the SF_Communication instance. 
+  com.linkMotor(M0, M1);
+
+  // The input must be either 'ONBOARD' for the communication with S3 chip.
+  // or, 'USB' to the Serial output.
+  com.init(ONBOARD);
+
+  // Open the communication channel to send the motor status, 
+  // and to receive the external commands.
+  com.start();
+}
+
+void loop()
+{
+  M0.run();
+  M1.run();
+}
+~~~
 
 
-ONBOARD uart:  hardware wiring
-Serial USB
 
