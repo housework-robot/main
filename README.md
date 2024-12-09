@@ -191,7 +191,16 @@ Here is a set of repositories, containing 3 kinds of contents,
 2. S06E02. [Serial Communication between Arduino and Python](./S06_robot_side/S06E02_arduino_serial_communication.md)
 
    [![The balancing bot doesn't run smoothly because its USB port is occupied](https://img.youtube.com/vi/_8OrdSzhsWY/hqdefault.jpg)](https://www.youtube.com/watch?v=_8OrdSzhsWY)
+
+&nbsp;
+
+3. S06E03. [Anatomy of a Wheel-legged Robot](./S06_robot_side/S06E03_anatomy_wheel_legged_bot.md)
+
+   [![The outlook of the Stack-force wheel-legged bot](https://img.youtube.com/vi/NXSYb4wlgIM/hqdefault.jpg)](https://www.youtube.com/shorts/NXSYb4wlgIM)
    
 
 &nbsp;
+
+&nbsp;
+
 ### To be continued ...
