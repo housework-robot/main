@@ -1055,9 +1055,7 @@ uint8_t SF_Servo::readFromPCA(uint8_t addr){
 
 &nbsp;
 
-# 6. IMU 
-
-## 6.1 MPU6050 Chip
+# 6. MPU6050 IMU Chip
 
 Stack-force self-made servo imu board uses MPU6050 chip for [IMU](https://en.wikipedia.org/wiki/Inertial_measurement_unit). 
 It uses I2C to communicate with S3 chip on the master controller board. 
