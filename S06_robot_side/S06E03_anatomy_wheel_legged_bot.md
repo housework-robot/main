@@ -1135,3 +1135,6 @@ We didn't talk about the wireless remote controller and its receiver, because we
 So far we haven't yet discussed how to keep balance when the wheel-legged robot is moving, making a turn, standing up and squatting. 
 Since the control algorithm is very important, we will write an other article to focus on the motion control. 
 
+Click the following image to view the video of the balancing bot. 
+
+   [![The outlook of the Stack-force wheel-legged bot](https://img.youtube.com/vi/NXSYb4wlgIM/hqdefault.jpg)](https://www.youtube.com/shorts/NXSYb4wlgIM)
