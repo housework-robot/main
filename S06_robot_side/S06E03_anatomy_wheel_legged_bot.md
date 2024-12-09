@@ -57,7 +57,7 @@ In details, [Stack-force bipedal wheeled robot](https://gitee.com/StackForce/bip
    the robot software system uses algorithms, including inverse kinematics,
    to control the motors and servos, to make the robot moving and keep balance.  
 
-In addition, the Stack-force wheel-legged robot also contains a wireless controller and its receiver module. 
+In addition, the Stack-force wheel-legged robot also contains a wireless remote controller and its receiver module. 
 But in this article, we will not discuss the wireless controller and its receiver in details.
 
 
@@ -832,7 +832,7 @@ Therefore，Stack-force's boards have their custom settings, and also redefine s
 
 ## 5.1 Servo assembly
 
-Stack-force's wheel-legged robot has 4 servos, in charge of controlling the hip joints of its 4 legs. 
+Stack-force's wheel-legged robot has 4 DS041MG servos, in charge of controlling the hip joints of its 4 legs. 
 The 4 servos are linked to Stack-force self-made servo and imu board, shown in the left image below. 
 
 The 4 servos are controlled by [a PCA9685 chip](https://www.instructables.com/Mastering-Servo-Control-With-PCA9685-and-Arduino/), which provides multiple PWM outputs.
@@ -1052,3 +1052,86 @@ uint8_t SF_Servo::readFromPCA(uint8_t addr){
     return _i2c->read();
 }
 ~~~
+
+&nbsp;
+
+# 6. IMU 
+
+## 6.1 MPU6050 Chip
+
+Stack-force self-made servo imu board uses MPU6050 chip for [IMU](https://en.wikipedia.org/wiki/Inertial_measurement_unit). 
+It uses I2C to communicate with S3 chip on the master controller board. 
+
+The following code snippet extracted from the [`main.cpp`](./S06E03_src/dengfoc_bipedal_bot/bipedal/src/main.cpp) of Stack-force's wheel-legged robot is an example for the usage of the MPU6050 chip. 
+
+~~~
+#include <Arduino.h>
+#include "SF_Servo.h"
+#include "MPU6050_tockn.h"
+
+SF_Servo servos = SF_Servo(Wire); 
+MPU6050 mpu6050(Wire, 0.03, 0.97); 
+
+robotposeparam robotPose;
+robotmotionparam robotMotion;
+robotmode robotMode;
+
+void setup() {
+  Wire.begin(1, 2, 400000UL);
+
+  mpu6050.begin();
+  mpu6050.calcGyroOffsets(true);
+
+  servos.init();
+  servos.setAngleRange(0,300);
+
+  delay(6000);
+}
+
+void loop() {
+  ...
+  getMPUValue();
+}
+
+void getMPUValue(){
+  mpu6050.update();
+
+  robotPose.pitch = -mpu6050.getAngleX();
+  robotPose.roll = mpu6050.getAngleY()+ROLL_OFFSET;
+  robotPose.yaw = mpu6050.getAngleZ();
+  robotPose.GyroX = mpu6050.getGyroY(); 
+  robotPose.GyroY = -mpu6050.getGyroX();
+  robotPose.GyroZ = -mpu6050.getGyroZ();
+  Serial.printf("%f,%f,%f,%f,%f,%f\n", robotPose.pitch, robotPose.roll, robotPose.yaw, robotPose.GyroX, robotPose.GyroY, robotPose.GyroZ);
+}
+~~~
+
+Notice that, 
+
+1. The usage of MPU6050 IMU chip is almost identical to that of PCA9685 multi-PWM driver for DS041MG servos.  
+
+   Actually Stack-force uses an open-source library, [MPU6050_tockn](https://github.com/tockn/MPU6050_tockn), to handle the communication with the MPU6050.
+
+2. I2C communication is used to access both the MPU6050 and the PCA9685, 
+
+   The S3 chip on the master board is the master of the I2C, it uses IO1 and IO2 pins in the left image below. 
+
+   The MPU6050 IMU chip and the PCA9685 multi-PWM driver for DS041MG servos are 2 slaves of the I2C, illustrated in the right image below. 
+
+   <p align="center">
+     <img alt="IO1 and IO2 are used for I2C " src="./S06E03_src/images/SF_servo_imu_board_pin.png" width="48%">
+     &nbsp;  
+     <img alt="one single master with multiple slaves of a I2C system" src="./S06E03_src/images/ESP_I2C_master.png" width="48%">
+   </p>
+
+
+&nbsp;
+# 7. Future work
+
+This article focuses on the anatomy of Stack-force's wheel-legged robot. What boards, modules, and chips are used, and how are they wired together, how to write program to access them. 
+
+We didn't talk about the wireless remote controller and its receiver, because we will not use wireless remote control.
+
+So far we haven't yet discussed how to keep balance when the wheel-legged robot is moving, making a turn, standing up and squatting. 
+Since the control algorithm is very important, we will write an other article to focus on the motion control. 
+
