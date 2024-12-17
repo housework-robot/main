@@ -185,7 +185,7 @@ Therefore, we can control the motors by changing their power supply's voltages.
 
 The schematic on the left is a ESP32-WROOM-32 chip with its pins. 
 
-Overthere, you can find `IO32` `IO33` `IO25` `IO22` and `IO26` `IO27` `IO14` `IO12` 
+Over there, you can find `IO32` `IO33` `IO25` `IO22` and `IO26` `IO27` `IO14` `IO12` 
 correspond to the parameters of `BLDCDriver3PWM()` of the two motors. 
 
 ~~~
@@ -195,17 +195,19 @@ BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
 
 #### 2. Battery ADC
 
-The `BAT_ADC` in the upper-middle schematic refers to the Analog-to-Digital Converter to control the voltage of the power supply. 
+The `BAT_ADC` in the right-upper-left schematic diagram refers to the Analog-to-Digital Converter to control the voltage of the power supply. 
 
 Mushibot doesn't have a separated board for the motor PWM drivers. Instead, it controls the motors by the master controller board directly. 
 
 #### 3. HDR-M-2.54
 
-The lower-middle schematic is for HDR-M-2.54, a pin header male connector, with 2.54mm pin spacing.
+The right-lower schematic diagram is for HDR-M-2.54, a pin header male connector, with 2.54mm pin spacing.
 
 The motors are wired to the HDR-M-2.54 pin connectors, J1 and J3. 
 
-The upper-right schematic is also for HDR-M-2.54, but it is for the motor encoders, which we will discuss in next section. 
+The right-upper-right schematic is also for HDR-M-2.54, but it is for the motor encoder's operational amplifier, i.e `Vp` and `Vn`, 
+we will discuss them in next section.
+
 
 &nbsp;
 ## 2.2 AS5600-ASOM motor encoder
