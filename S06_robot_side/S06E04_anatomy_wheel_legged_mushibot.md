@@ -27,7 +27,10 @@ We will study how those hardware are wired to the master controller board, how t
 
 ### 2.1.1 Software 
 
-The following code snippet is extracted from Mushibot's `wl_pro_robot/wl_pro_robot.ino`, which is the main program of the Mushibot system. 
+The following code snippet is extracted from Mushibot's 
+"[wl_pro_robot/wl_pro_robot.ino](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino)", 
+which is the main program of the Mushibot system. 
+
 In the code, we can learn, 
 1. how to set up the motors with drivers,
 2. how to initialize and start the motors,
@@ -212,8 +215,11 @@ we will discuss them in next section.
 &nbsp;
 ## 2.2 AS5600-ASOM motor encoder
 
-The following code snippet is extracted from Mushibot's `wl_pro_robot/wl_pro_robot.ino`, which is the main program of the Mushibot system. In the code, we can learn,
+The following code snippet is extracted from Mushibot's 
+"[wl_pro_robot/wl_pro_robot.ino](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino)", 
+which is the main program of the Mushibot system. 
 
+In the code, we can learn,
 1. how to set up the motor encoders with I2C serial connection,
 2. how to initialize and start the motor encoders,
 3. and how to read the motor's rotation angle and velocity from the encoders.
@@ -405,11 +411,19 @@ void lqr_balance_loop(){
 }
 ~~~
 
-&nbsp;
-### 2.2.2 Hardware
 
 &nbsp;
 ## 2.3 STS3032 servo
+
+The following code snippet is extracted from Mushibot's 
+"[wl_pro_robot/wl_pro_robot.ino](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino)", 
+which is the main program of the Mushibot system. 
+
+In the code, we can learn,
+
+1. how to set up the motor encoders with I2C serial connection,
+2. how to initialize and start the motor encoders,
+3. and how to read the motor's rotation angle and velocity from the encoders.
 
 ### 2.3.1 Software
 ### 2.3.2 Hardware
