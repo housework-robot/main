@@ -178,7 +178,7 @@ Therefore, we can control the motors by changing their power supply's voltages.
 ### 2.1.2 Hardware
 
    <p align="center">
-     <img alt="the partial Mushibot schematic of the master controller board for motor controlling" src="./S06E04_src/Mushibot_master_board_motor.png" width="90%">
+     <img alt="the partial Mushibot schematic of the master controller board for motor controlling" src="./S06E04_src/images/Mushibot_master_board_motor.png" width="90%">
    </p>
 
 #### 1. ESP32-WROOM-32 chip
@@ -210,13 +210,13 @@ The upper-right schematic is also for HDR-M-2.54, but it is for the motor encode
 &nbsp;
 ## 2.2 AS5600-ASOM motor encoder
 
+### 2.2.1 Software
+
 The following code snippet is extracted from Mushibot's `wl_pro_robot/wl_pro_robot.ino`, which is the main program of the Mushibot system. In the code, we can learn,
 
 1. how to set up the motor encoders with I2C serial connection,
 2. how to initialize and start the motor encoders,
 3. and how to read the motor's rotation angle and velocity from the encoders.
-
-### 2.2.1 Software
 
 ~~~
 // /Users/dengkan/Projects/Mushibo-wheel-legged-robot/3.Software/wl_pro_robot/wl_pro_robot.ino
@@ -284,24 +284,66 @@ void lqr_balance_loop(){
 
 Let's dive into the code. 
 
-#### 1. Motor encoder configuration
+#### 1. Encoder configuration
+
+As a full-fledged configuration, we need to create an instance of the configuration first,
 
 ~~~
+// Data structure of the magnetic sensor I2C configuration
+struct MagneticSensorI2CConfig_s  {
+  int chip_address;
+  int bit_resolution; 
+  int angle_register;
+  int data_start_bit; 
+};
+
+// configuration for AS5600 sensor
+MagneticSensorI2CConfig_s MySensorConfig = {
+  .chip_address = 0x36, 
+  .bit_resolution = 12, 
+  .angle_register=0x0E, 
+  .data_start_bit=11
+}; 
+~~~
+
+After then provide it to the constructor, 
+
+~~~
+// the sensor class with desired sensor configuration
+MagneticSensorI2C sensor = MagneticSensorI2C(MySensorConfig);
+
+void setup(){
+  sensor.init();
+  ...
+}
+~~~
+
+For the most common I2C magnetic sensors, the  SimpleFOC library provides the simplified configuration constructor. 
+Namely for `AS5600` 12-bit sensor and `AS5048` 14-bit sensor. 
+
+More detail refers to the SimpleFOC tutorial, "[I2C Magnetic sensor setup](https://docs.simplefoc.com/magnetic_sensor_i2c#quick-configuration-for-common-sensors)".
+
+~~~
+#include <SimpleFOC.h>
+
 MagneticSensorI2C sensor1 = MagneticSensorI2C(AS5600_I2C);
 MagneticSensorI2C sensor2 = MagneticSensorI2C(AS5600_I2C);
 ~~~
 
-The `AS5600_I2C` here is .
 
-#### 2. Connect the encoder to motor via I2C
+#### 2. I2C communication 
+
+Mushibot uses I2C serial communication to link the encoders to the motors. 
 
 ~~~
 //编码器实例
-TwoWire I2Cone = TwoWire(0);
-TwoWire I2Ctwo = TwoWire(1);
+// 0 and 1 are sequence IDs, to distinguish themself from others. 
+TwoWire I2Cone = TwoWire(0);  
+TwoWire I2Ctwo = TwoWire(1);  
 
 void setup() {
   // 编码器设置
+  // bool begin(int sdaPin, int sclPin, uint32_t frequency);
   I2Cone.begin(19,18, 400000UL); 
   I2Ctwo.begin(23,5, 400000UL);
 
@@ -314,9 +356,45 @@ void setup() {
 }
 ~~~
 
-The `AS5600_I2C` here is .
+   <p align="center">
+     <img alt="the partial Mushibot schematic of the master controller board for motor controlling" src="./S06E04_src/images/Mushibot_master_board_motor.png" width="90%">
+   </p>
 
-#### 3. Read rotation angle and velocity from encoder
+In the schematic diagram on the left side, we can find the `IO19` `IO18` and `IO23` `IO5` pins, correspond to the following code. 
+
+~~~
+  // 编码器设置
+  // bool begin(int sdaPin, int sclPin, uint32_t frequency);
+  I2Cone.begin(19,18, 400000UL); 
+  I2Ctwo.begin(23,5, 400000UL);
+~~~
+
+The upper-right schematic is for HDR-M-2.54_1x4, a pin header male connector, one column of four pins, with 2.54mm pin spacing.
+
+`J2` `J4` pin connectors are for the encoders' I2C serial communication. 
+
+`I2Cone.begin(int sdaPin, int sclPin, uint32_t frequency)` is an I2C function, and this function is used only for I2C's master mode, 
+referring to [ESP32's API documentation](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/i2c.html#i2c-master-apis).
+
+   <p align="center">
+     <img alt="the stack of stack-force boards" src="./S06E04_src/images/arduino_i2c_master.png" width="48%">
+     &nbsp;  
+     <img alt="the outlook of the motor driver board" src="./S06E04_src/images/arduino_i2c_slave.png" width="48%">
+   </p>
+
+The above diagrams illustrate the difference between I2C's master mode and slave mode. 
+
+An ESP32 chip can be used either as a master or as a slave. The diagram on the left is an ESP32 chip behaves as a master communicating with multiple slave devices. 
+
+There are two ESP32 chips in the diagram on the right, one for the master, the other for the slave, they communicate with each other via I2C. 
+
+
+#### 3. Read from encoder
+
+It is quite straightforward to read motor's rotation angle and velocity from the encoder. 
+
+In Mushibot system, the following code gives an example of the usage,
+simply retrieving the values of motor's member variables `motor1.shaft_angle` and `motor1.shaft_velocity`.  
 
 ~~~
 void lqr_balance_loop(){
@@ -327,8 +405,7 @@ void lqr_balance_loop(){
 }
 ~~~
 
-The `AS5600_I2C` here is .
-
+&nbsp;
 ### 2.2.2 Hardware
 
 &nbsp;
