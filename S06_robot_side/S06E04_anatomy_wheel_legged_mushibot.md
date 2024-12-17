@@ -177,7 +177,33 @@ Therefore, we can control the motors by changing their power supply's voltages.
 &nbsp;
 ### 2.1.2 Hardware
 
+   <p align="center">
+     <img alt="the partial Mushibot schematic of the master controller board for motor controlling" src="./S06E04_src/Mushibot_master_board_motor.png" width="90%">
+   </p>
 
+**1. ESP32-WROOM-32 chip**   
+
+The schematic on the left is a ESP32-WROOM-32 chip with its pins. 
+
+Overthere, you can find `IO32` `IO33` `IO25` `IO22` and `IO26` `IO27` `IO14` `IO12` 
+correspond to the parameters of `BLDCDriver3PWM()` of the two motors. 
+
+~~~
+BLDCDriver3PWM driver1 = BLDCDriver3PWM(32,33,25,22);
+BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
+~~~
+
+**2. Battery ADC**
+
+The `BAT_ADC` in the upper-middle schematic refers to the Analog-to-Digital Converter to control the voltage of the power supply. 
+
+Mushibot doesn't have a separated board for the motor PWM drivers. Instead, it controls the motors by the master controller board directly. 
+
+**3. HDR-M-2.54**
+
+The lower-middle schematic is for HDR-M-2.54, a pin header male connector, with 2.54mm pin spacing.
+
+The motors are wired to the HDR-M-2.54 pin connectors, J1 and J3. 
 
 
 
