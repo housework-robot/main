@@ -50,10 +50,15 @@ void setup() {
   Serial.begin(115200);  //通讯串口
 
   // 驱动器设置
+  // set motor's power supply voltage,
+  // the rule of thumb is to align with the motor.voltage_limit for the open loop.
   motor1.voltage_sensor_align = 6;
   motor2.voltage_sensor_align = 6;
+
+  // set driver's power supply voltage [V]
   driver1.voltage_power_supply = 8;
   driver2.voltage_power_supply = 8;
+
   driver1.init();
   driver2.init();
 
@@ -61,8 +66,11 @@ void setup() {
   motor1.linkDriver(&driver1);
   motor2.linkDriver(&driver2);
 
+  // set the torque control type
   motor1.torque_controller = TorqueControlType::voltage;
-  motor2.torque_controller = TorqueControlType::voltage;   
+  motor2.torque_controller = TorqueControlType::voltage;
+
+  // set motion control loop to be used
   motor1.controller = MotionControlType::torque;
   motor2.controller = MotionControlType::torque;
   
@@ -71,8 +79,11 @@ void setup() {
   motor2.useMonitoring(Serial);
 
   // 电机初始化
+  // initialize motor
   motor1.init();
-  motor1.initFOC(); 
+  // align sensor and start FOC
+  motor1.initFOC();
+
   motor2.init();
   motor2.initFOC();
 
@@ -118,15 +129,52 @@ BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
 
 The parameters in `BLDCDriver3PWM()` are the A, B, C phase pwm pins, and the enable pin, referring to the SimpleFOC's tutorial, "[BLDC driver 3 PWM](https://docs.simplefoc.com/bldcdriver3pwm#step-1-hardware-setup)". 
 
+**3. Voltage setting**
 
+~~~
+void setup() {
+  // 驱动器设置
+  // set motor's power supply voltage [V],
+  // the rule of thumb is to align with the motor.voltage_limit for the open loop.
+  motor1.voltage_sensor_align = 6;
+  motor2.voltage_sensor_align = 6;
 
+  // set driver's power supply voltage [V]
+  driver1.voltage_power_supply = 8;
+  driver2.voltage_power_supply = 8;
+}
+~~~
 
+It is a bit tricky to set the power supply's voltages of the motors and drivers, because they must be aligned with the voltages of the motor's encoders. 
 
+A high-level guidance refers to the SimpleFOC's tutorial, "[Let’s get started](https://docs.simplefoc.com/example_from_scratch#step-3-closed-loop-control---torque-using-voltage)", especially "Step 3. Closed-loop control - torque using voltage" section, and the example sketch for "BLDC Motor + 3PWM driver + Encoder".
 
+A more detailed explanation refers to SimpleFOC's tutorial, "[Torque control using voltage](https://docs.simplefoc.com/voltage_torque_mode)"。
 
-https://docs.simplefoc.com/voltage_torque_mode
+**4. Torque control**
 
+~~~
+void setup() {
+  // set the torque control type
+  motor1.torque_controller = TorqueControlType::voltage;
+  motor2.torque_controller = TorqueControlType::voltage;
 
+  // set motion control type to be used
+  motor1.controller = MotionControlType::torque;
+  motor2.controller = MotionControlType::torque;
+}
+
+void loop() {
+  motor1.target = (-0.5)*(LQR_u + YAW_output);
+  motor2.target = (-0.5)*(LQR_u - YAW_output);
+}
+~~~
+
+Mushibot set the torque of the motor to be controlled by the power supply's voltage. Also, it set the motor's control mode to be torque. 
+
+Therefore, we can control the motors by changing their power supply's voltages. 
+
+&nbsp;
 ### 2.1.2 Hardware
 
 
