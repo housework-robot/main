@@ -111,7 +111,7 @@ void loop() {
 
 Let's dive into the code. 
 
-**1. BLDC Motor configuration** 
+#### 1. BLDC Motor configuration
 
 ~~~
 BLDCMotor motor1 = BLDCMotor(7);
@@ -120,7 +120,7 @@ BLDCMotor motor2 = BLDCMotor(7);
 
 The `7` here is the pole pair number, referring to the SimpleFOC's tutorial, "[BLDC Motor configuration](https://docs.simplefoc.com/bldcmotor#step-1-creating-the-instance-of-the-bldc-motor)".
 
-**2. BLDC driver 3 PWM**
+#### 2. BLDC driver 3 PWM
 
 ~~~
 BLDCDriver3PWM driver1 = BLDCDriver3PWM(32,33,25,22);
@@ -129,7 +129,7 @@ BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
 
 The parameters in `BLDCDriver3PWM()` are the A, B, C phase pwm pins, and the enable pin, referring to the SimpleFOC's tutorial, "[BLDC driver 3 PWM](https://docs.simplefoc.com/bldcdriver3pwm#step-1-hardware-setup)". 
 
-**3. Voltage setting**
+#### 3. Voltage setting
 
 ~~~
 void setup() {
@@ -151,7 +151,7 @@ A high-level guidance refers to the SimpleFOC's tutorial, "[Let’s get started]
 
 A more detailed explanation refers to SimpleFOC's tutorial, "[Torque control using voltage](https://docs.simplefoc.com/voltage_torque_mode)"。
 
-**4. Torque control**
+#### 4. Torque control
 
 ~~~
 void setup() {
@@ -181,7 +181,7 @@ Therefore, we can control the motors by changing their power supply's voltages.
      <img alt="the partial Mushibot schematic of the master controller board for motor controlling" src="./S06E04_src/Mushibot_master_board_motor.png" width="90%">
    </p>
 
-**1. ESP32-WROOM-32 chip**   
+#### 1. ESP32-WROOM-32 chip
 
 The schematic on the left is a ESP32-WROOM-32 chip with its pins. 
 
@@ -193,13 +193,13 @@ BLDCDriver3PWM driver1 = BLDCDriver3PWM(32,33,25,22);
 BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
 ~~~
 
-**2. Battery ADC**
+#### 2. Battery ADC
 
 The `BAT_ADC` in the upper-middle schematic refers to the Analog-to-Digital Converter to control the voltage of the power supply. 
 
 Mushibot doesn't have a separated board for the motor PWM drivers. Instead, it controls the motors by the master controller board directly. 
 
-**3. HDR-M-2.54**
+#### 3. HDR-M-2.54
 
 The lower-middle schematic is for HDR-M-2.54, a pin header male connector, with 2.54mm pin spacing.
 
