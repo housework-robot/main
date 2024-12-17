@@ -37,7 +37,7 @@ In the code, we can learn,
 3. and how to control the torques of the motors. 
 
 ~~~
-// /Users/dengkan/Projects/Mushibo-wheel-legged-robot/3.Software/wl_pro_robot/wl_pro_robot.ino
+// https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino
 
 // 机器人控制头文件
 #include <SimpleFOC.h>
@@ -225,7 +225,7 @@ In the code, we can learn,
 3. and how to read the motor's rotation angle and velocity from the encoders.
 
 ~~~
-// /Users/dengkan/Projects/Mushibo-wheel-legged-robot/3.Software/wl_pro_robot/wl_pro_robot.ino
+// https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino
 
 //机器人控制头文件
 #include <SimpleFOC.h>
@@ -421,9 +421,114 @@ which is the main program of the Mushibot system.
 
 In the code, we can learn,
 
-1. how to set up the motor encoders with I2C serial connection,
-2. how to initialize and start the motor encoders,
-3. and how to read the motor's rotation angle and velocity from the encoders.
+1. how to set up the STS3032 servo with serial communication,
+2. how to control the STS3032 servo.
+
+~~~
+// https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino
+
+//机器人控制头文件
+#include "Servo_STS3032.h"
+#include <Arduino.h>
+
+//STS舵机实例
+SMS_STS sms_sts;
+
+//腿部舵机控制数据
+byte ID[2];
+s16 Position[2];
+u16 Speed[2];
+byte ACC[2];
+
+
+void setup() {
+  Serial.begin(115200);    //通讯串口
+  Serial2.begin(1000000);  //腿部sts舵机
+
+  //舵机初始化
+  sms_sts.pSerial = &Serial2;
+  ID[0] = 1;
+  ID[1] = 2;
+
+  //舵机有效行程450
+  ACC[0] = 30;
+  ACC[1] = 30;
+  Speed[0] = 300;
+  Speed[1] = 300;
+
+  //左侧舵机[2048+12+50,2048+12+450]
+  //左侧舵机[2048-12-50,2048-12-450]
+  Position[0] = 2148;
+  Position[1] = 1948;
+
+  //舵机(ID1/ID2)以最高速度V=2400步/秒，加速度A=50(50*100步/秒^2)，运行至各自的Position位置
+  sms_sts.SyncWritePosEx(ID, 2, Position, Speed, ACC);
+
+  delay(500);
+}
+
+void loop() {
+  mpu6050.update();   //IMU数据更新
+  leg_loop();         //腿部动作控制
+}
+
+//腿部动作控制
+void leg_loop() {
+  jump_loop();
+  if(jump_flag == 0)//不处于跳跃状态
+  {
+    //机身高度自适应控制
+    ACC[0] = 8;
+    ACC[1] = 8;
+    Speed[0] = 200;
+    Speed[1] = 200;
+
+    float roll_angle  = (float)mpu6050.getAngleX() + 2.0;
+    //leg_position_add += pid_roll_angle(roll_angle);
+    leg_position_add = pid_roll_angle(lpf_roll(roll_angle));//test
+    Position[0] = 2048 + 12 + 8.4*(wrobot.height-32) - leg_position_add;
+    Position[1] = 2048 - 12 - 8.4*(wrobot.height-32) - leg_position_add;
+
+    sms_sts.SyncWritePosEx(ID, 2, Position, Speed, ACC);
+  }  
+}
+
+//跳跃控制
+void jump_loop() {
+  if( (wrobot.dir_last == 5) && (wrobot.dir == 4) && (jump_flag == 0) )
+  {
+      ACC[0] = 0;
+      ACC[1] = 0;
+      Speed[0] = 0;
+      Speed[1] = 0;
+      Position[0] = 2048 + 12 + 8.4*(80-32);
+      Position[1] = 2048 - 12 - 8.4*(80-32);
+      sms_sts.SyncWritePosEx(ID, 2, Position, Speed, ACC);
+
+      jump_flag = 1;
+  }
+  if( jump_flag > 0 )
+  {
+    jump_flag++;
+    if( (jump_flag > 30) && (jump_flag < 35) )
+    {
+      ACC[0] = 0;
+      ACC[1] = 0;
+      Speed[0] = 0;
+      Speed[1] = 0;
+      Position[0] = 2048 + 12 + 8.4*(40-32);
+      Position[1] = 2048 - 12 - 8.4*(40-32);
+      sms_sts.SyncWritePosEx(ID, 2, Position, Speed, ACC);
+
+      jump_flag = 40;
+    }
+    if(jump_flag > 200)
+    {
+      jump_flag = 0;//已准备好再次跳跃
+    }
+  }
+}
+~~~
 
 ### 2.3.1 Software
 ### 2.3.2 Hardware
