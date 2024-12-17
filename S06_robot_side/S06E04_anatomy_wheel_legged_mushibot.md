@@ -210,7 +210,125 @@ The upper-right schematic is also for HDR-M-2.54, but it is for the motor encode
 &nbsp;
 ## 2.2 AS5600-ASOM motor encoder
 
+The following code snippet is extracted from Mushibot's `wl_pro_robot/wl_pro_robot.ino`, which is the main program of the Mushibot system. In the code, we can learn,
+
+1. how to set up the motor encoders with I2C serial connection,
+2. how to initialize and start the motor encoders,
+3. and how to read the motor's rotation angle and velocity from the encoders.
+
 ### 2.2.1 Software
+
+~~~
+// /Users/dengkan/Projects/Mushibo-wheel-legged-robot/3.Software/wl_pro_robot/wl_pro_robot.ino
+
+//机器人控制头文件
+#include <SimpleFOC.h>
+#include <Arduino.h>
+
+//电机实例
+BLDCMotor motor1 = BLDCMotor(7);
+BLDCMotor motor2 = BLDCMotor(7);
+BLDCDriver3PWM driver1 = BLDCDriver3PWM(32,33,25,22);
+BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
+
+//编码器实例
+TwoWire I2Cone = TwoWire(0);
+TwoWire I2Ctwo = TwoWire(1);
+MagneticSensorI2C sensor1 = MagneticSensorI2C(AS5600_I2C);
+MagneticSensorI2C sensor2 = MagneticSensorI2C(AS5600_I2C);
+
+
+void setup() {
+  // 编码器设置
+  I2Cone.begin(19,18, 400000UL); 
+  I2Ctwo.begin(23,5, 400000UL); 
+  sensor1.init(&I2Cone);
+  sensor2.init(&I2Ctwo);
+  
+  //连接motor对象与编码器对象
+  motor1.linkSensor(&sensor1);
+  motor2.linkSensor(&sensor2);
+
+  //连接motor对象与驱动器对象
+  motor1.linkDriver(&driver1);
+  motor2.linkDriver(&driver2);
+
+  delay(500);
+}
+
+void loop() {
+  lqr_balance_loop(); //lqr自平衡控制
+  yaw_loop();         //yaw轴转向控制
+
+  //将自平衡计算输出转矩赋给电机
+  motor1.target = (-0.5)*(LQR_u + YAW_output);
+  motor2.target = (-0.5)*(LQR_u - YAW_output);
+ 
+  //迭代计算FOC相电压
+  motor1.loopFOC();
+  motor2.loopFOC();
+  
+  //设置轮部电机输出
+  motor1.move();
+  motor2.move();
+}
+
+//lqr自平衡控制
+void lqr_balance_loop(){
+  //给负值是因为按照当前的电机接线，正转矩会向后转
+  LQR_distance  = (-0.5) *(motor1.shaft_angle + motor2.shaft_angle);
+  LQR_speed     = (-0.5) *(motor1.shaft_velocity + motor2.shaft_velocity);
+  ...
+}
+~~~
+
+Let's dive into the code. 
+
+#### 1. Motor encoder configuration
+
+~~~
+MagneticSensorI2C sensor1 = MagneticSensorI2C(AS5600_I2C);
+MagneticSensorI2C sensor2 = MagneticSensorI2C(AS5600_I2C);
+~~~
+
+The `AS5600_I2C` here is .
+
+#### 2. Connect the encoder to motor via I2C
+
+~~~
+//编码器实例
+TwoWire I2Cone = TwoWire(0);
+TwoWire I2Ctwo = TwoWire(1);
+
+void setup() {
+  // 编码器设置
+  I2Cone.begin(19,18, 400000UL); 
+  I2Ctwo.begin(23,5, 400000UL);
+
+  sensor1.init(&I2Cone);
+  sensor2.init(&I2Ctwo);
+  
+  //连接motor对象与编码器对象
+  motor1.linkSensor(&sensor1);
+  motor2.linkSensor(&sensor2);
+}
+~~~
+
+The `AS5600_I2C` here is .
+
+#### 3. Read rotation angle and velocity from encoder
+
+~~~
+void lqr_balance_loop(){
+  //给负值是因为按照当前的电机接线，正转矩会向后转
+  LQR_distance  = (-0.5) *(motor1.shaft_angle + motor2.shaft_angle);
+  LQR_speed     = (-0.5) *(motor1.shaft_velocity + motor2.shaft_velocity);
+  ...
+}
+~~~
+
+The `AS5600_I2C` here is .
+
 ### 2.2.2 Hardware
 
 &nbsp;
