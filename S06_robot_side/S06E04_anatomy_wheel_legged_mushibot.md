@@ -210,8 +210,6 @@ The upper-right schematic is also for HDR-M-2.54, but it is for the motor encode
 &nbsp;
 ## 2.2 AS5600-ASOM motor encoder
 
-### 2.2.1 Software
-
 The following code snippet is extracted from Mushibot's `wl_pro_robot/wl_pro_robot.ino`, which is the main program of the Mushibot system. In the code, we can learn,
 
 1. how to set up the motor encoders with I2C serial connection,
@@ -284,7 +282,7 @@ void lqr_balance_loop(){
 
 Let's dive into the code. 
 
-#### 1. Encoder configuration
+### 2.2.1 Encoder configuration
 
 As a full-fledged configuration, we need to create an instance of the configuration first,
 
@@ -331,7 +329,7 @@ MagneticSensorI2C sensor2 = MagneticSensorI2C(AS5600_I2C);
 ~~~
 
 
-#### 2. I2C communication 
+### 2.2.2 I2C communication 
 
 Mushibot uses I2C serial communication to link the encoders to the motors. 
 
@@ -389,7 +387,7 @@ An ESP32 chip can be used either as a master or as a slave. The diagram on the l
 There are two ESP32 chips in the diagram on the right, one for the master, the other for the slave, they communicate with each other via I2C. 
 
 
-#### 3. Read from encoder
+### 2.2.3 Read from encoder
 
 It is quite straightforward to read motor's rotation angle and velocity from the encoder. 
 
