@@ -530,8 +530,10 @@ void jump_loop() {
 }
 ~~~
 
-### 2.3.1 Software
-### 2.3.2 Hardware
+### 2.3.1 Serial2
+
+### 2.3.2 L6234PD013TR Driver
+
 
 &nbsp;
 ## 2.4 MPU6050 IMU module
