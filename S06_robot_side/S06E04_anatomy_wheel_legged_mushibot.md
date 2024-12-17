@@ -98,6 +98,32 @@ void loop() {
 }
 ~~~
 
+Let's dive into the code. 
+
+**1. BLDC Motor configuration** 
+
+~~~
+BLDCMotor motor1 = BLDCMotor(7);
+BLDCMotor motor2 = BLDCMotor(7);
+~~~
+
+The `7` here is the pole pair number, referring to the SimpleFOC's tutorial, "[BLDC Motor configuration](https://docs.simplefoc.com/bldcmotor#step-1-creating-the-instance-of-the-bldc-motor)".
+
+**2. BLDC driver 3 PWM**
+
+~~~
+BLDCDriver3PWM driver1 = BLDCDriver3PWM(32,33,25,22);
+BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
+~~~
+
+The parameters in `BLDCDriver3PWM()` are the A, B, C phase pwm pins, and the enable pin, referring to the SimpleFOC's tutorial, "[BLDC driver 3 PWM](https://docs.simplefoc.com/bldcdriver3pwm#step-1-hardware-setup)". 
+
+
+
+
+
+
+
 https://docs.simplefoc.com/voltage_torque_mode
 
 
