@@ -21,6 +21,89 @@ Let's start with the hardware used in the Mushibot, especially
 3. Two Feetech's STS3032 servos that control the pose of the legs.
 4. One MPU6050 IMU module.
 
-We will study how those hardware are wired to the master controller board, how to write C program to access them. 
+We will study how those hardware are wired to the master controller board, how to write C/C++ program to access them. 
+
+## 2.1 2208 BLDC motors
+
+### 2.1.1 Software 
+
+The following code snippet is extracted from Mushibot's `wl_pro_robot/wl_pro_robot.ino`, which is the main program of the Mushibot system. 
+In the code, we can learn, 
+1. how to set up the motors with drivers,
+2. how to initialize and start the motors,
+3. and how to control the torques of the motors. 
+
+~~~
+// /Users/dengkan/Projects/Mushibo-wheel-legged-robot/3.Software/wl_pro_robot/wl_pro_robot.ino
+
+// 机器人控制头文件
+#include <SimpleFOC.h>
+#include <Arduino.h>
+
+//电机实例
+BLDCMotor motor1 = BLDCMotor(7);
+BLDCMotor motor2 = BLDCMotor(7);
+BLDCDriver3PWM driver1 = BLDCDriver3PWM(32,33,25,22);
+BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
+
+void setup() {
+  Serial.begin(115200);  //通讯串口
+
+  // 驱动器设置
+  motor1.voltage_sensor_align = 6;
+  motor2.voltage_sensor_align = 6;
+  driver1.voltage_power_supply = 8;
+  driver2.voltage_power_supply = 8;
+  driver1.init();
+  driver2.init();
+
+  // 连接motor对象与驱动器对象
+  motor1.linkDriver(&driver1);
+  motor2.linkDriver(&driver2);
+
+  motor1.torque_controller = TorqueControlType::voltage;
+  motor2.torque_controller = TorqueControlType::voltage;   
+  motor1.controller = MotionControlType::torque;
+  motor2.controller = MotionControlType::torque;
+  
+  // monitor相关设置
+  motor1.useMonitoring(Serial);
+  motor2.useMonitoring(Serial);
+
+  // 电机初始化
+  motor1.init();
+  motor1.initFOC(); 
+  motor2.init();
+  motor2.initFOC();
+
+  delay(500);
+}
+
+void loop() {
+  lqr_balance_loop(); // lqr自平衡控制，calculate 'LQR_u'
+  yaw_loop();         // yaw轴转向控制, calculate 'YAW_output'
+  
+  //将自平衡计算输出转矩赋给电机
+  motor1.target = (-0.5)*(LQR_u + YAW_output);
+  motor2.target = (-0.5)*(LQR_u - YAW_output);
+  ...
+  
+  //迭代计算FOC相电压
+  motor1.loopFOC();
+  motor2.loopFOC();
+  
+  //设置轮部电机输出
+  motor1.move();
+  motor2.move();
+}
+~~~
+
+https://docs.simplefoc.com/voltage_torque_mode
+
+
+### 2.1.2 Hardware
+
+
+
 
 
