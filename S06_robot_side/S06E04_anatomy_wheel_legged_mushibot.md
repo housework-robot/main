@@ -12,7 +12,7 @@ In addition to the anatomy of its hardware, we spent more time on Mushibot's mot
 
 
 &nbsp;
-# 2. Hardware
+# 2. Actuators and Sensors
 
 Let's start with the hardware used in the Mushibot, especially
 
@@ -205,5 +205,27 @@ The lower-middle schematic is for HDR-M-2.54, a pin header male connector, with 
 
 The motors are wired to the HDR-M-2.54 pin connectors, J1 and J3. 
 
+The upper-right schematic is also for HDR-M-2.54, but it is for the motor encoders, which we will discuss in next section. 
 
+&nbsp;
+## 2.2 AS5600-ASOM motor encoder
+
+### 2.2.1 Software
+### 2.2.2 Hardware
+
+&nbsp;
+## 2.3 STS3032 servo
+
+### 2.3.1 Software
+### 2.3.2 Hardware
+
+&nbsp;
+## 2.4 MPU6050 IMU module
+
+### 2.4.1 Software
+### 2.4.2 Hardware
+
+
+&nbsp;
+# 3. Motion control
 
