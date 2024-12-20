@@ -505,9 +505,40 @@ However, if you look into [Mushibot's github repo](https://github.com/MuShibo/Mi
 
    The reloaded mushibot behaves exactly the same as before, therefore, we think [libraries/SCServo.zip](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/tree/master/3.Software/libraries) is useless in the Mushibot system.
 
+
+&nbsp;
 ### 2.3.2 Serial2
 
-### 2.3.3 L6234PD013TR Driver
+It looks quite straightforword to setup the communication from the master controller, that is a ESP32-WROOM-32 chip, to the two STS3032 servos. 
+
+~~~
+void setup() {
+  Serial2.begin(1000000);  //腿部sts舵机
+
+  //舵机初始化
+  sms_sts.pSerial = &Serial2;
+}
+~~~
+
+1. Since Mushibot uses ESP32-WROOM-32 chip as its master controller, let's look into [ESP32-WROOM-32's datasheet](https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf). 
+
+   <p align="center">
+     <img alt="the default pin setting for ESP32 chip" src="./S06E04_src/images/ESP32_pinout_serial2.png" width="80%">
+   </p>
+
+    In its datasheet, ESP32-WROOM-32 defines its default pins for `Serial`, `Serial1` and `Serial2` etc. For `Serial2`, the receiver pin (RX) is `IO16` and the transmitter pin (TX) is `IO17`. 
+
+2. Next, we look into the schematic of ESP32-WROOM-32 chip and its related components in the Mushibot's master controller board, as the left diagram below. 
+As expected, the ESP32-WROOM-32 chip's `IO16` pin is used for `SERVO_RX`, and `IO17` pin is for `SERVO_TX`. 
+
+   <p align="center">
+     <img alt="the schematic of the servos" src="./S06E04_src/images/servo_schematic.png" width="95%">
+   </p>
+
+3. The right diagram above indicates how the two servos are connected to the master controller board.
+
+   The key component here is the `SN74LVC1G126DBVR` chip, that is a single bus buffer gate with 3-state output,
+   as the driver to control the servo. One driver for one servo.
 
 
 &nbsp;
