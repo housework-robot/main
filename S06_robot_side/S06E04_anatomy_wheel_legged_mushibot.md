@@ -648,5 +648,12 @@ Notice that,
    In short, use the data out of DMP, instead of the raw data. 
 
 
+&nbsp;
+## 7. Future work
+
+Next, we will focus on the motion control algorithm. 
+
+Also, we will study the board schematic, especially to add port hub, in order to enable plug-and-play for third-party peripheral devices.
+
 
 
