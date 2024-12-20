@@ -466,73 +466,48 @@ void setup() {
 
   delay(500);
 }
-
-void loop() {
-  mpu6050.update();   //IMU数据更新
-  leg_loop();         //腿部动作控制
-}
-
-//腿部动作控制
-void leg_loop() {
-  jump_loop();
-  if(jump_flag == 0)//不处于跳跃状态
-  {
-    //机身高度自适应控制
-    ACC[0] = 8;
-    ACC[1] = 8;
-    Speed[0] = 200;
-    Speed[1] = 200;
-
-    float roll_angle  = (float)mpu6050.getAngleX() + 2.0;
-    //leg_position_add += pid_roll_angle(roll_angle);
-    leg_position_add = pid_roll_angle(lpf_roll(roll_angle));//test
-    Position[0] = 2048 + 12 + 8.4*(wrobot.height-32) - leg_position_add;
-    Position[1] = 2048 - 12 - 8.4*(wrobot.height-32) - leg_position_add;
-
-    sms_sts.SyncWritePosEx(ID, 2, Position, Speed, ACC);
-  }  
-}
-
-//跳跃控制
-void jump_loop() {
-  if( (wrobot.dir_last == 5) && (wrobot.dir == 4) && (jump_flag == 0) )
-  {
-      ACC[0] = 0;
-      ACC[1] = 0;
-      Speed[0] = 0;
-      Speed[1] = 0;
-      Position[0] = 2048 + 12 + 8.4*(80-32);
-      Position[1] = 2048 - 12 - 8.4*(80-32);
-      sms_sts.SyncWritePosEx(ID, 2, Position, Speed, ACC);
-
-      jump_flag = 1;
-  }
-  if( jump_flag > 0 )
-  {
-    jump_flag++;
-    if( (jump_flag > 30) && (jump_flag < 35) )
-    {
-      ACC[0] = 0;
-      ACC[1] = 0;
-      Speed[0] = 0;
-      Speed[1] = 0;
-      Position[0] = 2048 + 12 + 8.4*(40-32);
-      Position[1] = 2048 - 12 - 8.4*(40-32);
-      sms_sts.SyncWritePosEx(ID, 2, Position, Speed, ACC);
-
-      jump_flag = 40;
-    }
-    if(jump_flag > 200)
-    {
-      jump_flag = 0;//已准备好再次跳跃
-    }
-  }
-}
 ~~~
 
-### 2.3.1 Serial2
+### 2.3.1 Servo_STS3032 library
 
-### 2.3.2 L6234PD013TR Driver
+It looks quite simple to initialize an instance of `SMS_STS` servo, as the following. 
+
+~~~
+//STS舵机实例
+SMS_STS sms_sts;
+~~~
+
+However, if you look into [Mushibot's github repo](https://github.com/MuShibo/Micro-Wheeled_leg-Robot), you will find two servo libraries, 
+
+1. [Servo_STS3032.{h,cpp}](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/tree/master/3.Software/wl_pro_robot)
+
+   ~~~
+    //飞特SMS/STS系列串行舵机应用层程序
+    class SMS_STS : public SCSerial
+    {
+    public:
+      //同步写多个舵机位置指令
+    	virtual void SyncWritePosEx(u8 ID[], u8 IDN, s16 Position[], u16 Speed[], u8 ACC[]);
+    };
+   ~~~
+
+   This is the library that "[wl_pro_robot/wl_pro_robot.ino](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino)" uses. 
+
+2. [libraries/SCServo.zip](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/tree/master/3.Software/libraries)
+
+   Looking into this zip library, we found that it is quite different from [Servo_STS3032.{h,cpp}](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/tree/master/3.Software/wl_pro_robot).
+
+   Looking into [Servo_STS3032.{h,cpp}](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/tree/master/3.Software/wl_pro_robot), we didn't find any code to call the [libraries/SCServo.zip](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/tree/master/3.Software/libraries) library.
+   
+   The question is that why Mushibot put this zip library in its repo?
+
+   To verify that [libraries/SCServo.zip](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/tree/master/3.Software/libraries) is useless in the Mushibot system, we removed it from the library directory, and reload the software to the hardware for re-deployment.
+
+   The reloaded mushibot behaves exactly the same as before, therefore, we think [libraries/SCServo.zip](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/tree/master/3.Software/libraries) is useless in the Mushibot system.
+
+### 2.3.2 Serial2
+
+### 2.3.3 L6234PD013TR Driver
 
 
 &nbsp;
