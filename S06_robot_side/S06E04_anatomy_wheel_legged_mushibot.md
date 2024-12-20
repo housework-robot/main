@@ -544,6 +544,54 @@ As expected, the ESP32-WROOM-32 chip's `IO16` pin is used for `SERVO_RX`, and `I
 &nbsp;
 ## 2.4 MPU6050 IMU module
 
+~~~
+// https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino
+
+#include <MPU6050_tockn.h>
+#include <SimpleFOC.h>
+#include <Arduino.h>
+
+//编码器实例
+TwoWire I2Cone = TwoWire(0);
+TwoWire I2Ctwo = TwoWire(1);
+MagneticSensorI2C sensor1 = MagneticSensorI2C(AS5600_I2C);
+MagneticSensorI2C sensor2 = MagneticSensorI2C(AS5600_I2C);
+
+//MPU6050实例
+MPU6050 mpu6050(I2Ctwo);
+
+void setup() {
+
+  // 编码器设置
+  I2Cone.begin(19,18, 400000UL); 
+  I2Ctwo.begin(23,5, 400000UL); 
+  sensor1.init(&I2Cone);
+  sensor2.init(&I2Ctwo);
+  
+  //连接motor对象与编码器对象
+  motor1.linkSensor(&sensor1);
+  motor2.linkSensor(&sensor2);
+
+  delay(500);
+}
+
+void loop() {
+  mpu6050.update();   //IMU数据更新
+  lqr_balance_loop(); //lqr自平衡控制
+  
+}
+
+//lqr自平衡控制
+void lqr_balance_loop(){
+  ...
+  LQR_angle = (float)mpu6050.getAngleY();
+  LQR_gyro  = (float)mpu6050.getGyroY();
+  ...
+}
+~~~
+
+
+
 ### 2.4.1 Software
 ### 2.4.2 Hardware
 
