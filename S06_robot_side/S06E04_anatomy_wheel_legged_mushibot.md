@@ -544,6 +544,14 @@ As expected, the ESP32-WROOM-32 chip's `IO16` pin is used for `SERVO_RX`, and `I
 &nbsp;
 ## 2.4 MPU6050 IMU module
 
+The following code snippet is extracted from Mushibot's 
+"[wl_pro_robot/wl_pro_robot.ino](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino)", 
+which is the main program of the Mushibot system. 
+
+In the code, we can learn,
+1. how to initialize an instance of MPU6050 IMU,
+2. how to retrieve the gyro and accelerometer data from the MPU6050 IMU.
+
 ~~~
 // https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino
 
@@ -589,6 +597,9 @@ void lqr_balance_loop(){
   ...
 }
 ~~~
+
+The Mushibot system uses an open source toolkit to access the MPU6050 data, `MPU6050_tockn`.  
+
 
 
 
