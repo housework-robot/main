@@ -1,18 +1,13 @@
 # Anatomy of Mushibot, Another Wheel-legged Robot
 
-# 1. Objectives
+## 1. Objectives
 
-In the last article, we studied [Stack-force's wheel-legged robot](https://gitee.com/StackForce/bipedal_wheeled_robot). 
+In the last blog, we studied [Stack-force's wheel-legged robot](https://gitee.com/StackForce/bipedal_wheeled_robot). 
 What boards, modules, and chips are used, how are they wired together, and how to write program to access them.
 
-In this article, we studied another wheel-legged robot, [Mushibot](https://github.com/MuShibo/Micro-Wheeled_leg-Robot), 
-which is almost a mini version of ETH Zurich's [Ascento](https://www.ascento.ai/), with some differences in the shape and structure of the leg linkages etc. 
-
-In addition to the anatomy of its hardware, we spent more time on Mushibot's motion control. 
-
-
-&nbsp;
-# 2. Actuators and Sensors
+In this blog, we studied another wheel-legged robot, [Mushibot](https://github.com/MuShibo/Micro-Wheeled_leg-Robot), 
+which is almost a mini version of ETH Zurich's [Ascento](https://www.ascento.ai/), 
+with some differences in the shape and structure of the leg linkages etc. 
 
 Let's start with the hardware used in the Mushibot, especially
 
@@ -23,9 +18,8 @@ Let's start with the hardware used in the Mushibot, especially
 
 We will study how those hardware are wired to the master controller board, how to write C/C++ program to access them. 
 
-## 2.1 2208 BLDC motors
-
-### 2.1.1 Software 
+&nbsp;
+## 2. 2208 BLDC motors
 
 The following code snippet is extracted from Mushibot's 
 "[wl_pro_robot/wl_pro_robot.ino](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino)", 
@@ -114,7 +108,7 @@ void loop() {
 
 Let's dive into the code. 
 
-#### 1. BLDC Motor configuration
+### 2.1 BLDC Motor configuration
 
 ~~~
 BLDCMotor motor1 = BLDCMotor(7);
@@ -123,7 +117,8 @@ BLDCMotor motor2 = BLDCMotor(7);
 
 The `7` here is the pole pair number, referring to the SimpleFOC's tutorial, "[BLDC Motor configuration](https://docs.simplefoc.com/bldcmotor#step-1-creating-the-instance-of-the-bldc-motor)".
 
-#### 2. BLDC driver 3 PWM
+
+### 2.2 BLDC driver 3 PWM
 
 ~~~
 BLDCDriver3PWM driver1 = BLDCDriver3PWM(32,33,25,22);
@@ -132,7 +127,8 @@ BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
 
 The parameters in `BLDCDriver3PWM()` are the A, B, C phase pwm pins, and the enable pin, referring to the SimpleFOC's tutorial, "[BLDC driver 3 PWM](https://docs.simplefoc.com/bldcdriver3pwm#step-1-hardware-setup)". 
 
-#### 3. Voltage setting
+
+### 2.3 Voltage setting
 
 ~~~
 void setup() {
@@ -154,7 +150,8 @@ A high-level guidance refers to the SimpleFOC's tutorial, "[Let’s get started]
 
 A more detailed explanation refers to SimpleFOC's tutorial, "[Torque control using voltage](https://docs.simplefoc.com/voltage_torque_mode)"。
 
-#### 4. Torque control
+
+### 2.4 Torque control
 
 ~~~
 void setup() {
@@ -177,14 +174,15 @@ Mushibot set the torque of the motor to be controlled by the power supply's volt
 
 Therefore, we can control the motors by changing their power supply's voltages. 
 
+
 &nbsp;
-### 2.1.2 Hardware
+## 3. The master controller board
 
    <p align="center">
      <img alt="the partial Mushibot schematic of the master controller board for motor controlling" src="./S06E04_src/images/Mushibot_master_board_motor.png" width="90%">
    </p>
 
-#### 1. ESP32-WROOM-32 chip
+### 3.1 ESP32-WROOM-32 chip
 
 The schematic on the left is a ESP32-WROOM-32 chip with its pins. 
 
@@ -196,13 +194,13 @@ BLDCDriver3PWM driver1 = BLDCDriver3PWM(32,33,25,22);
 BLDCDriver3PWM driver2  = BLDCDriver3PWM(26,27,14,12);
 ~~~
 
-#### 2. Battery ADC
+### 3.2 Battery ADC
 
 The `BAT_ADC` in the right-upper-left schematic diagram refers to the Analog-to-Digital Converter to control the voltage of the power supply. 
 
 Mushibot doesn't have a separated board for the motor PWM drivers. Instead, it controls the motors by the master controller board directly. 
 
-#### 3. HDR-M-2.54
+### 3.3 HDR-M-2.54
 
 The right-lower schematic diagram is for HDR-M-2.54, a pin header male connector, with 2.54mm pin spacing.
 
@@ -213,7 +211,7 @@ we will discuss them in next section.
 
 
 &nbsp;
-## 2.2 AS5600-ASOM motor encoder
+## 4. AS5600-ASOM motor encoder
 
 The following code snippet is extracted from Mushibot's 
 "[wl_pro_robot/wl_pro_robot.ino](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino)", 
@@ -290,7 +288,7 @@ void lqr_balance_loop(){
 
 Let's dive into the code. 
 
-### 2.2.1 Encoder configuration
+### 4.1 Encoder configuration
 
 As a full-fledged configuration, we need to create an instance of the configuration first,
 
@@ -337,7 +335,7 @@ MagneticSensorI2C sensor2 = MagneticSensorI2C(AS5600_I2C);
 ~~~
 
 
-### 2.2.2 I2C communication 
+### 4.2 I2C communication 
 
 Mushibot uses I2C serial communication to link the encoders to the motors. 
 
@@ -395,7 +393,7 @@ An ESP32 chip can be used either as a master or as a slave. The diagram on the l
 There are two ESP32 chips in the diagram on the right, one for the master, the other for the slave, they communicate with each other via I2C. 
 
 
-### 2.2.3 Read from encoder
+### 4.3 Read from encoder
 
 It is quite straightforward to read motor's rotation angle and velocity from the encoder. 
 
@@ -413,7 +411,7 @@ void lqr_balance_loop(){
 
 
 &nbsp;
-## 2.3 STS3032 servo
+## 5. STS3032 servo
 
 The following code snippet is extracted from Mushibot's 
 "[wl_pro_robot/wl_pro_robot.ino](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino)", 
@@ -468,7 +466,7 @@ void setup() {
 }
 ~~~
 
-### 2.3.1 Servo_STS3032 library
+### 5.1 Servo_STS3032 library
 
 It looks quite simple to initialize an instance of `SMS_STS` servo, as the following. 
 
@@ -507,7 +505,7 @@ However, if you look into [Mushibot's github repo](https://github.com/MuShibo/Mi
 
 
 &nbsp;
-### 2.3.2 Serial2
+### 5.2 Serial2
 
 It looks quite straightforword to setup the communication from the master controller, that is a ESP32-WROOM-32 chip, to the two STS3032 servos. 
 
@@ -542,7 +540,7 @@ As expected, the ESP32-WROOM-32 chip's `IO16` pin is used for `SERVO_RX`, and `I
 
 
 &nbsp;
-## 2.4 MPU6050 IMU module
+## 6. MPU6050 IMU module
 
 The following code snippet is extracted from Mushibot's 
 "[wl_pro_robot/wl_pro_robot.ino](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/3.Software/wl_pro_robot/wl_pro_robot.ino)", 
@@ -598,15 +596,57 @@ void lqr_balance_loop(){
 }
 ~~~
 
-The Mushibot system uses an open source toolkit to access the MPU6050 data, `MPU6050_tockn`.  
+The Mushibot system uses an open source toolkit to access the MPU6050 data, ["MPU6050_tockn"](https://github.com/tockn/MPU6050_tockn).  
+
+It is quite straightforward to use this toolkit. 
+
+~~~
+TwoWire I2Ctwo = TwoWire(1);
+MPU6050 mpu6050(I2Ctwo);
+I2Ctwo.begin(23,5, 400000UL);
+ 
+LQR_angle = (float)mpu6050.getAngleY();
+LQR_gyro  = (float)mpu6050.getGyroY();
+~~~
+
+1. Initialize an I2C connection, by `TwoWire I2Ctwo = TwoWire(1)`,
+
+2. Initialize an instance of MPU6050 instance, by `MPU6050 mpu6050(I2Ctwo)`,
+
+3. Start up the I2C connection, by `I2Ctwo.begin(23,5, 400000UL)`,
+
+4. Read the gyro data by `mpu6050.getAngleY()` and `mpu6050.getGyroY()`.
+
+Notice that, 
+
+1. `I2Ctwo` is shared by the MPU6050 IMU module and the motor M1's encoder `AS5600` sensor,
+
+   Read ["section 2.2 AS5600-ASOM motor encoder" of this blog](https://github.com/housework-robot/main/blob/main/S06_robot_side/S06E04_anatomy_wheel_legged_mushibot.md#22-as5600-asom-motor-encoder) for more details of the hardware assembly and the software usage of the `AS5600` motor encoder.
+
+   For the hardware wiring,
+
+   * The M1 motor's AS5600 encoder is wired to the IMU board, to set up the I2C serial communication, 
+     The IMU board is wired to the master controller board, to access the `IO23` and `IO5` pins of the ESP32-WROOM-32 chip.
+   * The M0 motor's AS5600 encoder is wired to the master controller board, to access the `IO19` and `IO18` pins of the ESP32-WROOM-32 chip.
+
+
+2. `MPU6050` provides the access to the IMU data, including the gyro's data, and the accelerometer's data.
+
+   ["MPU6050_tockn"](https://github.com/tockn/MPU6050_tockn) is not well documented. You have to read its source code to understand its APIs.
+
+   To understand `MPU6050_tockn` source code, you have to understand its working principle.
+
+   ["The MPU6050 Explained"](https://mjwhite8119.github.io/Robots/mpu6050) is a good article to explain the physical meaning of MPU6050's raw data. In summary,
+
+   * Gyroscopes do NOT report angles, they report the speed at which the device is turning, or angular velocity.
+     In order to get the angle position you have to integrate it over time.
+
+   * There are two ways to extract useful data from the MPU6050.
+     One way is to read the raw sensor data values, as we did during calibration process, and use that data to compute the new orientation.
+     The second method is to pull the data out of the MPU’s onboard Digital Motion Processor (DMP).
+
+   In short, use the data out of DMP, instead of the raw data. 
 
 
 
-
-### 2.4.1 Software
-### 2.4.2 Hardware
-
-
-&nbsp;
-# 3. Motion control
 
