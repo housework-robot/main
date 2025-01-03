@@ -1,4 +1,4 @@
-# Anatomy of the Motion Control of Mushibot
+# Anatomy of the ADC reading of Mushibot
 
 ## 1. Objectives
 
@@ -357,6 +357,67 @@ void Mushibot::setup_adc() {
   and `ADC_CALI_LINE_FITTING_EFUSE_VAL_EFUSE_VREF` for vRef,
 
   But it doesn't hurt either. We do the eFuse check in the setup procedure for debugging purpose.
+
+
+&nbsp;
+#### 3. ADC reading
+
+~~~
+int Mushibot::get_voltage() {
+    int adc_raw;
+    int adc_voltage;
+  
+    // Read raw data from ADC
+    ESP_ERROR_CHECK(adc_oneshot_read(
+        adc1_handle,
+        ADC_CHANNEL_7, 
+        &adc_raw
+    ));
+    Serial.printf("\n[INFO] ADC%d channel[%d] raw data: %d. \n",
+        ADC_UNIT_1 + 1, ADC_CHANNEL_7, adc_raw);
+
+    // Read calibrated data from ADC
+    ESP_ERROR_CHECK(adc_cali_raw_to_voltage(
+        adc1_cali_handle, 
+        adc_raw,
+        &adc_voltage
+    ));
+    Serial.printf("[INFO] ADC%d channel[%d] calibrated voltage: %d mV. \n",
+        ADC_UNIT_1 + 1, ADC_CHANNEL_7, adc_voltage);
+    
+    return adc_voltage;
+}
+
+
+void Mushibot::bat_check() {
+    uint32_t sum = 0;
+    int calibrated_voltage; 
+    float battery;
+
+    if (bat_check_num > 1000) {
+        // sum = analogRead(BAT_PIN);
+        // ESP_ERROR_CHECK(adc_cali_raw_to_voltage(adc1_cali_handle, sum, &calibrated_voltage));
+        calibrated_voltage = get_voltage();
+        battery = (float) calibrated_voltage;
+        battery = (battery * 3.97) / 1000.0;
+        Serial.printf("[INFO] Battery is %.2f. \n", battery);
+        
+        //电量显示
+        if (battery > 7.8)
+            digitalWrite(LED_BAT, HIGH);
+        else
+            digitalWrite(LED_BAT, LOW);
+
+        bat_check_num = 0;
+    } else
+        bat_check_num++;  
+}
+~~~
+
+Notice that the battery check `bat_check()` calls `get_voltage()` to get the calibrated voltage from pin GPIO35, 
+which is equivalent to channel 7. 
+
+The battery level is equal to `(calibrated_voltage * 3.97) / 1000.0`. This is copied from Mushibot's original source code. 
 
 
 
