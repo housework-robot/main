@@ -429,6 +429,16 @@ which is equivalent to channel 7.
 The battery level is equal to `(calibrated_voltage * 3.97) / 1000.0`. This is copied from Mushibot's original source code. 
 
 
+&nbsp;
+## 3. Demo
+
+As mentioned above, we reconstructed Mushibot's original source code, to make it more readable and easier to maintain. 
+
+[Our source code](./S06E05_src/src/README.md) is stored in this repo. 
+
+Click the following image to view the video of Mushibot's jumping. 
+
+   [![The outlook of the Stack-force wheel-legged bot](https://img.youtube.com/vi/knGd_0lGek0/hqdefault.jpg)](https://www.youtube.com/shorts/knGd_0lGek0)
 
 
 
