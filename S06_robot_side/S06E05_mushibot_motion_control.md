@@ -237,7 +237,7 @@ In our scenario, we only use ADC1, and reserve ADC2 for wifi.
 
 We reconstructed Mushibot's original source code, to make it more readable and easier to maintain. 
 
-We define a `Mushibot` class, that contains multiple components including ADC. 
+We define a [`Mushibot` class](./S06E05_src/src/Mushibot20250103/wl_pro_robot_platformio2/src/mushibot.h), that contains multiple components including ADC. 
 
 ~~~
 #include <esp_log.h>
@@ -285,6 +285,8 @@ in the Mushibot controller board, ADC1 gets its Vin from channel 7, which is ide
 
 &nbsp;
 #### 2. ADC setup
+
+Following is our source code of [`setup_adc()`](./S06E05_src/src/Mushibot20250103/wl_pro_robot_platformio2/src/mushibot.cpp#L60), 
 
 ~~~
 void Mushibot::setup_adc() {
@@ -370,6 +372,9 @@ void Mushibot::setup_adc() {
 
 &nbsp;
 #### 3. ADC reading
+
+Following is our source code [`get_voltage()` and `bat_check()`](./S06E05_src/src/Mushibot20250103/wl_pro_robot_platformio2/src/mushibot.cpp#L129) 
+to read the calibrated voltage from ADC1 and calculate the battery level. 
 
 ~~~
 int Mushibot::get_voltage() {
