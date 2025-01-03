@@ -204,7 +204,159 @@ However, `characteristics of an ADC` is a general term containing the following 
 &nbsp;
 ### 2.2 Workflow
 
+[`oneshot_read_main.c`](https://github.com/espressif/esp-idf/blob/v5.3.2/examples/peripherals/adc/oneshot_read/main/oneshot_read_main.c)
+is a sample code for the usage of ESP32's ADC APIs for version 5.3.x. 
 
+Essentially, the workflow to get calibrated voltage from ESP32's ADC consists of the following steps, 
+
+1. Initialize an instance of the ADC1's handler, with configuration setting.
+   
+2. Initialize an instance of a ADC1's channel, with configuration setting.
+
+   In case you need to access multiple ADC channels, you can initialize multiple channel instances, one instance for one channel.
+
+3. Initialize an instance of a ADC1's calibration for one channel, with configuration setting.
+
+   In case you have multiple channels, you can initialize multiple calibration instances, one calibration instance for one channel. 
+
+4. Read the raw data from ADC1, using the ADC1's handler and the channel instance.
+
+5. Do the calibration of the raw data, using the ADC1's calibration instance.
+
+6. Delete the ADC1's handler instance and its calibration instances.
+
+In case you need to access the channels and calibrations of ADC2, repeat the above 6 steps for ADC2.
+
+&nbsp;
+#### 1. Mushibot class 
+
+In our scenario, we only use ADC1, and reserve ADC2 for wifi. 
+
+We reconstructed Mushibot's original source code, to make it more readable and easier to maintain. 
+
+We define a `Mushibot` class, that contains multiple components including ADC. 
+
+~~~
+#include <esp_log.h>
+#include <esp_adc/adc_cali.h>
+#include <esp_adc/adc_cali_scheme.h>
+#include <esp_adc/adc_oneshot.h>
+
+class Mushibot
+{
+public:
+    Mushibot();
+    ~Mushibot();
+    void setup_mushibot();
+    void loop_mushibot();
+
+    int get_voltage(); 
+    void bat_check();
+    ...
+
+private:  
+    // ADC
+    // We don't explicitly select the input pin 35 for the ADC,
+    // but rather using the channel, GPIO35 == Channel 7.
+    // int BAT_PIN = 35;
+
+    adc_oneshot_unit_handle_t adc1_handle;
+    adc_cali_handle_t adc1_cali_handle;
+    bool is_calibrated = false;
+
+    void setup_adc();
+};
+~~~
+
+Notice that, we don't directly read from ADC1's pin, that is GPIO35. 
+
+Instead, we read the ADC raw data from channel 7, which is identical to GPIO35, 
+and aligned with the official usages of ESP32 ADC's APIs. 
+
+
+&nbsp;
+#### 2. ADC setup
+
+~~~
+void Mushibot::setup_adc() {
+    esp_err_t ret = ESP_FAIL;
+
+    // ADC1 handle
+    adc_oneshot_unit_init_cfg_t adc1_handle_init_config = {
+        .unit_id = ADC_UNIT_1,
+        .ulp_mode = ADC_ULP_MODE_DISABLE,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(
+        &adc1_handle_init_config, 
+        &adc1_handle
+    ));
+
+    // ADC1 channel
+    adc_oneshot_chan_cfg_t adc1_handle_channel_config = {
+        .atten = ADC_ATTEN_DB_12,
+        .bitwidth = ADC_BITWIDTH_DEFAULT,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(
+        adc1_handle, 
+        ADC_CHANNEL_7, 
+        &adc1_handle_channel_config
+    ));
+
+    // ADC1 calibration 
+    if (!is_calibrated) {
+        Serial.printf("\n[INFO] Calibration scheme is Line-fitting. \n");
+        adc_cali_line_fitting_config_t adc1_cali_config = {
+            .unit_id = ADC_UNIT_1,
+            .atten = ADC_ATTEN_DB_12,
+            .bitwidth = ADC_BITWIDTH_DEFAULT,
+        };
+
+        ret = adc_cali_create_scheme_line_fitting(
+            &adc1_cali_config, 
+            &adc1_cali_handle
+        );
+        if (ret == ESP_OK) {
+            is_calibrated = true;
+            Serial.printf("[INFO] Calibration succeed.\n");
+        }
+        else if (ret == ESP_ERR_NOT_SUPPORTED || !is_calibrated) {
+            Serial.printf("[WARN] eFuse not burned, skip software calibration.\n");
+        }
+        else {
+            Serial.printf("[WARN] Invalid arguements or no memory.\n");
+        }
+    }
+
+    // https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/peripherals/adc_calibration.html
+    adc_cali_line_fitting_efuse_val_t efuse_tp = ADC_CALI_LINE_FITTING_EFUSE_VAL_EFUSE_TP; 
+    adc_cali_line_fitting_efuse_val_t efuse_vref = ADC_CALI_LINE_FITTING_EFUSE_VAL_EFUSE_VREF; 
+
+    // Check TP is burned into eFuse, not quite useful, feel safe to delete.
+    if (adc_cali_scheme_line_fitting_check_efuse(&efuse_tp) == ESP_OK) {
+        Serial.printf("\n[INFO] eFuse Two Point: Supported. \n");
+    } else {
+        Serial.printf("\n[INFO] eFuse Two Point: NOT supported. \n");
+    }
+
+    // Check Vref is burned into eFuse
+    if (adc_cali_scheme_line_fitting_check_efuse(&efuse_vref) == ESP_OK) {
+        Serial.printf("[INFO] eFuse Vref: Supported. \n");
+    } else {
+        Serial.printf("[INFO] eFuse Vref: NOT supported. \n");
+    }
+}
+~~~
+
+- In the above source code, when we set the configuration of the ADC1's handle, its channels and the calibration,
+  we use the default parameters, including
+  `ADC_UNIT_1`, `ADC_ULP_MODE_DISABLE`, `ADC_ATTEN_DB_12`, `ADC_BITWIDTH_DEFAULT`, `ADC_CHANNEL_7` etc.
+
+- We use line-fitting scheme for calibration, rather than curve-fitting scheme for simplicity.
+
+- In fact, it is not necessary to check the eFuse for `ADC_CALI_LINE_FITTING_EFUSE_VAL_EFUSE_TP` for two-points
+  and `ADC_CALI_LINE_FITTING_EFUSE_VAL_EFUSE_VREF` for vRef,
+
+  But it doesn't hurt either. We do the eFuse check in the setup procedure for debugging purpose.
 
 
 
