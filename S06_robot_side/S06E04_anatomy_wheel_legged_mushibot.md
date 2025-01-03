@@ -655,5 +655,7 @@ Next, we will focus on the motion control algorithm.
 
 Also, we will study the board schematic, especially to add port hub, in order to enable plug-and-play for third-party peripheral devices.
 
+Click the following image to view the video of Mushibot that stands balanced even when disturbed. 
 
+   [![Mushibot stands balanced when disturbed](https://img.youtube.com/vi/Yoz9zmx9cyA/hqdefault.jpg)](https://www.youtube.com/watch?v=Yoz9zmx9cyA)
 
