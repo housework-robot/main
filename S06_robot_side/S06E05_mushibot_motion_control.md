@@ -106,7 +106,7 @@ The ESP32 integrates 2 SAR (Successive Approximation Register) ADCs, supporting 
   
 - `ADC2`, 10 channels: GPIO0, GPIO2, GPIO4, GPIO12 - GPIO15, GOIO25 - GPIO27
 
-The `ADC2` is mainly used by wifi, hence, we often only use `ADC1`. 
+The `ADC2` is mainly used by wifi, hence in most cases, we only use `ADC1`. 
 
 
 #### 7. [One-shot vs Continuous ADC](https://docs.espressif.com/projects/esp-idf/en/v5.3.1/esp32/api-reference/peripherals/adc_oneshot.html#introduction)
