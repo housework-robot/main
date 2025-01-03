@@ -438,7 +438,7 @@ As mentioned above, we reconstructed Mushibot's original source code, to make it
 
 Click the following image to view the video of Mushibot's jumping. 
 
-   [![The outlook of the Stack-force wheel-legged bot](https://img.youtube.com/vi/knGd_0lGek0/hqdefault.jpg)](https://www.youtube.com/shorts/knGd_0lGek0)
+   [![Mushibot jumps](https://img.youtube.com/vi/knGd_0lGek0/hqdefault.jpg)](https://www.youtube.com/shorts/knGd_0lGek0)
 
 
 
