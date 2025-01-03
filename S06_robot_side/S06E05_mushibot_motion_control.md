@@ -7,9 +7,12 @@ to construct a wheel-legged robot, [Mushibot](https://github.com/MuShibo/Micro-W
 which is almost a mini version of ETH Zurich's Ascento, 
 with some differences in the shape and structure of the leg linkages etc.
 
-In this blog, we dive into the details how to control the motors and servos for desired motion, using the robot status information collected from 
+In this blog, we dive into the details how to read calibrated voltage from ADC. 
+
+Later on we will disucss how to control the motors and servos for desired motion, using the robot status information collected from 
 the motor encoders, the IMU (gyro and accelerometer) modules and ADC (analog to digital converter). 
-Later on, we will discuss how to use the environmental information retrieved from camera etc. 
+
+After that, we will discuss how to use the environmental information retrieved from camera etc. 
 
 &nbsp;
 ## 2. Analog to Digital Converter with ESP32 
@@ -269,9 +272,15 @@ private:
 ~~~
 
 Notice that, we don't directly read from ADC1's pin, that is GPIO35. 
-
-Instead, we read the ADC raw data from channel 7, which is identical to GPIO35, 
+Instead, we read the ADC1 raw data from channel 7, which is identical to GPIO35, 
 and aligned with the official usages of ESP32 ADC's APIs. 
+
+Referring to [the pinout of ESP32 chip](https://github.com/MuShibo/Micro-Wheeled_leg-Robot/blob/master/2.Hardware/1.ControllerPCB/Schematic.pdf) 
+in the Mushibot controller board, ADC1 gets its Vin from channel 7, which is identical to GPIO35.
+
+   <p align="center">
+     <img alt="Channel 7 is identical to GPIO35 in Mushibot's controller board" src="./S06E05_src/images/ESP32_chip_pinout.png" width="80%">
+   </p>
 
 
 &nbsp;
