@@ -200,13 +200,13 @@ Here is a set of repositories, containing 3 kinds of contents,
    
 &nbsp;
 
-4. S06E04. [Anatomy of Mushibot, Another Wheel-legged Robot](./S06E04_anatomy_wheel_legged_mushibot.md)
+4. S06E04. [Anatomy of Mushibot, Another Wheel-legged Robot](./S06_robot_side/S06E04_anatomy_wheel_legged_mushibot.md)
 
    [![Mushibot stands balanced when disturbed](https://img.youtube.com/vi/Yoz9zmx9cyA/hqdefault.jpg)](https://www.youtube.com/watch?v=Yoz9zmx9cyA)
 
 &nbsp;
 
-5. S06E05. [Anatomy of the ADC reading of Mushibot](./S06E05_mushibot_motion_control.md)
+5. S06E05. [Anatomy of the ADC reading of Mushibot](./S06_robot_side/S06E05_mushibot_motion_control.md)
 
    [![Mushibot jumps](https://img.youtube.com/vi/knGd_0lGek0/hqdefault.jpg)](https://www.youtube.com/shorts/knGd_0lGek0)
    
