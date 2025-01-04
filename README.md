@@ -206,7 +206,7 @@ Here is a set of repositories, containing 3 kinds of contents,
 
 &nbsp;
 
-5. S06E05. [Anatomy of the ADC reading of Mushibot](./S06_robot_side/S06E05_mushibot_motion_control.md)
+5. S06E05. [Anatomy of the ADC reading of Mushibot](./S06_robot_side/S06E05_mushibot_adc.md)
 
    [![Mushibot jumps](https://img.youtube.com/vi/knGd_0lGek0/hqdefault.jpg)](https://www.youtube.com/shorts/knGd_0lGek0)
    
