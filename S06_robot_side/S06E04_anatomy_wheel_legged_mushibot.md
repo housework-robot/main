@@ -538,6 +538,30 @@ As expected, the ESP32-WROOM-32 chip's `IO16` pin is used for `SERVO_RX`, and `I
    The key component here is the `SN74LVC1G126DBVR` chip, that is a single bus buffer gate with 3-state output,
    as the driver to control the servo. One driver for one servo.
 
+4. Serial2.begin()
+
+   You can use `Serial2.begin(10000)` with default configuration setting, but that depends on whether or not your Arduino/ESP32 environment is constructed correctly.
+   
+   In case `HardwareSerial.cpp` in your Arduino library doesn't set `rxPin` for `RX2` and `txPin` for `TX2` with correct values,
+   `Serial2.begin(10000)` will not work correctly. 
+   To make it more challenging to debug, the system doesn't throw any exception or warning.
+
+   A more robust way is to use `Serial2.begin(1000000, SERIAL_8N1, S_RXD, S_TXD)` to replace `Serial2.begin(1000000)`.
+   The configuration of the serial channel may specify a few parameters, including the number of data bits, stop bits, parity, flow control and others.
+   The default setting of any serial channel is `SERIAL_8N1`, which means 8 data bits, no parity, and 1 stop bit. 
+
+   ~~~
+   #define S_RXD 16 // Setting the serial receive pin
+   #define S_TXD 17 // Setting the serial transmit pin
+
+   void setup() {
+     Serial2.begin(1000000, SERIAL_8N1, S_RXD, S_TXD); // 腿部sts舵机
+     // Serial2.begin(1000000);
+
+     //舵机初始化
+     sms_sts.pSerial = &Serial2;
+   }
+   ~~~
 
 &nbsp;
 ## 6. MPU6050 IMU module
