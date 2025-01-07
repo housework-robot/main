@@ -548,18 +548,108 @@ As shown in the above screenshot,
 
    Once you have plugged in a serial cable to a USB port of you computer, the `port` dropdown list will contain this USB port, select it.
 
-   Baud rate is defined in the `main.cpp`,
+   Baud rate is defined in the [`main.cpp`](https://github.com/housework-robot/main/blob/main/S06_robot_side/S06E06_src/src/Mushibot20250107/src/main.cpp#L63),
 
    ~~~
-
+    void setup()
+    {
+        Serial.begin(115200); 
+        ...
+    }
    ~~~
 
-   To be more reliable, you can also add the this line to `platformio.ini`,
+   To be more reliable, you can also add the following line into `platformio.ini`,
 
    ~~~
-   monitor_speed = 115200`
+   monitor_speed = 115200
    ~~~
 
+4. Finally, when clicking `Start monitoring (开始监控)` as in the `[6]` in the screenshot,
+   the window of `serial monitor` printed out the log information we wrote in [our programs](https://github.com/housework-robot/main/tree/main/S06_robot_side/S06E06_src/src/Mushibot20250107), as the following,
+
+   ~~~
+    ��d��Ѱ��0�bl�Kʵ�!�+�:��0����b╹:�C!�
+                                         ���4!�+�:��0���0��+�:���!�K�y��Ѱ�µXSH�
+    [INFO] Successfully mounts LittleFS at '/spiffs'. 
+    
+    [INFO] Listing directory: '/'
+    -- Notice that SPIFSS doesn't recognize directories, but it can find the files inside subdirs. --
+    
+      FILE: 'index.html', SIZE: 22430 
+      FILE: 'test.txt', SIZE: 22 
+    
+    [INFO] Successfully write 'Hello...' to file '/subdir/test.txt'.
+    
+    [INFO] Read from file '/subdir/test.txt': 
+    Hello: 20250106, 22:04
+    [INFO] End of file '/subdir/test.txt'.
+    
+    [INFO] Scan wifi start:
+       [0] Wifi-name: 'KanHome', Signal-strength: 55, Authentication:  without password.
+       [1] Wifi-name: 'XuemeiHome', Signal-strength: 59, Authentication:  without password.
+       [2] Wifi-name: 'KanHome', Signal-strength: 78, Authentication:  without password.
+       [3] Wifi-name: 'Zeng1', Signal-strength: 83, Authentication:  with password.
+       [4] Wifi-name: 'Zeng1', Signal-strength: 83, Authentication:  with password.
+       [5] Wifi-name: '��?', Signal-strength: 85, Authentication:  without password.
+       [6] Wifi-name: 'KanHome', Signal-strength: 85, Authentication:  without password.
+       [7] Wifi-name: 'KanHome', Signal-strength: 91, Authentication:  without password.
+    
+    
+    [EVENT] The mushibot is connected to wifi network 'KanHome', waiting for getting IP address.
+    
+    [EVENT] The mushibot is connected to 'KanHome', with '192.168.0.111' IP address.
+    
+    [INFO] connect_wifi(): The mushibot is connected to 'KanHome' wifi network, with '192.168.0.111' IP address.
+    
+    [INFO] setup_servo() is done. 
+    
+    [INFO] Calibration scheme is Line-fitting. 
+    [INFO] Calibration succeed.
+    
+    [INFO] eFuse TwoPoint: Supported. 
+    [INFO] eFuse Vref: Supported. 
+    
+    [INFO] setup_adc() is done. 
+    
+    ========================================
+    Calculating gyro offsets
+    DO NOT MOVE MPU6050...
+    Done!
+    X : -4.20
+    Y : -0.64
+    Z : 0.38
+    Program will start after 3 seconds
+    ========================================MOT: Monitor enabled!
+    MOT: Monitor enabled!
+    MOT: Init
+    MOT: Enable driver.
+    MOT: Align sensor.
+    MOT: sensor_direction==CW
+    MOT: PP check: OK!
+    MOT: Zero elec. angle: 2.69
+    MOT: No current sense.
+    MOT: Ready.
+    MOT: Init
+    MOT: Enable driver.
+    MOT: Align sensor.
+    MOT: sensor_direction==CCW
+    MOT: PP check: OK!
+    MOT: Zero elec. angle: 3.34
+    MOT: No current sense.
+    MOT: Ready.
+    
+    [INFO] setup_mushibot() is done. 
+    
+    [INFO] speed: -0.00 
+    
+    [INFO] speed: -0.00 
+    
+    [INFO] status: 
+    {"chartsname":["speed","angle"],"speed":{"robot_speed":"0.00","motor1_shaft_velocity":"0.00","motor2_shaft_velocity":"0.00"},"angle":{"motor1_shaft_angle":"3.97","motor2_shaft_angle":"-4.85"}}
+    
+    [INFO] speed: -0.00 
+    ...
+   ~~~
 
 
 &nbsp;
