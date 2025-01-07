@@ -123,7 +123,191 @@ We tried `littlefs`, and it failed. When using `spiffs`, it worked well.
 
 
 &nbsp;
-### 2.3 Make an image of the files,end upload to the ESP32 board
+### 2.3 Upload to the ESP32 board
+
+Using platformio, it is quite straightforward to upload files to ESP32 with SPIFFS and LittleFS file systems. 
+
+Referring to these two articles, e. 
+[ESP32 with VS Code and PlatformIO: Upload Files to LittleFS Filesystem](https://randomnerdtutorials.com/esp32-vs-code-platformio-littlefs/) 
+and [ESP32 with VS Code and PlatformIO: Upload Files to SPIFFS Filesystem](https://randomnerdtutorials.com/esp32-vs-code-platformio-spiffs/), 
+we can take the following steps to upload files and directories to ESP32 board, using platformio.
+
+&nbsp;
+#### 1. Put the files and directories in `/data` folder in your platformio project
+
+   <p align="center">
+     <img alt="put the files in the data folder of the platformio project" src="./S06E06_src/img/platformio_file_folder.png" width="85%">
+   </p>   
+
+   As shown in the above screenshot, you must create a folder in your platformio project, name it as `data`. The folder name must be `data`, other names are not allowed.
+
+   The `data` folder must be at the same level as `src` folder in the project file structure. 
+
+   After then, copy and paste your files and directories into the `data` folder.
+
+&nbsp;
+#### 2. Build filesystem image
+
+   <p align="center">
+     <img alt="build the filesystem image and upload it" src="./S06E06_src/img/platformio_file_upload.png" width="85%">
+   </p>
+
+   Click the `platformio` icon at the left side bar, as shown in the red `[1]` in the screenshot.
+
+   Select `esp32dev` env, that is identical to the `env` setting in the `platformio.ini`.
+
+   Expand the `Platform` cascade menu.
+
+   Finally, click `Build Filesystem Image`, as shown in the red `[2]` in the screenshot.
+
+   After then, in the terminal block of the VSCode, the platformio will print out the following messages.
+
+   ~~~
+     *  正在执行任务: platformio run --target buildfs --environment esp32dev 
+    
+    Processing esp32dev (platform: espressif32; board: esp32dev; framework: arduino)
+    ---------------------------------------------------------------------------------------------------------------
+    Verbose mode can be enabled via `-v, --verbose` option
+    CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+    PLATFORM: Espressif 32 (53.3.10) > Espressif ESP32 Dev Module
+    HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+    DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+    PACKAGES: 
+     - framework-arduinoespressif32 @ 3.1.0 
+     - framework-arduinoespressif32-libs @ 5.3.0+sha.083aad99cf 
+     - tool-esptoolpy @ 4.8.5 
+     - tool-mklittlefs @ 3.2.0 
+     - tool-riscv32-esp-elf-gdb @ 14.2.0+20240403 
+     - tool-xtensa-esp-elf-gdb @ 14.2.0+20240403 
+     - toolchain-xtensa-esp-elf @ 13.2.0+20240530
+    LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+    LDF Modes: Finder ~ deep, Compatibility ~ soft
+    Found 51 compatible libraries
+    Scanning dependencies...
+    Dependency Graph
+    |-- ArduinoJson @ 7.3.0
+    |-- WebSockets @ 2.6.1
+    |-- MPU6050_tockn @ 1.5.2
+    |-- Simple FOC @ 2.3.4
+    |-- SimpleFOCDrivers @ 1.0.8
+    |-- SPI @ 3.1.0
+    |-- Wire @ 3.1.0
+    |-- FS @ 3.1.0
+    |-- SPIFFS @ 3.1.0
+    |-- Servo_STS3032
+    |-- WiFi @ 3.1.0
+    Building in release mode
+    Building FS image from 'data' directory to .pio/build/esp32dev/spiffs.bin
+    /index.html
+    /subdir/test.txt
+    ========================================= [SUCCESS] Took 1.47 seconds =========================================
+     *  终端将被任务重用，按任意键关闭。 
+   ~~~
+
+   Notice that, the entire file system, including the files, directories, and the files in the directories,
+   are all burned into a binary image, `spiffs.bin`.
+
+   ~~~
+    Building FS image from 'data' directory to .pio/build/esp32dev/spiffs.bin
+    /index.html
+    /subdir/test.txt
+   ~~~
+   
+&nbsp;
+#### 3. Upload filesytem image
+
+   Still referring to the previous screenshot, finally click `Upload Filesystem Image`, as shown in the red `[3]`.
+
+   After then, in the terminal block of the VSCode, the platformio will print out the following messages.
+
+   ~~~   
+     *  正在执行任务: platformio run --target uploadfs --environment esp32dev 
+    
+    Processing esp32dev (platform: espressif32; board: esp32dev; framework: arduino)
+    ---------------------------------------------------------------------------------------------------------------
+    Verbose mode can be enabled via `-v, --verbose` option
+    CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+    PLATFORM: Espressif 32 (53.3.10) > Espressif ESP32 Dev Module
+    HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+    DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+    PACKAGES: 
+     - framework-arduinoespressif32 @ 3.1.0 
+     - framework-arduinoespressif32-libs @ 5.3.0+sha.083aad99cf 
+     - tool-esptoolpy @ 4.8.5 
+     - tool-mkfatfs @ 2.0.1 
+     - tool-mklittlefs @ 3.2.0 
+     - tool-mkspiffs @ 2.230.0 (2.30) 
+     - tool-riscv32-esp-elf-gdb @ 14.2.0+20240403 
+     - tool-xtensa-esp-elf-gdb @ 14.2.0+20240403 
+     - toolchain-xtensa-esp-elf @ 13.2.0+20240530
+    LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+    LDF Modes: Finder ~ deep, Compatibility ~ soft
+    Found 51 compatible libraries
+    Scanning dependencies...
+    Dependency Graph
+    |-- ArduinoJson @ 7.3.0
+    |-- WebSockets @ 2.6.1
+    |-- MPU6050_tockn @ 1.5.2
+    |-- Simple FOC @ 2.3.4
+    |-- SimpleFOCDrivers @ 1.0.8
+    |-- SPI @ 3.1.0
+    |-- Wire @ 3.1.0
+    |-- FS @ 3.1.0
+    |-- SPIFFS @ 3.1.0
+    |-- Servo_STS3032
+    |-- WiFi @ 3.1.0
+    Building in release mode
+    Building FS image from 'data' directory to .pio/build/esp32dev/spiffs.bin
+    /index.html
+    /subdir/test.txt
+    Looking for upload port...
+    
+    Warning! Please install `99-platformio-udev.rules`. 
+    More details: https://docs.platformio.org/en/latest/core/installation/udev-rules.html
+    
+    Auto-detected: /dev/ttyUSB0
+    Uploading .pio/build/esp32dev/spiffs.bin
+    esptool.py v4.8.5
+    Serial port /dev/ttyUSB0
+    Connecting....
+    Chip is ESP32-D0WDQ6 (revision v1.1)
+    Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+    Crystal is 40MHz
+    MAC: a0:dd:6c:ae:3b:10
+    Uploading stub...
+    Running stub...
+    Stub running...
+    Changing baud rate to 460800
+    Changed.
+    Configuring flash size...
+    Auto-detected Flash size: 4MB
+    Flash will be erased from 0x00290000 to 0x003effff...
+    Compressed 1441792 bytes to 10055...
+    Writing at 0x00290000... (100 %)
+    Wrote 1441792 bytes (10055 compressed) at 0x00290000 in 8.0 seconds (effective 1438.3 kbit/s)...
+    Hash of data verified.
+    
+    Leaving...
+    Hard resetting via RTS pin...
+    ======================================== [SUCCESS] Took 12.07 seconds ========================================
+     *  终端将被任务重用，按任意键关闭。 
+   ~~~
+
+   Notice that,
+
+   1. `Upload Filesystem Image` repeated the previous task `Build Filesystem Image`.
+  
+   2. It uploaded `spiffs.bin` by `esptool.py` via Serial.
+  
+      ~~~
+      Auto-detected: /dev/ttyUSB0
+      Uploading .pio/build/esp32dev/spiffs.bin
+      esptool.py v4.8.5
+      Serial port /dev/ttyUSB0
+      Connecting....
+      ~~~
+
+   
 
 &nbsp;
 ### 2.4 Write C++ programs to manage the uploaded files
