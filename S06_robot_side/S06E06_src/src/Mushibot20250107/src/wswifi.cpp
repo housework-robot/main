@@ -53,6 +53,7 @@ void WsWifi::setup_wswifi() {
 
 
 void WsWifi::loop_wswifi() {
+    loop_embeddedfs();
     websocket.loop();
 }
 
