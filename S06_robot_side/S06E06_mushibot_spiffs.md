@@ -312,6 +312,124 @@ we can take the following steps to upload files and directories to ESP32 board, 
 &nbsp;
 ### 2.4 Write C++ programs to manage the uploaded files
 
+We implemented [`embedded_fs.{h, cpp}`](/S06E06_src/src/Mushibot20250107/src) 
+for SPIFFS file system, and its application in the Mushibot system. 
+
+Following is the source code of `embedded_fs.h`.
+
+~~~
+/*
+   Modified from:
+   https://github.com/espressif/arduino-esp32/blob/master/libraries/LittleFS/examples/LITTLEFS_test/LITTLEFS_test.ino
+*/
+
+#ifndef EMBEDDED_FS_H_
+#define EMBEDDED_FS_H_
+
+#include <Arduino.h>
+#include <FS.h>
+#include <SPIFFS.h>
+
+// Even though LittleFS is to replace SPIFFS, however, for unknown reason in our environment, 
+// we can successfully upload directories and files in LittleFS with Platformio, 
+// but we cannot use LittleFS to access the uploaded files. 
+// #include <LittleFS.h>
+
+class EmbeddedFS
+{
+public:
+    EmbeddedFS();
+    virtual ~EmbeddedFS();
+
+    void setup_embeddedfs(); 
+    void loop_embeddedfs();
+
+    void list_dir(String dir_name, int level);
+    void create_dir(String dir_path);
+    void delete_dir(String dir_path);
+
+    void read_file_to_serial(String file_dirname);
+    void write_file(String file_dirname, String msg);
+    void append_file(String file_dirname, String msg);
+    void rename_file(String file_dirname1, String file_dirname2);
+    void delete_file(String file_dirname);
+
+private:
+};
+
+#endif
+~~~
+
+Notice that, 
+
+1. `setup_embeddedfs()` and `loop_embeddedfs()` are used to integrate the SPIFFS file system into the Mushibot system.
+
+   The usage of these 2 functions refer to [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) and 
+   [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp),
+
+   ~~~
+    class WsWifi
+    {
+    public:
+        WsWifi();
+        virtual ~WsWifi();
+    
+        // LittleFS wrapped as EmbeddedFS
+        EmbeddedFS embedded_fs = EmbeddedFS();
+        ...
+   ~~~
+
+   ~~~
+    void WsWifi::setup_wswifi() {
+        // Setup the LittleFS.
+        embedded_fs.setup_embeddedfs();
+        ...
+    }
+    
+    void WsWifi::loop_wswifi() {
+        embedded_fs.loop_embeddedfs();    
+        ...
+    } 
+   ~~~
+
+2. `embedded_fs` is based on `SPIFFS`.
+
+   For example, `void setup_embeddedfs()` is implemented in the following way,
+
+   ~~~
+    void EmbeddedFS::setup_embeddedfs() {
+        // LittleFS.begin(bool formatOnFail, const char *basePath, uint8_t maxOpenFiles, const char *partitionLabel)
+        // if (!LittleFS.begin(true, "/littlefs", 10U, "littlefs")) {
+        // if (!SPIFFS.begin(true, "/spiffs", 10U, "spiffs")) {
+        if (!SPIFFS.begin(true)) {
+            Serial.printf("\n[WARN] LittleFS mount failed. \n");
+            return;
+        }
+        else {
+            Serial.printf("\n[INFO] Successfully mounts LittleFS at '%s'. \n",
+                SPIFFS.mountpoint()
+            );        
+        }   
+    
+        // Verify that the SPIFSS file system works well.
+        // List file directory with 3 levels. 
+        list_dir("/", 3);
+        write_file("/subdir/test.txt", "Hello: 20250106, 22:04");
+        read_file_to_serial("/subdir/test.txt");
+    }
+   ~~~
+
+   Notice that, 
+
+   1. It uses `SPIFFS.begin(true)` to mount the file system, instead of `LittleFS` or others.
+  
+   2. `SPIFFS.begin()` has 4 input parameters, we used `true` for `formatOnFail`,
+      which means that when mounting fails, it will format the related ESP32 memory space.
+
+   3. We used the default value, which is `"/spiffs"` for `basePath`,
+      but actually you can use whatever name for the `basePath`, except that `"/"` is not allowed.
+
+
 &nbsp;
 ### 2.5 Upload the programs to ESP32 board, and run them
 
