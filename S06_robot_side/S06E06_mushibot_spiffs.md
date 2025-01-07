@@ -529,22 +529,134 @@ As mentioned in the first section of this blog, we tooks the following steps to 
 4. Write C++ programs to manage the uploaded files,
 5. Upload the programs to ESP32 board, and run them.
 
-For step 5, finally we used platformio to Upload the programs to ESP32 board, and run them.
+At step 5, we used platformio to Upload the programs to ESP32 board, and run them. Let's elaborate on this step. 
+
+&nbsp;
+#### 1. Compile and upload programs
 
    <p align="center">
      <img alt="upload the programs and run it in platformio" src="./S06E06_src/img/platformio_serial_monitor.png" width="85%">
    </p>   
 
-As shown in the above screenshot, 
+As shown in the above screenshot, in VSCode with platformio plugin, 
+the check mark in the bottom menu bar is to compile all the programs, 
+as the red `[1]` in the screenshot, 
+and the right-arrow mark is to upload all the program to the board, as the red `[2]`.
 
-1. In VSCode with platformio plugin, the check mark in the bottom menu bar is to compile all the programs, as the red `[1]` in the screenshot, 
-   and the right-arrow mark is to upload all the program to the board, as the red `[2]`. 
+When executing step [2], `uploading`, the platformio printed out the following log information in the terminal window. 
 
-2. If the compiling and uploading are successful, next step is to click the `Serial monitor (串行监控器)`, as the red `[3]` in the screenshot.
+In case you encounted any bugs, compare with the correct log information as following, maybe you can find some hints to fix your bugs.
+
+~~~
+ *  正在执行任务: platformio run --target upload 
+
+Processing esp32dev (platform: espressif32; board: esp32dev; framework: arduino)
+---------------------------------------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+PLATFORM: Espressif 32 (53.3.10) > Espressif ESP32 Dev Module
+HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 3.1.0 
+ - framework-arduinoespressif32-libs @ 5.3.0+sha.083aad99cf 
+ - tool-esptoolpy @ 4.8.5 
+ - tool-mkfatfs @ 2.0.1 
+ - tool-mklittlefs @ 3.2.0 
+ - tool-mkspiffs @ 2.230.0 (2.30) 
+ - tool-riscv32-esp-elf-gdb @ 14.2.0+20240403 
+ - tool-xtensa-esp-elf-gdb @ 14.2.0+20240403 
+ - toolchain-xtensa-esp-elf @ 13.2.0+20240530
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ deep, Compatibility ~ soft
+Found 52 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- ArduinoJson @ 7.3.0
+|-- WebSockets @ 2.6.1
+|-- MPU6050_tockn @ 1.5.2
+|-- Simple FOC @ 2.3.4
+|-- SimpleFOCDrivers @ 1.0.8
+|-- SPI @ 3.1.0
+|-- Wire @ 3.1.0
+|-- FS @ 3.1.0
+|-- SPIFFS @ 3.1.0
+|-- Servo_STS3032
+|-- WiFi @ 3.1.0
+Building in release mode
+Retrieving maximum program size .pio/build/esp32dev/firmware.elf
+Checking size .pio/build/esp32dev/firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [=         ]  14.9% (used 48792 bytes from 327680 bytes)
+Flash: [========  ]  78.7% (used 1031832 bytes from 1310720 bytes)
+Configuring upload protocol...
+AVAILABLE: cmsis-dap, esp-bridge, esp-prog, espota, esptool, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa
+CURRENT: upload_protocol = esptool
+Looking for upload port...
+
+Warning! Please install `99-platformio-udev.rules`. 
+More details: https://docs.platformio.org/en/latest/core/installation/udev-rules.html
+
+Auto-detected: /dev/ttyUSB0
+Uploading .pio/build/esp32dev/firmware.bin
+esptool.py v4.8.5
+Serial port /dev/ttyUSB0
+Connecting.......
+Chip is ESP32-D0WDQ6 (revision v1.1)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: a0:dd:6c:ae:3b:10
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Auto-detected Flash size: 4MB
+Flash will be erased from 0x00001000 to 0x00006fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Flash will be erased from 0x0000e000 to 0x0000ffff...
+Flash will be erased from 0x00010000 to 0x0010cfff...
+SHA digest in image updated
+Compressed 23440 bytes to 15053...
+Writing at 0x00001000... (100 %)
+Wrote 23440 bytes (15053 compressed) at 0x00001000 in 0.8 seconds (effective 245.6 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 146...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (146 compressed) at 0x00008000 in 0.1 seconds (effective 344.6 kbit/s)...
+Hash of data verified.
+Compressed 8192 bytes to 47...
+Writing at 0x0000e000... (100 %)
+Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 468.8 kbit/s)...
+Hash of data verified.
+Compressed 1032208 bytes to 650284...
+Writing at 0x00010000... (2 %)
+Writing at 0x0001d871... (5 %)
+Writing at 0x0002941f... (7 %)
+Writing at 0x00031077... (10 %)
+...
+Writing at 0x000fcaa1... (95 %)
+Writing at 0x00102247... (97 %)
+Writing at 0x00107d28... (100 %)
+Wrote 1032208 bytes (650284 compressed) at 0x00010000 in 15.2 seconds (effective 544.3 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
+======================================== [SUCCESS] Took 23.25 seconds ========================================
+ *  终端将被任务重用，按任意键关闭。 
+~~~
+
+
+&nbsp;
+#### 2. Execution result
+
+1. If the compiling and uploading are successful, next step is to click the `Serial monitor (串行监控器)`, as the red `[3]` in the screenshot.
 
    `Serial Monitor` is a plugin to the VSCode, developed by Microsoft.
 
-3. In the window of `serial monitor`, configure `port` and `baud rate` as in the `[4]` and `[5]` in the screenshot,
+2. In the window of `serial monitor`, configure `port` and `baud rate` as in the `[4]` and `[5]` in the screenshot,
 
    Once you have plugged in a serial cable to a USB port of you computer, the `port` dropdown list will contain this USB port, select it.
 
@@ -564,7 +676,7 @@ As shown in the above screenshot,
    monitor_speed = 115200
    ~~~
 
-4. Finally, when clicking `Start monitoring (开始监控)` as in the `[6]` in the screenshot,
+3. Finally, when clicking `Start monitoring (开始监控)` as in the `[6]` in the screenshot,
    the window of `serial monitor` printed out the log information we wrote in [our programs](https://github.com/housework-robot/main/tree/main/S06_robot_side/S06E06_src/src/Mushibot20250107), as the following,
 
    ~~~
