@@ -1035,6 +1035,13 @@ Notice that,
     [    51][E][LittleFS.cpp:79] begin(): Mounting LittleFS failed! Error: 261
    ~~~
 
+
+&nbsp;
+## 4. Video of the entire process
+
+Click the following image to view the video of the entire process to use SPIFSS for mushibot robot.  
+
+   [![Mushibot jumps](https://img.youtube.com/vi/3S8g0Q6BFB4/hqdefault.jpg)](https://www.youtube.com/watch?v=3S8g0Q6BFB4)
    
 
 
