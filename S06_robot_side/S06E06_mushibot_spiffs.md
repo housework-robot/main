@@ -30,7 +30,7 @@ We tooks the following steps to use SPIFFS in the Mushibot system,
 
 1. Configure `platformio.ini`,
 2. Create a partition table,
-3. Make an image of the files, and upload to the ESP32 board, using Platformio tools,
+3. Build the filesystem image, and upload it to the ESP32 board, using Platformio tools,
 4. Write C++ programs to manage the uploaded files,
 5. Upload the programs to ESP32 board, and run them.   
 
@@ -70,7 +70,7 @@ board_build.partitions = default_4MB.csv
   framework = arduino
   ~~~
 
-  You can replace `platform = espressif32` with `platform = https://github.com/pioarduino/platform-espressif32/releases/download/51.03.04/platform-espressif32.zip`.
+  You can replace `platform = espressif32` with`platform = https://github.com/pioarduino/platform-espressif32/releases/download/51.03.04/platform-espressif32.zip`.
 
   But it doesn't work when using `platform = https://github.com/platformio/platform-espressif32.git`. 
 
@@ -515,7 +515,7 @@ the purpose of this function is to show how to read bytes from file.
 And in most case, you have to write your own read_file() to implement your own workflow.
 
 For example, if you want to send out the content via `WebSocketsServer`, 
-you should replace `Serial.write(file.read())` to `webSocketsServer.sendTXT(client_id, file.read())` 
+you should replace `Serial.write(file.read())` with `webSocketsServer.sendTXT(client_id, file.read())` 
 
      
 &nbsp;
@@ -525,9 +525,9 @@ As mentioned in the first section of this blog, we tooks the following steps to 
 
 1. Configure `platformio.ini`,
 2. Create a partition table,
-3. Make an image of the files, and upload to the ESP32 board, using Platformio tools,
+3. Build the filesystem image, and upload it to the ESP32 board, using Platformio tools,
 4. Write C++ programs to manage the uploaded files,
-5. Upload the programs to ESP32 board, and run them.
+5. Upload the programs to ESP32 board, and run them.  
 
 At step 5, we used platformio to Upload the programs to ESP32 board, and run them. Let's elaborate on this step. 
 
@@ -767,7 +767,275 @@ Hard resetting via RTS pin...
 &nbsp;
 ## 3. LittleFFS failed
 
-Similar to the previous section, we took 5 steps to use `LittleFS` in the Mushibot system. 
+Similar to the previous section, we took 5 steps to use `LittleFS` in the Mushibot system, 
+but we replaced `SPIFFS` with `LittleFS` in the configuration files and programs. 
 
+1. Configure `platformio.ini`,
+2. Create a partition table,
+3. Build the filesystem image, and upload it to the ESP32 board, using Platformio tools,
+4. Write C++ programs to manage the uploaded files,
+5. Upload the programs to ESP32 board, and run them.  
  
+&nbsp;
+### 3.1 Modify platformio.ini and default_4MB.csv
+
+1. We changed `board_build.filesytem` from `spiffs` to `littlefs` in `platformio.ini`,
+
+    ~~~
+    board_build.filesytem = littlefs
+    ~~~
+
+2. We replaced `spiffs` with `littlefs` in `default_4MB.csv`,
+
+    ~~~
+    # Name,   Type, SubType, Offset,  Size, Flags
+    nvs,      data, nvs,     0x9000,  0x5000,
+    otadata,  data, ota,     0xe000,  0x2000,
+    app0,     app,  ota_0,   0x10000, 0x140000,
+    app1,     app,  ota_1,   0x150000,0x140000,
+    littlefs,   data, littlefs,  0x290000,0x160000,
+    coredump, data, coredump,0x3F0000,0x10000,
+    ~~~
+
+&nbsp;
+### 3.2 Build the filesystem image and upload it
+
+We clicked the `Build Filesystem Image` and `Upload Filesystem Image` in the platformio bar on the left side of VSCode.
+
+1. When building the filesystem image, the log included this line, 
+
+    ~~~
+     *  正在执行任务: platformio run --target buildfs --environment esp32dev 
+    
+    Processing esp32dev (platform: espressif32; board: esp32dev; framework: arduino)
+    ---------------------------------------------------------------------------------------------------------------
+    Verbose mode can be enabled via `-v, --verbose` option
+    CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+    PLATFORM: Espressif 32 (53.3.10) > Espressif ESP32 Dev Module
+    HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+    DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+    PACKAGES: 
+     - framework-arduinoespressif32 @ 3.1.0 
+     - framework-arduinoespressif32-libs @ 5.3.0+sha.083aad99cf 
+     - tool-esptoolpy @ 4.8.5 
+     - tool-mklittlefs @ 3.2.0 
+     - tool-riscv32-esp-elf-gdb @ 14.2.0+20240403 
+     - tool-xtensa-esp-elf-gdb @ 14.2.0+20240403 
+     - toolchain-xtensa-esp-elf @ 13.2.0+20240530
+    LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+    LDF Modes: Finder ~ deep, Compatibility ~ soft
+    Found 52 compatible libraries
+    Scanning dependencies...
+    Dependency Graph
+    |-- ArduinoJson @ 7.3.0
+    |-- WebSockets @ 2.6.1
+    |-- MPU6050_tockn @ 1.5.2
+    |-- Simple FOC @ 2.3.4
+    |-- SimpleFOCDrivers @ 1.0.8
+    |-- SPI @ 3.1.0
+    |-- Wire @ 3.1.0
+    |-- FS @ 3.1.0
+    |-- SPIFFS @ 3.1.0
+    |-- Servo_STS3032
+    |-- WiFi @ 3.1.0
+    Building in release mode
+    Building FS image from 'data' directory to .pio/build/esp32dev/spiffs.bin
+    /index.html
+    /subdir/test.txt
+    ========================================= [SUCCESS] Took 0.98 seconds =========================================
+     *  终端将被任务重用，按任意键关闭。 
+    ~~~
+    
+    Notice that the name of the filesystem image is `spiffs.bin`, rather than `littlefs.bin` as expected.
+
+    ~~~
+    Building FS image from 'data' directory to .pio/build/esp32dev/spiffs.bin
+    /index.html
+    /subdir/test.txt    
+    ~~~   
+
+2. When building the filesystem image, the log included this line, 
+    
+    ~~~
+     *  正在执行任务: platformio run --target uploadfs --environment esp32dev 
+    
+    Processing esp32dev (platform: espressif32; board: esp32dev; framework: arduino)
+    ---------------------------------------------------------------------------------------------------------------
+    Verbose mode can be enabled via `-v, --verbose` option
+    CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+    PLATFORM: Espressif 32 (53.3.10) > Espressif ESP32 Dev Module
+    HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+    DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+    PACKAGES: 
+     - framework-arduinoespressif32 @ 3.1.0 
+     - framework-arduinoespressif32-libs @ 5.3.0+sha.083aad99cf 
+     - tool-esptoolpy @ 4.8.5 
+     - tool-mkfatfs @ 2.0.1 
+     - tool-mklittlefs @ 3.2.0 
+     - tool-mkspiffs @ 2.230.0 (2.30) 
+     - tool-riscv32-esp-elf-gdb @ 14.2.0+20240403 
+     - tool-xtensa-esp-elf-gdb @ 14.2.0+20240403 
+     - toolchain-xtensa-esp-elf @ 13.2.0+20240530
+    LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+    LDF Modes: Finder ~ deep, Compatibility ~ soft
+    Found 52 compatible libraries
+    Scanning dependencies...
+    Dependency Graph
+    |-- ArduinoJson @ 7.3.0
+    |-- WebSockets @ 2.6.1
+    |-- MPU6050_tockn @ 1.5.2
+    |-- Simple FOC @ 2.3.4
+    |-- SimpleFOCDrivers @ 1.0.8
+    |-- SPI @ 3.1.0
+    |-- Wire @ 3.1.0
+    |-- FS @ 3.1.0
+    |-- SPIFFS @ 3.1.0
+    |-- Servo_STS3032
+    |-- WiFi @ 3.1.0
+    Building in release mode
+    Building FS image from 'data' directory to .pio/build/esp32dev/spiffs.bin
+    /index.html
+    /subdir/test.txt
+    Looking for upload port...
+    
+    Warning! Please install `99-platformio-udev.rules`. 
+    More details: https://docs.platformio.org/en/latest/core/installation/udev-rules.html
+    
+    Auto-detected: /dev/ttyUSB0
+    Uploading .pio/build/esp32dev/spiffs.bin
+    esptool.py v4.8.5
+    Serial port /dev/ttyUSB0
+    Connecting.....
+    Chip is ESP32-D0WDQ6 (revision v1.1)
+    Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+    Crystal is 40MHz
+    MAC: a0:dd:6c:ae:3b:10
+    Uploading stub...
+    Running stub...
+    Stub running...
+    Changing baud rate to 460800
+    Changed.
+    Configuring flash size...
+    Auto-detected Flash size: 4MB
+    Flash will be erased from 0x00290000 to 0x003effff...
+    Compressed 1441792 bytes to 10055...
+    Writing at 0x00290000... (100 %)
+    Wrote 1441792 bytes (10055 compressed) at 0x00290000 in 8.0 seconds (effective 1433.9 kbit/s)...
+    Hash of data verified.
+    
+    Leaving...
+    Hard resetting via RTS pin...
+    ======================================== [SUCCESS] Took 12.20 seconds ========================================
+     *  终端将被任务重用，按任意键关闭。 
+    ~~~
+
+    Notice that the name of the uploaded filesystem image is `spiffs.bin`, rather than `littlefs.bin` as expected.
+
+    ~~~
+    Auto-detected: /dev/ttyUSB0
+    Uploading .pio/build/esp32dev/spiffs.bin
+    esptool.py v4.8.5
+    Serial port /dev/ttyUSB0
+    Connecting.....  
+    ~~~       
+
+&nbsp;
+### 3.3 Modify the C++ programs
+
+We replaced `SPIFFS` with `LittleFS` in [`embedded_fs.cpp`](https://github.com/housework-robot/main/blob/main/S06_robot_side/S06E06_src/src/Mushibot20250107/src/embedded_fs.cpp#L12),  
+~~~
+#include <LittleFS.h>
+
+void EmbeddedFS::setup_embeddedfs() {
+    // LittleFS.begin(bool formatOnFail, const char *basePath, uint8_t maxOpenFiles, const char *partitionLabel)
+    if (!LittleFS.begin(true, "/littlefs", 10U, "littlefs")) {
+    // if (!SPIFFS.begin(true, "/spiffs", 10U, "spiffs")) {
+    // if (!SPIFFS.begin(true)) {
+        Serial.printf("\n[WARN] LittleFS mount failed. \n");
+        return;
+    }
+    else {
+        Serial.printf("\n[INFO] Successfully mounts LittleFS at '%s'. \n",
+            LittleFS.mountpoint()
+        );        
+    }   
+
+    // Verify that the LittleFS file system works well.
+    // List file directory with 3 levels. 
+    list_dir("/", 3);
+}
+
+void EmbeddedFS::list_dir(String dir_name, int levels) {
+    const char *_dir_name = dir_name.c_str();
+    Serial.printf("\n[INFO] Listing directory: '%s'\n", dir_name);
+    Serial.printf("-- Notice that SPIFSS doesn't recognize directories, but it can find the files inside subdirs. --\n\n");
+
+    // File root = SPIFFS.open(_dir_name);
+    File root = LittleFS.open(_dir_name);
+    if (!root) {
+        Serial.printf("\n[WARN] Failed to open directory: %s.\n", _dir_name);
+        return;
+    }
+    if (!root.isDirectory()) {
+        Serial.printf("\n[WARN] '%s' not a directory. \n", _dir_name);
+        return;
+    }
+
+    File file = root.openNextFile();
+    while (file) {
+
+        if (file.isDirectory()) {
+            Serial.print("  DIR : ");
+            Serial.println(file.name());
+            
+            if (levels) {
+                list_dir(file.path(), levels - 1);
+            }
+        } else {
+            Serial.printf("  FILE: '%s', SIZE: %d \n", file.name(), file.size());
+        }
+        file = root.openNextFile();
+    }
+}
+~~~
+
+&nbsp;
+### 3.4 Compile the program, upload and run them
+
+The following log fragmentation is extracted from the execution result,
+
+~~~
+[INFO] Successfully mounts LittleFS at '/littlefs'. 
+
+[INFO] Listing directory: '/'
+-- Notice that SPIFSS doesn't recognize directories, but it can find the files inside subdirs. --
+
+[    64][E][vfs_api.cpp:23] open(): File system is not mounted
+
+[WARN] Failed to open file '/subdir/test.txt' for writing.
+[    74][E][vfs_api.cpp:23] open(): File system is not mounted
+
+[WARN] Failed to open file '/subdir/test.txt' for reading.
+
+~~~
+
+Notice that,  
+
+1. The mounting of LittleFS, `LittleFS.begin(true, "/littlefs", 10U, "littlefs")`, failed. 
+
+    Hence, it failed to list the `/` directory, in consequence.
+
+2. Even when we replaced `LittleFS.begin(true, "/littlefs", 10U, "spiffs")`, it still failed,
+
+   And the error message in log was harsher,
+
+   ~~~
+    E (20) esp_littlefs: partition "spiffs" could not be found
+    E (20) esp_littlefs: Failed to initialize LittleFS
+    [    51][E][LittleFS.cpp:79] begin(): Mounting LittleFS failed! Error: 261
+   ~~~
+
+   
+
+
 
