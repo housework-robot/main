@@ -312,7 +312,7 @@ we can take the following steps to upload files and directories to ESP32 board, 
 &nbsp;
 ### 2.4 Write C++ programs to manage the uploaded files
 
-We implemented [`embedded_fs.{h, cpp}`](/S06E06_src/src/Mushibot20250107/src) 
+We implemented [`embedded_fs.{h, cpp}`](./S06E06_src/src/Mushibot20250107/src) 
 for SPIFFS file system, and its application in the Mushibot system. 
 
 Following is the source code of `embedded_fs.h`.
