@@ -421,15 +421,17 @@ Notice that,
 
    Notice that, 
 
-   1. It uses `SPIFFS.begin(true)` to mount the file system, instead of `LittleFS` or others.
+   * It uses `SPIFFS.begin(true)` to mount the file system, instead of `LittleFS` or others.
   
-   2. `SPIFFS.begin()` has 4 input parameters, we used `true` for `formatOnFail`,
+   * `SPIFFS.begin()` has 4 input parameters, we used `true` for `formatOnFail`,
       which means that when mounting fails, it will format the related ESP32 memory space.
 
-   3. We used the default value, which is `"/spiffs"` for `basePath`,
+   * We used the default value, which is `"/spiffs"` for `basePath`,
       but actually you can use whatever name for the `basePath`, except that `"/"` is not allowed.
 
-
+   * For `partitionLabel`, `"spiffs"` works well, but not `"littlefs"`. 
+  
+     
 &nbsp;
 ### 2.5 Upload the programs to ESP32 board, and run them
 
