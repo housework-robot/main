@@ -26,7 +26,7 @@ This section provides a SPIFFS based file system implementation that works well 
 However, we didn't make LittleFS work properly in the Mushibot system, and the reason is unknown yet. 
 In the later section of this blog, we took a record of how we used LittleFS in the Mushibot system, and what bugs we encountered. 
 
-We tooks the following steps to make SPIFFS in the Mushibot system, 
+We tooks the following steps to use SPIFFS in the Mushibot system, 
 
 1. Configure `platformio.ini`,
 2. Create a partition table,
@@ -358,82 +358,208 @@ private:
 };
 
 #endif
+~~~ 
+
+&nbsp;
+#### 1. `setup_embeddedfs()` and `loop_embeddedfs()` 
+
+These two functions are used to integrate the SPIFFS file system into the Mushibot system.
+
+The usage of these 2 functions refer to [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) and 
+[`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp),
+
+~~~
+class WsWifi
+{
+public:
+    WsWifi();
+    virtual ~WsWifi();
+
+    // LittleFS wrapped as EmbeddedFS
+    EmbeddedFS embedded_fs = EmbeddedFS();
+    ...
+~~~
+
+~~~
+void WsWifi::setup_wswifi() {
+    // Setup the LittleFS.
+    embedded_fs.setup_embeddedfs();
+    ...
+}
+
+void WsWifi::loop_wswifi() {
+    embedded_fs.loop_embeddedfs();    
+    ...
+} 
+~~~
+
+&nbsp;
+#### 2. `setup_embeddedfs()`
+
+`embedded_fs` is based on `SPIFFS`.
+For example, `void setup_embeddedfs()` is implemented in the following way,
+
+~~~
+void EmbeddedFS::setup_embeddedfs() {
+    // LittleFS.begin(bool formatOnFail, const char *basePath, uint8_t maxOpenFiles, const char *partitionLabel)
+    // if (!LittleFS.begin(true, "/littlefs", 10U, "littlefs")) {
+    // if (!SPIFFS.begin(true, "/spiffs", 10U, "spiffs")) {
+    if (!SPIFFS.begin(true)) {
+        Serial.printf("\n[WARN] LittleFS mount failed. \n");
+        return;
+    }
+    else {
+        Serial.printf("\n[INFO] Successfully mounts LittleFS at '%s'. \n",
+            SPIFFS.mountpoint()
+        );        
+    }   
+
+    // Verify that the SPIFSS file system works well.
+    // List file directory with 3 levels. 
+    list_dir("/", 3);
+    write_file("/subdir/test.txt", "Hello: 20250106, 22:04");
+    read_file_to_serial("/subdir/test.txt");
+}
 ~~~
 
 Notice that, 
 
-1. `setup_embeddedfs()` and `loop_embeddedfs()` are used to integrate the SPIFFS file system into the Mushibot system.
+1. It uses `SPIFFS.begin(true)` to mount the file system, instead of `LittleFS` or others.
 
-   The usage of these 2 functions refer to [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) and 
-   [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp),
+2. `SPIFFS.begin()` has 4 input parameters, we used `true` for `formatOnFail`,
+    which means that when mounting fails, it will format the related ESP32 memory space.
 
-   ~~~
-    class WsWifi
-    {
-    public:
-        WsWifi();
-        virtual ~WsWifi();
-    
-        // LittleFS wrapped as EmbeddedFS
-        EmbeddedFS embedded_fs = EmbeddedFS();
-        ...
-   ~~~
+3. We used the default value, which is `"/spiffs"` for `basePath`,
+   but actually you can use whatever name for the `basePath`, except that `"/"` is not allowed.
 
-   ~~~
-    void WsWifi::setup_wswifi() {
-        // Setup the LittleFS.
-        embedded_fs.setup_embeddedfs();
-        ...
-    }
-    
-    void WsWifi::loop_wswifi() {
-        embedded_fs.loop_embeddedfs();    
-        ...
-    } 
-   ~~~
+4. For `partitionLabel`, `"spiffs"` works well, but not `"littlefs"`. 
 
-2. `embedded_fs` is based on `SPIFFS`.
+&nbsp;
+#### 3. `list_dir()`
 
-   For example, `void setup_embeddedfs()` is implemented in the following way,
+`list_dir(String dir_name, int levels)` is implemented in the following code, 
 
-   ~~~
-    void EmbeddedFS::setup_embeddedfs() {
-        // LittleFS.begin(bool formatOnFail, const char *basePath, uint8_t maxOpenFiles, const char *partitionLabel)
-        // if (!LittleFS.begin(true, "/littlefs", 10U, "littlefs")) {
-        // if (!SPIFFS.begin(true, "/spiffs", 10U, "spiffs")) {
-        if (!SPIFFS.begin(true)) {
-            Serial.printf("\n[WARN] LittleFS mount failed. \n");
-            return;
+~~~
+void EmbeddedFS::list_dir(String dir_name, int levels) {
+    const char *_dir_name = dir_name.c_str();
+    Serial.printf("\n[INFO] Listing directory: '%s'\n", dir_name);
+    Serial.printf("-- Notice that SPIFSS doesn't recognize directories, but it can find the files inside subdirs. --\n\n");
+
+    File root = SPIFFS.open(_dir_name);
+    ...
+    File file = root.openNextFile();
+    while (file) {
+        if (file.isDirectory()) {
+            Serial.print("  DIR : ");
+            Serial.println(file.name());
+            
+            if (levels) {
+                list_dir(file.path(), levels - 1);
+            }
+        } else {
+            Serial.printf("  FILE: '%s', SIZE: %d \n", file.name(), file.size());
         }
-        else {
-            Serial.printf("\n[INFO] Successfully mounts LittleFS at '%s'. \n",
-                SPIFFS.mountpoint()
-            );        
-        }   
-    
-        // Verify that the SPIFSS file system works well.
-        // List file directory with 3 levels. 
-        list_dir("/", 3);
-        write_file("/subdir/test.txt", "Hello: 20250106, 22:04");
-        read_file_to_serial("/subdir/test.txt");
+        file = root.openNextFile();
     }
-   ~~~
+}
+~~~
 
-   Notice that, 
+The following is the running result of `list_dir()`,
 
-   * It uses `SPIFFS.begin(true)` to mount the file system, instead of `LittleFS` or others.
-  
-   * `SPIFFS.begin()` has 4 input parameters, we used `true` for `formatOnFail`,
-      which means that when mounting fails, it will format the related ESP32 memory space.
+~~~
+[INFO] Listing directory: '/'
+-- Notice that SPIFSS doesn't recognize directories, but it can find the files inside subdirs. --
 
-   * We used the default value, which is `"/spiffs"` for `basePath`,
-      but actually you can use whatever name for the `basePath`, except that `"/"` is not allowed.
+  FILE: 'index.html', SIZE: 22430 
+  FILE: 'test.txt', SIZE: 22 
+~~~
 
-   * For `partitionLabel`, `"spiffs"` works well, but not `"littlefs"`. 
-  
+Notice that file `test.txt` is actually under directory `/subdir`, 
+but the directory name `subdir` didn't show up in the running result. 
+The reason is that SPIFFS doesn't support directory, as mentioned above.
+
+However quite strange, 
+
+1. `list_dir()` can traverse the tree-like file system and enumerate all files,
+
+2. `read_file_to_serial("/subdir/test.txt")` works fine to read the content of `test.txt` file.
+   
+&nbsp;
+#### 4. `read_file_to_serial()`
+
+`read_file_to_serial(String file_dirname)` is implemented in the following code, 
+
+~~~
+// The purpose of this function is to show how to read bytes from file.
+// In most case, you have to write your own read_file() to implement your own workflow.
+void EmbeddedFS::read_file_to_serial(String file_dirname) {
+    const char *_file_dirname = file_dirname.c_str();
+
+    File file = SPIFFS.open(_file_dirname);
+    if (!file || file.isDirectory()) {
+        Serial.printf("\n[WARN] Failed to open file '%s' for reading.\n", _file_dirname);
+        return;
+    }
+
+    Serial.printf("\n[INFO] Read from file '%s': \n", _file_dirname);
+    while (file.available()) {
+        Serial.write(file.read());
+    }
+    file.close();
+    Serial.printf("\n[INFO] End of file '%s'.\n", _file_dirname);
+}
+~~~
+
+As commented in the source code, 
+the purpose of this function is to show how to read bytes from file.
+And in most case, you have to write your own read_file() to implement your own workflow.
+
+For example, if you want to send out the content via `WebSocketsServer`, 
+you should replace `Serial.write(file.read())` to `webSocketsServer.sendTXT(client_id, file.read())` 
+
      
 &nbsp;
-### 2.5 Upload the programs to ESP32 board, and run them
+### 2.5 Upload the programs to ESP32 board
+
+As mentioned in the first section of this blog, we tooks the following steps to use SPIFFS in the Mushibot system, 
+
+1. Configure `platformio.ini`,
+2. Create a partition table,
+3. Make an image of the files, and upload to the ESP32 board, using Platformio tools,
+4. Write C++ programs to manage the uploaded files,
+5. Upload the programs to ESP32 board, and run them.
+
+For step 5, finally we used platformio to Upload the programs to ESP32 board, and run them.
+
+   <p align="center">
+     <img alt="upload the programs and run it in platformio" src="./S06E06_src/img/platformio_serial_monitor.png" width="85%">
+   </p>   
+
+As shown in the above screenshot, 
+
+1. In VSCode with platformio plugin, the check mark in the bottom menu bar is to compile all the programs, as the red `[1]` in the screenshot, 
+   and the right-arrow mark is to upload all the program to the board, as the red `[2]`. 
+
+2. If the compiling and uploading are successful, next step is to click the `Serial monitor (串行监控器)`, as the red `[3]` in the screenshot.
+
+   `Serial Monitor` is a plugin to the VSCode, developed by Microsoft.
+
+3. In the window of `serial monitor`, configure `port` and `baud rate` as in the `[4]` and `[5]` in the screenshot,
+
+   Once you have plugged in a serial cable to a USB port of you computer, the `port` dropdown list will contain this USB port, select it.
+
+   Baud rate is defined in the `main.cpp`,
+
+   ~~~
+
+   ~~~
+
+   To be more reliable, you can also add the this line to `platformio.ini`,
+
+   ~~~
+   monitor_speed = 115200`
+   ~~~
+
 
 
 &nbsp;
