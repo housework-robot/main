@@ -1025,9 +1025,9 @@ Notice that,
 
     Hence, it failed to list the `/` directory, in consequence.
 
-2. Even when we replaced `LittleFS.begin(true, "/littlefs", 10U, "spiffs")`, it still failed,
+2. Even when we changed `LittleFS.begin(true, "/littlefs", 10U, "littlefs")` to `LittleFS.begin(true, "/littlefs", 10U, "spiffs")`, it still failed,
 
-   And the error message in log was harsher,
+   And the error message in log was more severe,
 
    ~~~
     E (20) esp_littlefs: partition "spiffs" could not be found
@@ -1035,6 +1035,7 @@ Notice that,
     [    51][E][LittleFS.cpp:79] begin(): Mounting LittleFS failed! Error: 261
    ~~~
 
+We have reported these bugs to ESPRESSIF's [ESP32 Arduino forum](https://www.esp32.com/viewforum.php?f=19), with title "LittleFS for ESP32-WROOM chip". 
 
 &nbsp;
 ## 4. Video of the entire process
