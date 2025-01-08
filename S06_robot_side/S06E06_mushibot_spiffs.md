@@ -1035,7 +1035,14 @@ Notice that,
     [    51][E][LittleFS.cpp:79] begin(): Mounting LittleFS failed! Error: 261
    ~~~
 
-We have reported these bugs to ESPRESSIF's [ESP32 Arduino forum](https://www.esp32.com/viewforum.php?f=19), with title "LittleFS for ESP32-WROOM chip". 
+&nbsp;
+### 3.5 Bug reports to communities
+
+We reported these bugs to two communities, 
+
+1. ESPRESSIF's [ESP32 Arduino forum](https://www.esp32.com/viewforum.php?f=19), with title "LittleFS for ESP32-WROOM chip". 
+
+2. PLATFORMIO's [Development Platforms, with tag 'espressif32'](https://community.platformio.org/t/how-to-mount-littlefs-to-esp32-wroom-chip-using-platformio/45161), with title "How to mount LittleFS to ESP32 WROOM chip using Platformio?"
 
 &nbsp;
 ## 4. Video of the entire process
