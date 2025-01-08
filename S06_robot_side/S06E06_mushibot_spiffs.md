@@ -1040,7 +1040,7 @@ Notice that,
 
 We reported these bugs to two communities, 
 
-1. ESPRESSIF's [ESP32 Arduino forum](https://www.esp32.com/viewforum.php?f=19), with title "LittleFS for ESP32-WROOM chip". 
+1. ESPRESSIF's [ESP32 Arduino forum](https://www.esp32.com/viewtopic.php?f=19&t=43810), with title "LittleFS for ESP32-WROOM". 
 
 2. PLATFORMIO's [Development Platforms, with tag 'espressif32'](https://community.platformio.org/t/how-to-mount-littlefs-to-esp32-wroom-chip-using-platformio/45161), with title "How to mount LittleFS to ESP32 WROOM chip using Platformio?"
 
