@@ -764,7 +764,6 @@ The following configurations are available:
 * :obj:`G1_CFG`: G1 humanoid robot
 
 Reference: https://github.com/unitreerobotics/unitree_ros
-# 这里只有 Go1 的 config，没有 Go2 的 config
 """
 
 import omni.isaac.lab.sim as sim_utils
@@ -850,10 +849,6 @@ def main():
     # close the simulator
     env.close()
 ~~~
-
-- play.py 具体位置是，
-  ${HOME}/IsaacLab/source/standalone/workflows/rsl_rl/play.py
-- 运行 play.py 后，显示出了 agent_cfg 的结果如下，
 
 1. The source code of `play.py` locates at `/home/robot/IsaacLab/source/standalone/workflows/rsl_rl/play.py`. 
 
@@ -1003,12 +998,6 @@ EXTRAS_REQUIRE = {
 EXTRAS_REQUIRE["rl_games"] = EXTRAS_REQUIRE["rl-games"]
 EXTRAS_REQUIRE["rsl_rl"] = EXTRAS_REQUIRE["rsl-rl"]
 ~~~
-
-- setup.py 的具体位置是，
-  ${HOME}/IsaacLab/source/extensions/omni.isaac.lab_tasks/setup.py
-- rsl_rl package 是从 rsl_rl github 上下载的，网址是，
-  https://github.com/leggedrobotics/rsl_rl/
-- 我们需要在 Isaac Lab 系统外，重新安装 rsl_rl package，因为后续工作，将脱离 Isaac Lab 系统，
 
 1. The source code of `setup.py` locates at `/home/robot/IsaacLab/source/extensions/omni.isaac.lab_tasks/setup.py`
 
