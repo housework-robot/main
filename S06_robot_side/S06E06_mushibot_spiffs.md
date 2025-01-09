@@ -1044,6 +1044,71 @@ We reported these bugs to two communities,
 
 2. PLATFORMIO's [Development Platforms, with tag 'espressif32'](https://community.platformio.org/t/how-to-mount-littlefs-to-esp32-wroom-chip-using-platformio/45161), with title "How to mount LittleFS to ESP32 WROOM chip using Platformio?"
 
+PLATFORMIO's engineer gave some suggestions. Even though not yet solved our problems, but his suggestion taught us some tricks to use Platformio correctly. 
+
+#### 1. The version of ESP32 platform 
+
+   <p align="center">
+     <img alt="install and uninstall ESP32 in platformio with different versions" src="./S06E06_src/img/platformio_config_esp32version.png" width="85%">
+   </p> 
+
+One root cause of our problems is the version of ESP32 platform used by our Platformio project.
+
+1. In `platformio.ini`, we should specify the ESP32 platform with a specific version,
+   in two ways, 1. give the version number, 2. give the URL to the zip. 3. use the default one. 
+
+   ~~~
+   [env:esp32dev]
+   ; This is the best way
+   ;platform = espressif32 @ 6.9.0
+   
+   ; This is allowed
+   ;platform = https://github.com/pioarduino/platform-espressif32/releases/download/stable/platform-espressif32.zip
+
+   ; This is allowed
+   ;platform = https://github.com/pioarduino/platform-espressif32/releases/download/51.03.04/platform-espressif32.zip
+
+   ; This is allowd, and the default one, i.e the ESP32 with the latest version, will be used
+   ;platform = espressif32
+   ~~~
+
+   In case no specific version is given, the Platformio will select the default one, that is the ESP32 with the latest version to use.
+   In the above screenshot, version 6.9.0 with a specific branch was the latest version of ESP32, hence, it is selected.
+   
+2. To play safe, uninstall all other versions of ESP32 platforms. 
+
+   Keep only one version that is aligned with the ESP32 platform version in `platformio.ini`, referring the above screenshot for execution steps.
+
+3. Close the VSCode with Platformio, and then remove the `packages` and `platforms` directories in the platformio root directory.
+
+   ~~~
+   $ pwd
+   /home/robot/.platformio
+
+   $ rm -rf packages
+   $ rm -rf platforms
+
+   $ ls
+   appstate.json  homestate.json  penv
+   ~~~
+
+4. Re-open VSCode with Platformio, the Platformio will automatically reinstall `packages` and `platfoms` in the platformio root directory.
+
+5. Click `Full Clean` in Platformio left-side bar.
+
+   Then click `Build Filesystem Image`, and `Upload Filesystem Image` in order.
+
+
+#### 2. littlefs.bin, not spiffs.bin
+
+For unknown reason, the platformio always built filesystem image from 'data' directory to `.pio/build/esp32dev/spiffs.bin`. 
+However, the correct one should be `.pio/build/esp32dev/littlefs.bin`. 
+
+We haven't yet found the root cause of this bug. 
+
+  
+
+
 &nbsp;
 ## 4. Video of the entire process
 
