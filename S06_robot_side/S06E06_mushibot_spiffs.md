@@ -1044,6 +1044,8 @@ We reported these bugs to two communities,
 
 2. PLATFORMIO's [Development Platforms, with tag 'espressif32'](https://community.platformio.org/t/how-to-mount-littlefs-to-esp32-wroom-chip-using-platformio/45161), with title "How to mount LittleFS to ESP32 WROOM chip using Platformio?"
 
+To be convenient to repeat the LittleFS bugs, we created a simple project [`pio_littlefs_202501091009`](https://github.com/housework-robot/main/tree/main/S06_robot_side/S06E06_src/src/pio_littlefs_202501091009) which is stored in this repo.
+
 PLATFORMIO's engineer gave some suggestions. Even though not yet solved our problems, but his suggestion taught us some tricks to use Platformio correctly. 
 
 #### 1. The version of ESP32 platform 
