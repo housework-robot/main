@@ -9,12 +9,8 @@
 
 #include <Arduino.h>
 #include <FS.h>
-#include <SPIFFS.h>
-
-// Even though LittleFS is to replace SPIFFS, however, for unknown reason in our environment, 
-// we can successfully upload directories and files in LittleFS with Platformio, 
-// but we cannot use LittleFS to access the uploaded files. 
-// #include <LittleFS.h>
+// #include <SPIFFS.h>
+#include <LittleFS.h>
 
 
 class EmbeddedFS
