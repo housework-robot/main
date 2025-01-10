@@ -11,13 +11,14 @@ void EmbeddedFS::setup_embeddedfs() {
     // LittleFS.begin(bool formatOnFail, const char *basePath, uint8_t maxOpenFiles, const char *partitionLabel)
     // if (!LittleFS.begin(true, "/littlefs", 10U, "littlefs")) {
     // if (!SPIFFS.begin(true, "/spiffs", 10U, "spiffs")) {
-    if (!SPIFFS.begin(true)) {
+    // if (!SPIFFS.begin(true)) {
+    if (!LittleFS.begin(true, "/spiffs", 10U, "spiffs")) {
         Serial.printf("\n[WARN] LittleFS mount failed. \n");
         return;
     }
     else {
         Serial.printf("\n[INFO] Successfully mounts LittleFS at '%s'. \n",
-            SPIFFS.mountpoint()
+            LittleFS.mountpoint()
         );        
     }   
 
@@ -36,9 +37,9 @@ void EmbeddedFS::loop_embeddedfs() {
 void EmbeddedFS::list_dir(String dir_name, int levels) {
     const char *_dir_name = dir_name.c_str();
     Serial.printf("\n[INFO] Listing directory: '%s'\n", dir_name);
-    Serial.printf("-- Notice that SPIFSS doesn't recognize directories, but it can find the files inside subdirs. --\n\n");
+    // Serial.printf("-- Notice that SPIFSS doesn't recognize directories, but it can find the files inside subdirs. --\n\n");
 
-    File root = SPIFFS.open(_dir_name);
+    File root = LittleFS.open(_dir_name);
     if (!root) {
         Serial.printf("\n[WARN] Failed to open directory: %s.\n", _dir_name);
         return;
@@ -69,7 +70,7 @@ void EmbeddedFS::list_dir(String dir_name, int levels) {
 void EmbeddedFS::create_dir(String dir_path) {
     const char *_dir_path = dir_path.c_str();
 
-    if (SPIFFS.mkdir(_dir_path)) {
+    if (LittleFS.mkdir(_dir_path)) {
         Serial.printf("\n[INFO] Successfully create directory: '%s'.\n", _dir_path);
     } else {
         Serial.printf("\n[WARN] Fail to create directory: '%s'.\n", _dir_path);
@@ -79,7 +80,7 @@ void EmbeddedFS::create_dir(String dir_path) {
 void EmbeddedFS::delete_dir(String dir_path) {
     const char *_dir_path = dir_path.c_str();
 
-    if (SPIFFS.rmdir(_dir_path)) {
+    if (LittleFS.rmdir(_dir_path)) {
         Serial.printf("\n[INFO] Successfully delete directory: '%s'.\n", _dir_path);
     } else {
         Serial.printf("\n[WARN] Fail to delete directory: '%s'.\n", _dir_path);
@@ -92,7 +93,7 @@ void EmbeddedFS::write_file(String file_dirname, String msg) {
     const char *message = msg.c_str();
     String sub_msg = msg.substring(0, 5);
 
-    File file = SPIFFS.open(_file_dirname, FILE_WRITE);
+    File file = LittleFS.open(_file_dirname, FILE_WRITE);
     if (!file) {
         Serial.printf("\n[WARN] Failed to open file '%s' for writing.\n", _file_dirname);
         return;
@@ -111,7 +112,7 @@ void EmbeddedFS::append_file(String file_dirname, String msg) {
     const char *message = msg.c_str();
     String sub_msg = msg.substring(0, 5);
 
-    File file = SPIFFS.open(_file_dirname, FILE_APPEND);
+    File file = LittleFS.open(_file_dirname, FILE_APPEND);
     if (!file) {
         Serial.printf("\n[WARN] Failed to open file '%s' for appending.\n", _file_dirname);
         return;
@@ -129,7 +130,7 @@ void EmbeddedFS::rename_file(String file_dirname1, String file_dirname2) {
     const char *_file_dirname1 = file_dirname1.c_str();
     const char *_file_dirname2 = file_dirname2.c_str();
 
-    if (SPIFFS.rename(_file_dirname1, _file_dirname2)) {
+    if (LittleFS.rename(_file_dirname1, _file_dirname2)) {
         Serial.printf("\n[INFO] Successfully rename file '%s' to file '%s'.\n", 
             _file_dirname1, _file_dirname2);
     } else {
@@ -141,7 +142,7 @@ void EmbeddedFS::rename_file(String file_dirname1, String file_dirname2) {
 void EmbeddedFS::delete_file(String file_dirname) {
     const char *_file_dirname = file_dirname.c_str();
 
-    if (SPIFFS.remove(_file_dirname)) {
+    if (LittleFS.remove(_file_dirname)) {
         Serial.printf("\n[INFO] Successfully delete file '%s'.\n", _file_dirname);
     } else {
         Serial.printf("\n[WARN] Failed to delete file '%s'.\n", _file_dirname);
@@ -154,7 +155,7 @@ void EmbeddedFS::delete_file(String file_dirname) {
 void EmbeddedFS::read_file_to_serial(String file_dirname) {
     const char *_file_dirname = file_dirname.c_str();
 
-    File file = SPIFFS.open(_file_dirname);
+    File file = LittleFS.open(_file_dirname);
     if (!file || file.isDirectory()) {
         Serial.printf("\n[WARN] Failed to open file '%s' for reading.\n", _file_dirname);
         return;
