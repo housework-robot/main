@@ -765,7 +765,7 @@ Hard resetting via RTS pin...
 
 
 &nbsp;
-## 3. LittleFFS failed
+## 3. LittleFFS failed, now fixed!
 
 Similar to the previous section, we took 5 steps to use `LittleFS` in the Mushibot system, 
 but we replaced `SPIFFS` with `LittleFS` in the configuration files and programs. 
@@ -1046,6 +1046,8 @@ We reported these bugs to two communities,
 
 To be convenient to repeat the LittleFS bugs, we created a simple project [`pio_littlefs_202501091009`](https://github.com/housework-robot/main/tree/main/S06_robot_side/S06E06_src/src/pio_littlefs_202501091009) which is stored in this repo.
 
+**UPDATE** Even though the bug has been fixed, we leave the `pio_littlefs_202501091009` untouched, so as to repeat the bug if necessary. 
+
 PLATFORMIO's engineer gave some suggestions. Even though not yet solved our problems, but his suggestion taught us some tricks to use Platformio correctly. 
 
 #### 1. The version of ESP32 platform 
@@ -1108,6 +1110,60 @@ However, the correct one should be `.pio/build/esp32dev/littlefs.bin`.
 
 We haven't yet found the root cause of this bug. 
 
+**UPDATE** Now the root cause of the bug has been found, it was a typo. 
+
+~~~
+[env:esp32dev]
+platform = espressif32 
+board = esp32dev
+framework = arduino
+board_build.filesystem = littlefs
+board_build.partitions = default_4MB.csv
+
+lib_deps = 
+	bblanchon/ArduinoJson@^7.2.1
+	links2004/WebSockets@^2.6.1
+	tockn/MPU6050_tockn@^1.5.2
+	askuric/Simple FOC@^2.3.4
+	simplefoc/SimpleFOCDrivers@^1.0.8
+	SPI
+	Wire
+~~~
+
+Notice that it should be `board_build.filesystem = littlefs`, we mis-spelled as `filesytem`. 
+
+In addition, once changing from `spiffs` to `littlefs`, we needed to change `embedded_fs.{h, cpp}`, replacing `SPIFFS` with `LittleFS`. 
+
+~~~
+void EmbeddedFS::setup_embeddedfs() {
+    // LittleFS.begin(bool formatOnFail, const char *basePath, uint8_t maxOpenFiles, const char *partitionLabel)
+    // if (!SPIFFS.begin(true, "/spiffs", 10U, "spiffs")) {
+    // if (!SPIFFS.begin(true)) {
+    if (!LittleFS.begin(true, "/littlefs", 10U, "littlefs")) {
+        Serial.printf("\n[WARN] LittleFS mount failed. \n");
+        return;
+    }
+    else {
+        Serial.printf("\n[INFO] Successfully mounts LittleFS at '%s'. \n",
+            LittleFS.mountpoint()
+        );        
+    }   
+
+    ...
+}
+~~~
+
+And also, we need to use "spiffs" rather than "littlefs" in the partition table, as following, 
+
+~~~
+# Name,   Type, SubType, Offset,  Size, Flags
+nvs,      data, nvs,     0x9000,  0x5000,
+otadata,  data, ota,     0xe000,  0x2000,
+app0,     app,  ota_0,   0x10000, 0x140000,
+app1,     app,  ota_1,   0x150000,0x140000,
+spiffs, data, spiffs, 0x290000, 0x160000,
+coredump, data, coredump,0x3F0000,0x10000,
+~~~
   
 
 
