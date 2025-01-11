@@ -61,7 +61,7 @@ Hence we skip the RTMP and WebRTC topic in this blog, and focus on Wifi, WebSock
 We implemented a C++ class `WsWifi` in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) 
 and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
 
-### 2.1 Connect to wifi
+### 2.1 Construct a wifi station
 
 The workflow to set up the connection to wifi is in [`WsWifi::setup_wswifi()`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
 
@@ -91,9 +91,85 @@ void WsWifi::setup_wswifi() {
 
 Read the comment in the source code, that explains the purpose of each line of the source code. 
 
+Notice that there are two wifi modes, one is the station mode (STA), the other is the access point (AP) mode. 
+Here we use the station mode, that our ESP32 behaves as a client, connecting to an existing wifi network. 
+
+The existing wifi network may be provided by a hard access point e.g. a router, 
+or a soft access point e.g. a program running on a ESP32 chip. 
+
 
 &nbsp;
-### 2.2 Wifi event handlers
+### 2.2 Connect to wifi
+
+~~~
+void WsWifi::connect_wifi(String ssid, String password)
+{
+    int cnt = 0;
+    WiFi.begin(ssid, password);
+    delay(2000);
+
+    // Wait for WiFi.begin(ssid, password) to come into effect.  
+    while (WiFi.status()!=WL_CONNECTED) { 
+        WiFi.begin(ssid, password);
+
+        cnt += 1;
+        if (cnt > 5) {
+            break;
+        }
+        delay(2000);
+    }
+
+    if (cnt > 5) {
+        Serial.printf("\n[WARN] connect_wifi(): The mushibot can NOT connected to '%s' wifi network.\n", 
+            String(WiFi.SSID()));
+    } 
+    else {
+        robot_ip = WiFi.localIP();
+        Serial.printf("\n[INFO] connect_wifi(): The mushibot is connected to '%s' wifi network, with '%s' IP address.\n", 
+            String(WiFi.SSID()), WiFi.localIP().toString());
+    }
+}
+~~~
+
+`WiFi.begin(ssid, password)` connects the station to the wifi network. But it doesn't guarantee that it always succeeds. 
+If fail, try again. 
+
+
+&nbsp;
+### 2.3 Scan for available wifi APs
+
+~~~
+void WsWifi::scan_wifi() {
+    Serial.printf("\n[INFO] Scan wifi start:\n");
+
+    // WiFi.scanNetworks will return the number of networks found
+    int num_wifi = WiFi.scanNetworks();
+    delay(1000);
+
+    if (num_wifi == 0) {
+        Serial.printf("\t No wifi network is found.\n");
+    } 
+    else {  
+        for (int i = 0; i < num_wifi; ++i) {
+            Serial.printf("   [%d] Wifi-name: '%s', Signal-strength: %d, Authentication: ",
+                i, String(WiFi.SSID(i)), abs(WiFi.RSSI(i))
+            );
+            Serial.println(
+                (WiFi.encryptionType(i) == WIFI_AUTH_OPEN) ? " without password." : " with password."
+            );
+        }
+    }
+    Serial.println("");
+}
+~~~
+
+Scanning for available wifi access points is optional. 
+
+`WiFi.RSSI` is the wifi signal strength. The bigger RSSI the stronger wifi signal, no matter RSSI value is positive or negative.
+
+
+&nbsp;
+### 2.4 Wifi event handlers
 
 The wifi event handlers are implemented in [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
 
@@ -120,7 +196,7 @@ Notice that,
 
    Otherwise it violates the signature of [`WiFi.onEvent(WiFiEventFuncCb cbEvent, arduino_event_id_t event)`](https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/src/WiFiGeneric.cpp#L895).
 
-2. The handlers for ARDUINO_EVENT_WIFI_STA_CONNECTED, ARDUINO_EVENT_WIFI_STA_GOT_IP, and ARDUINO_EVENT_WIFI_STA_DISCONNECTED
+2. The handlers for wifi events, `ARDUINO_EVENT_WIFI_STA_CONNECTED`, `ARDUINO_EVENT_WIFI_STA_GOT_IP`, and `ARDUINO_EVENT_WIFI_STA_DISCONNECTED`
    only print out the related information.
 
    `WiFi.localIP()` provides the IP address of the ESP32 in the local network, it is NOT the public IP address.
