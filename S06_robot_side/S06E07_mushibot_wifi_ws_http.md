@@ -59,7 +59,8 @@ Hence we skip the RTMP and WebRTC topic in this blog, and focus on Wifi, WebSock
 ## 2. Wifi
 
 We implemented a C++ class `WsWifi` in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) 
-and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
+and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
+following the example code in [the ESP32 official guide](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html).
 
 ### 2.1 Construct a wifi station
 
@@ -131,8 +132,9 @@ void WsWifi::connect_wifi(String ssid, String password)
 }
 ~~~
 
-`WiFi.begin(ssid, password)` connects the station to the wifi network. But it doesn't guarantee that it always succeeds. 
-If fail, try again. 
+`WiFi.begin(ssid, password)` connects the station to the wifi network. 
+
+But it doesn't guarantee that it always succeeds. If fail, try again. 
 
 
 &nbsp;
