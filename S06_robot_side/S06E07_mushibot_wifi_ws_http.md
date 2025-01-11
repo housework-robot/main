@@ -55,4 +55,14 @@ For step 4.1 and 4.2, RTMP and WebRTC for video streaming, we have discussed thi
 
 Hence we skip the RTMP and WebRTC topic in this blog, and focus on Wifi, WebSocket and Http/s connections for Arduino-ESP32. 
 
+&nbsp;
+## 2. Wifi
+
+
+&nbsp;
+## 3. WebSocket
+
+&nbsp;
+## 4. HTTP/S
+
 
