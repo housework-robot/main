@@ -355,4 +355,21 @@ void webSocketEventCallback(uint8_t num, WStype_t type, uint8_t *payload, size_t
 
 Therefore, we implemented `webSocketEventCallback()` in [`main.cpp`](./S06E06_src/src/Mushibot20250107/src/main.cpp#L47).
 
+&nbsp;
+## 6. Future work
 
+1. Secure Websockets
+
+   Referring to [the arduinoWebSocket github repo](https://github.com/Links2004/arduinoWebSockets/?tab=readme-ov-file#wss--ssl),  
+   >  `arduinoWebSockets wss/SSL` library supports:
+   >   * wss/SSL for ESP32 in client mode
+   >   * wss/SSL is not natively supported in WebSocketsServer,
+   >     however it is possible to achieve secure websockets by running the device behind an SSL proxy.
+   
+   we will implement a secure websocket communication between the Mushibots and the web server.
+
+2. Secure web server
+
+   So far our web server is for testing purpose, once it is deployed in a production environment, the web server will provide HTTPS service.
+
+   At the same time, Mushibot's http client should be changed to HTTPS client. 
