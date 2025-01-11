@@ -1,4 +1,4 @@
-# Anatomy of Mushibot's Wifi WebSockets and HTTP/S connections
+# Anatomy of Mushibot's Wifi, WebSocket, and Https
 
 ## 1. Objectives
 
@@ -213,6 +213,56 @@ TO BE CONTINUED
 
 &nbsp;
 ## 3. WebSocket
+
+We implemented a WebSocketServer in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) 
+and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp). 
+
+
+### 3.1 Construct a WebSocket server
+
+1. First we initialized a WebSocketsServer instance in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h), 
+    with port `81`. 
+
+    ~~~
+    WebSocketsServer websocket = WebSocketsServer(81);
+    ~~~
+
+2. Then in the [`WsWifi::setup_wswifi()`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp#L33), 
+    we started up the WebSocket server, by `websocket.begin()`. 
+
+    Also, we hooked a handler to the WebSocket server to handle the WS events, by `websocket.onEvent(webSocketEventCallback)`.
+    
+    ~~~
+    void WsWifi::setup_wswifi() {
+        ...
+        // Setup the websocket. 
+        websocket.begin();
+        websocket.onEvent(webSocketEventCallback);
+    }
+    ~~~
+
+3. Finally, we executed [`websocket.loop()`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp#L55)
+   
+    ~~~
+    void WsWifi::loop_wswifi() {
+        ...
+        websocket.loop();
+    }
+    ~~~
+
+    in ESP32's main [`loop()`](./S06E06_src/src/Mushibot20250107/src/main.cpp#L78).
+    
+    ~~~
+    void loop()
+    {
+        ...
+        wswifi.loop_wswifi();
+    }
+    ~~~
+   
+
+&nbsp;
+### 3.2 
 
 &nbsp;
 ## 4. HTTP/S
