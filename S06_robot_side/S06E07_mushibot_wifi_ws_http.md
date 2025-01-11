@@ -207,18 +207,80 @@ Notice that,
 
 
 &nbsp;
-### 2.3 Public IP address
+## 3. Get public IP address
 
-TO BE CONTINUED
+We implemented a function `get_public_IP_address()` in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) 
+and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
+
+~~~
+IPAddress WsWifi::get_public_IP_address() {
+    HTTPClient http_client;
+    String public_ip_str;
+    const char* public_ip_chars;
+    JsonDocument public_ip_json;
+    IPAddress public_ip_address;
+    int httpResponseCode;
+
+    if (WiFi.status() == WL_CONNECTED) {
+        http_client.begin(public_ip_api);
+        httpResponseCode = http_client.GET();
+
+        if (httpResponseCode > 0) {            
+            deserializeJson(public_ip_json, http_client.getStream());
+
+            serializeJson(public_ip_json, public_ip_str);
+            Serial.printf("\n[DEBUG] The Mushibot's public IP address is: '%s' \n", public_ip_str.c_str());
+
+            public_ip_chars = public_ip_json["ip"];
+            // Serial.printf("public_ip_chars: '%s' \n", public_ip_chars);
+            public_ip_address.fromString(public_ip_chars);
+            // Serial.println(public_ip_address);
+        }
+        else {
+            Serial.printf("\n[WARN] Cannot access '%s' to get public IP address, http code is: '%d'.\n", 
+                public_ip_api, httpResponseCode);
+        }
+
+        http_client.end();
+    }
+
+    return public_ip_address;
+}
+~~~
+
+Notice that, 
+
+1. In `http_client.begin(public_ip_api)`,
+  
+   `public_ip_api` is a const char* defined in
+   [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h),
+
+   whose value is
+   `const char *public_ip_api = "https://realip.cc/"`.
+
+2. `https://realip.cc/` is the URL of a IP lookup service,
+   referring to [ip-info-api](https://github.com/ihmily/ip-info-api?tab=readme-ov-file).
+
+   Even though there are many IP lookup services in the list,
+   some of them can not be accessed from a program,
+   some of them are not reliable, sometimes works, sometimes not.
+
+   Therefore, when `get_public_IP_address()` crashes,
+   a quick solution is to change an IP address lookup service.
+
 
 &nbsp;
-## 3. WebSocket
+## 4. Https client
+
+
+&nbsp;
+## 5. WebSocket
 
 We implemented a WebSocketServer in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) 
 and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp). 
 
 
-### 3.1 Construct a WS server
+### 5.1 Construct a WS server
 
 1. First we initialized a WebSocketsServer instance in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h), 
     with port `81`. 
@@ -262,7 +324,7 @@ and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
    
 
 &nbsp;
-### 3.2 WS event handler
+### 5.2 WS event handler
 
 In [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
 `webSocketEventCallback` is disclaimed as an external function. 
@@ -292,9 +354,5 @@ void webSocketEventCallback(uint8_t num, WStype_t type, uint8_t *payload, size_t
 `mushibot.get_status()` cannot be accessed in [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
 
 Therefore, we implemented `webSocketEventCallback()` in [`main.cpp`](./S06E06_src/src/Mushibot20250107/src/main.cpp#L47).
-
-
-&nbsp;
-## 4. HTTP/S
 
 
