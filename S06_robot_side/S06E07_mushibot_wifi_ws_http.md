@@ -50,7 +50,7 @@ The lifecycle of the communication between a Mushibot and a human player consist
         and then sends a http/s request to the web server, to deregister itself as a unavailable robot. 
 
 
-For step 4.1 and 4.2, RTMP and WebRTC for video streaming, we discussed this topic in our previous blog, 
+For step 4.1 and 4.2, RTMP and WebRTC for video streaming, we have discussed this topic in our previous blog.
 "[Video Streaming from Unitree Go2 to Web Browsers](https://github.com/housework-robot/main/blob/main/S05_communication/S05E02_go2_video_streaming.md)", 
 
 Hence we skip the RTMP and WebRTC topic in this blog, and focus on Wifi, WebSocket and Http/s connections for Arduino-ESP32. 
