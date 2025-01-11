@@ -218,7 +218,7 @@ We implemented a WebSocketServer in [`wswifi.h`](./S06E06_src/src/Mushibot202501
 and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp). 
 
 
-### 3.1 Construct a WebSocket server
+### 3.1 Construct a WS server
 
 1. First we initialized a WebSocketsServer instance in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h), 
     with port `81`. 
@@ -262,7 +262,37 @@ and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
    
 
 &nbsp;
-### 3.2 
+### 3.2 WS event handler
+
+In [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
+`webSocketEventCallback` is disclaimed as an external function. 
+
+`webSocketEventCallback()` is implemented in [`main.cpp`](./S06E06_src/src/Mushibot20250107/src/main.cpp#L47). 
+
+~~~
+void webSocketEventCallback(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
+{
+    if (type == WStype_CONNECTED)
+    {
+        printf("[EVENT] %s connected to %s\n", wswifi.robot_ip, wswifi.sta_ssid);
+    }
+    if (type == WStype_TEXT)
+    {
+        JsonDocument status_json = mushibot.get_status();
+
+        String status_string;
+        serializeJson(doc, status_string);
+        doc.clear();
+
+        wswifi.websocket.broadcastTXT(status_str);
+    }
+}
+~~~
+
+`mushibot.get_status()` cannot be accessed in [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
+
+Therefore, we implemented `webSocketEventCallback()` in [`main.cpp`](./S06E06_src/src/Mushibot20250107/src/main.cpp#L47).
+
 
 &nbsp;
 ## 4. HTTP/S
