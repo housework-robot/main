@@ -58,6 +58,80 @@ Hence we skip the RTMP and WebRTC topic in this blog, and focus on Wifi, WebSock
 &nbsp;
 ## 2. Wifi
 
+We implemented a C++ class `WsWifi` in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) 
+and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
+
+### 2.1 Connect to wifi
+
+The workflow to set up the connection to wifi is in [`WsWifi::setup_wswifi()`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
+
+~~~
+void WsWifi::setup_wswifi() {
+    ...
+    // Set wifi mode to be WIFI_STA
+    WiFi.mode(WIFI_STA);
+
+    // Optionally, clear up the previous wifi. 
+    WiFi.disconnect();
+    delay(1000);
+
+    // Hook the event handlers. 
+    WiFi.onEvent(handle_wifiConnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_CONNECTED);
+    WiFi.onEvent(handle_wifiGotIP, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_GOT_IP);
+    WiFi.onEvent(handle_wifiDisconnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+
+    // Optionally, scan the available wifi's. 
+    scan_wifi();
+
+    // Connect to one wifi network, that we know ID and password beforehand.
+    connect_wifi(sta_ssid, sta_password); 
+    ...
+}
+~~~
+
+Read the comment in the source code, that explains the purpose of each line of the source code. 
+
+
+&nbsp;
+### 2.2 Wifi event handlers
+
+The wifi event handlers are implemented in [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
+
+~~~
+void handle_wifiConnected(WiFiEvent_t event, WiFiEventInfo_t info){
+    Serial.printf("\n[EVENT] The mushibot is connected to wifi network '%s', waiting for getting IP address.\n", 
+        String(WiFi.SSID()) );
+}
+
+void handle_wifiGotIP(WiFiEvent_t event, WiFiEventInfo_t info){
+    Serial.printf("\n[EVENT] The mushibot is connected to '%s', with '%s' IP address.\n", 
+        String(WiFi.SSID()), WiFi.localIP().toString());
+}
+
+void handle_wifiDisconnected(WiFiEvent_t event, WiFiEventInfo_t info){
+    Serial.printf("\n[EVENT] The mushibot is disconnected from wifi network.\n" );
+    // Serial.printf("\t Reason: %s \n", info.wifi_sta_disconnected.reason);
+}
+~~~
+
+Notice that, 
+
+1. The wifi event handlers can NOT be implemented as member functions of any custom class like `WsWifi`.
+
+   Otherwise it violates the signature of [`WiFi.onEvent(WiFiEventFuncCb cbEvent, arduino_event_id_t event)`](https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/src/WiFiGeneric.cpp#L895).
+
+2. The handlers for ARDUINO_EVENT_WIFI_STA_CONNECTED, ARDUINO_EVENT_WIFI_STA_GOT_IP, and ARDUINO_EVENT_WIFI_STA_DISCONNECTED
+   only print out the related information.
+
+   `WiFi.localIP()` provides the IP address of the ESP32 in the local network, it is NOT the public IP address.
+
+   `info.wifi_sta_disconnected.reason` sometimes may throw core dump exception because `info` is a null pointer.
+
+
+&nbsp;
+### 2.3 Public IP address
+
+TO BE CONTINUED
 
 &nbsp;
 ## 3. WebSocket
