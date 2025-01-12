@@ -343,7 +343,7 @@ manually click the secure icon on the Chrome browser.
 
 4. The screenshot below on the right side includes the summary of the certificate, and the button to download the certificate. 
 
-   Notice that the certificate contains a certificate to prove the identity of itself
+   Notice that the certificate contains a certificate to prove the identity of itself, 
    and a public key to encrypt the messages between the https client and the https website. 
 
    <p align="center">
