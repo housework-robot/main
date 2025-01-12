@@ -272,6 +272,64 @@ Notice that,
 &nbsp;
 ## 4. Https client
 
+"[ESP32 HTTPS Requests](https://randomnerdtutorials.com/esp32-https-requests/)"
+is a good tutorial on how to implement a https client in ESP32 
+to access a https website. 
+
+### 4.1 Workflow
+
+The following diagram illustrates the workflow that a https client in ESP32 
+to send a request to a https website, and then receive a response from the website. 
+
+   <p align="center">
+     <img alt="the workflow that an ESP32 https client accesses a https website" src="./S06E07_src/img/ESP32-check-server-certificate.png" width="85%">
+   </p>  
+
+    1.  We need to download the certificate manually beforehand, 
+        from the https website, and store it in ESP32.
+    
+    2.  By calling `HTTPClient.begin(*store_cert, website_URL)`, 
+        our programm tries to setup the connection from the esp32 to the https website.
+       
+      2.1  The arduino-esp32 `HTTPClient` library automatically downloads the certificate 
+           from the website whose address is `website_URL`.
+    
+           The downloaded certificate consists many contents, 
+           including a certificate which is used to prove its identity,
+           and a public key to encrypt the messages between the https client in the esp32 and the https website. 
+    
+      2.2  The arduino-esp32 library automatically compares the downloaded certificate 
+           with the trusted certificate that stored in our esp32 beforehand.
+    
+           If the two certificates are identical, 
+           it means the `website_URL` is the true address of the https website, rather than a hijacked fake one.
+    
+    3.  Our program sends a secure request from the esp32 https client to the https website.
+       
+      3.1  The arduino-esp32 library automatically uses the public key of the https website in the downloaded certificate,
+           to encrypt our request.
+    
+      3.2  When the https website receives our secure request, it uses its private key to decrypt the request.
+    
+    4.  The https website sends a response to the esp32 https client.
+    
+      4.1  The https website uses its private key to encrypt its response.
+        
+      4.2  When our https client receives the response the https website,
+           the arduino-esp32 library automatically uses the public key of the https website in the downloaded certificate,
+           to decrypt the response.
+
+&nbsp;
+### 4.2 Download the trusted certificate manually
+
+
+
+&nbsp;
+### 4.3 Https client
+
+
+
+
 
 &nbsp;
 ## 5. WebSocket
@@ -358,18 +416,14 @@ Therefore, we implemented `webSocketEventCallback()` in [`main.cpp`](./S06E06_sr
 &nbsp;
 ## 6. Future work
 
-1. Secure Websockets
+Secure Websockets
 
-   Referring to [the arduinoWebSocket github repo](https://github.com/Links2004/arduinoWebSockets/?tab=readme-ov-file#wss--ssl),  
-   >  `arduinoWebSockets wss/SSL` library supports:
-   >   * wss/SSL for ESP32 in client mode
-   >   * wss/SSL is not natively supported in WebSocketsServer,
-   >     however it is possible to achieve secure websockets by running the device behind an SSL proxy.
-   
-   we will implement a secure websocket communication between the Mushibots and the web server.
+Referring to [the arduinoWebSocket github repo](https://github.com/Links2004/arduinoWebSockets/?tab=readme-ov-file#wss--ssl),  
+>  `arduinoWebSockets wss/SSL` library supports:
+>   * wss/SSL for ESP32 in client mode
+>   * wss/SSL is not natively supported in WebSocketsServer,
+>     however it is possible to achieve secure websockets by running the device behind an SSL proxy.
 
-2. Secure web server
+We will implement a secure websocket communication between the Mushibots and the web server.
 
-   So far our web server is for testing purpose, once it is deployed in a production environment, the web server will provide HTTPS service.
 
-   At the same time, Mushibot's http client should be changed to HTTPS client. 
