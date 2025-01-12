@@ -287,42 +287,68 @@ to send a request to a https website, and then receive a response from the websi
 
     1.  We need to download the certificate manually beforehand, 
         from the https website, and store it in ESP32.
+
     
     2.  By calling `HTTPClient.begin(*store_cert, website_URL)`, 
         our programm tries to setup the connection from the esp32 to the https website.
        
-      2.1  The arduino-esp32 `HTTPClient` library automatically downloads the certificate 
-           from the website whose address is `website_URL`.
+     2.1  The arduino-esp32 `HTTPClient` library automatically downloads the certificate 
+          from the website whose address is `website_URL`.
     
-           The downloaded certificate consists many contents, 
-           including a certificate which is used to prove its identity,
-           and a public key to encrypt the messages between the https client in the esp32 and the https website. 
+          The downloaded certificate consists many contents, 
+          including a certificate which is used to prove its identity,
+          and a public key to encrypt the messages between the https client in the esp32 and the https website. 
     
-      2.2  The arduino-esp32 library automatically compares the downloaded certificate 
-           with the trusted certificate that stored in our esp32 beforehand.
+     2.2  The arduino-esp32 library automatically compares the downloaded certificate 
+          with the trusted certificate that stored in our esp32 beforehand.
     
-           If the two certificates are identical, 
+          If the two certificates are identical, 
            it means the `website_URL` is the true address of the https website, rather than a hijacked fake one.
+
     
     3.  Our program sends a secure request from the esp32 https client to the https website.
        
-      3.1  The arduino-esp32 library automatically uses the public key of the https website in the downloaded certificate,
-           to encrypt our request.
+     3.1  The arduino-esp32 library automatically uses the public key of the https website in the downloaded certificate,
+          to encrypt our request.
     
-      3.2  When the https website receives our secure request, it uses its private key to decrypt the request.
+     3.2  When the https website receives our secure request, it uses its private key to decrypt the request.
+
     
     4.  The https website sends a response to the esp32 https client.
     
-      4.1  The https website uses its private key to encrypt its response.
+     4.1  The https website uses its private key to encrypt its response.
         
-      4.2  When our https client receives the response the https website,
-           the arduino-esp32 library automatically uses the public key of the https website in the downloaded certificate,
-           to decrypt the response.
+     4.2  When our https client receives the response the https website,
+          the arduino-esp32 library automatically uses the public key of the https website in the downloaded certificate,
+          to decrypt the response.
 
 &nbsp;
 ### 4.2 Download the trusted certificate manually
 
+The screenshot below on the left side is the content of a https website. If our program uses https client correctly, 
+it will retrieve this content. 
 
+The screenshot below on the right side is the gateway to access the certificate of the https website, 
+manually click the secure icon on the Chrome browser. 
+
+   <p align="center">
+     <img alt="A https website for testing" src="./S06E07_src/img/1_howsmyssl_webpage.png" width="48%">
+     &nbsp;  
+     <img alt="Click the secure icon to access the certificate" src="./S06E07_src/img/2_howsmyssl_secure_icon.png" width="48%">
+   </p>
+
+The screenshot below on the left side is the manu button linking to the certificate. 
+
+The screenshot below on the right side includes the summary of the certificate, and the button to download the certificate. 
+
+Notice that the certificate contains a certificate to prove itself's identity 
+and a public key to encrypt the messages between the https client and the https website. 
+
+   <p align="center">
+     <img alt="Click the link to review the content of the certificate" src="./S06E07_src/img/3_howsmyssl_cert_access.png" width="48%">
+     &nbsp;  
+     <img alt="The summary of the content of the certificate" src="./S06E07_src/img/4_howsmyssl_cert_content.png" width="48%">
+   </p>   
 
 &nbsp;
 ### 4.3 Https client
