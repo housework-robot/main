@@ -323,12 +323,14 @@ to send a request to a https website, and then receive a response from the websi
           to decrypt the response.
 
 &nbsp;
-### 4.2 Download the trusted certificate manually
+### 4.2 Download the certificate
 
-The screenshot below on the left side is the content of a https website. If our program uses https client correctly, 
+To download the trusted certificate manually, we can follow these steps. 
+
+1. The screenshot below on the left side is the content of a https website. If our program uses https client correctly, 
 it will retrieve this content. 
 
-The screenshot below on the right side is the gateway to access the certificate of the https website, 
+2. The screenshot below on the right side is the gateway to access the certificate of the https website, 
 manually click the secure icon on the Chrome browser. 
 
    <p align="center">
@@ -337,18 +339,30 @@ manually click the secure icon on the Chrome browser.
      <img alt="Click the secure icon to access the certificate" src="./S06E07_src/img/2_howsmyssl_secure_icon.png" width="48%">
    </p>
 
-The screenshot below on the left side is the manu button linking to the certificate. 
+3. The screenshot below on the left side is the manu button linking to the certificate. 
 
-The screenshot below on the right side includes the summary of the certificate, and the button to download the certificate. 
+4. The screenshot below on the right side includes the summary of the certificate, and the button to download the certificate. 
 
-Notice that the certificate contains a certificate to prove itself's identity 
-and a public key to encrypt the messages between the https client and the https website. 
+   Notice that the certificate contains a certificate to prove the identity of itself
+   and a public key to encrypt the messages between the https client and the https website. 
 
    <p align="center">
      <img alt="Click the link to review the content of the certificate" src="./S06E07_src/img/3_howsmyssl_cert_access.png" width="48%">
      &nbsp;  
      <img alt="The summary of the content of the certificate" src="./S06E07_src/img/4_howsmyssl_cert_content.png" width="48%">
    </p>   
+
+5. The screenshot below on the left side is the button to download the certificate which is located at the "detail tab".
+
+6. We can use a wordpad to displays the content of the certificate.
+  
+   The content of the certificate is not human-readable, as shown in the screenshot below on the right side. 
+
+   <p align="center">
+     <img alt="Click the button to download  the certificate" src="./S06E07_src/img/5_howsmyssl_cert_download.png" width="48%">
+     &nbsp;  
+     <img alt="The content of the certificate" src="./S06E07_src/img/6_howsmyssl_cert_content.png" width="48%">
+   </p>      
 
 &nbsp;
 ### 4.3 Https client
