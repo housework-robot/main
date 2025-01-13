@@ -58,13 +58,13 @@ Hence we skip the RTMP and WebRTC topic in this blog, and focus on Wifi, WebSock
 &nbsp;
 ## 2. Wifi
 
-We implemented a C++ class `WsWifi` in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) 
-and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
+We implemented a C++ class `WsWifi` in [`wswifi.h`](./S06E07_src/src/Mushibot20250114/src/wswifi.h) 
+and [`wswifi.cpp`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp), 
 following the example code in [the ESP32 official guide](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html#wi-fi-sta-example).
 
 ### 2.1 Construct a wifi station
 
-The workflow to set up the connection to wifi is in [`WsWifi::setup_wswifi()`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
+The workflow to set up the connection to wifi is in [`WsWifi::setup_wswifi()`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp#L33), 
 
 ~~~
 void WsWifi::setup_wswifi() {
@@ -173,7 +173,7 @@ Scanning for available wifi access points is optional.
 &nbsp;
 ### 2.4 Wifi event handlers
 
-The wifi event handlers are implemented in [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
+The wifi event handlers are implemented in [`wswifi.cpp`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp#L18), 
 
 ~~~
 void handle_wifiConnected(WiFiEvent_t event, WiFiEventInfo_t info){
@@ -209,8 +209,11 @@ Notice that,
 &nbsp;
 ## 3. Get public IP address
 
-We implemented a function `get_public_IP_address()` in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) 
-and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
+We implemented a function `get_public_IP_address()` in 
+[`wswifi.cpp`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp#L134).
+
+However, since the public IP address services are not quite stable, 
+you should be prepared to handle the invalid public IP address. 
 
 ~~~
 IPAddress WsWifi::get_public_IP_address() {
@@ -253,7 +256,7 @@ Notice that,
 1. In `http_client.begin(public_ip_api)`,
   
    `public_ip_api` is a const char* defined in
-   [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h),
+   [`wswifi.h`](./S06E07_src/src/Mushibot20250114/src/wswifi.h#L53),
 
    whose value is
    `const char *public_ip_api = "https://realip.cc/"`.
@@ -512,20 +515,20 @@ Notice that,
 &nbsp;
 ## 5. WebSocket
 
-We implemented a WebSocketServer in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h) 
-and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp). 
+We implemented a `WebSocketServer` in [`wswifi.h`](./S06E07_src/src/Mushibot20250114/src/wswifi.h#L42) 
+and [`wswifi.cpp`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp#L55). 
 
 
 ### 5.1 Construct a WS server
 
-1. First we initialized a WebSocketsServer instance in [`wswifi.h`](./S06E06_src/src/Mushibot20250107/src/wswifi.h), 
-    with port `81`. 
+1. First we initialized a WebSocketsServer instance in [`wswifi.h`](./S06E07_src/src/Mushibot20250114/src/wswifi.h#L42), 
+    with port `80`. 
 
     ~~~
-    WebSocketsServer websocket = WebSocketsServer(81);
+    WebSocketsServer websocket = WebSocketsServer(80);
     ~~~
 
-2. Then in the [`WsWifi::setup_wswifi()`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp#L33), 
+2. Then in the [`WsWifi::setup_wswifi()`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp#L55), 
     we started up the WebSocket server, by `websocket.begin()`. 
 
     Also, we hooked a handler to the WebSocket server to handle the WS events, by `websocket.onEvent(webSocketEventCallback)`.
@@ -539,7 +542,7 @@ and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
     }
     ~~~
 
-3. Finally, we executed [`websocket.loop()`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp#L55)
+3. Finally, we executed [`websocket.loop()`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp#L64)
    
     ~~~
     void WsWifi::loop_wswifi() {
@@ -548,7 +551,7 @@ and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
     }
     ~~~
 
-    in ESP32's main [`loop()`](./S06E06_src/src/Mushibot20250107/src/main.cpp#L78).
+    which is called by Mushibot's main [`loop()`](./S06E07_src/src/Mushibot20250114/src/main.cpp#L117).
     
     ~~~
     void loop()
@@ -562,34 +565,57 @@ and [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
 &nbsp;
 ### 5.2 WS event handler
 
-In [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp), 
-`webSocketEventCallback` is disclaimed as an external function. 
+In [`wswifi.cpp`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp#L4), 
+`handle_WebsocketEvents` is disclaimed as an external function. 
 
-`webSocketEventCallback()` is implemented in [`main.cpp`](./S06E06_src/src/Mushibot20250107/src/main.cpp#L47). 
+`handle_WebsocketEvents()` is implemented in [`main.cpp`](./S06E07_src/src/Mushibot20250114/src/main.cpp#L37). 
 
 ~~~
-void webSocketEventCallback(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
+void handle_WebsocketEvents(
+    uint8_t num,
+    WStype_t type,
+    uint8_t * payload,
+    size_t length) 
 {
-    if (type == WStype_CONNECTED)
-    {
-        printf("[EVENT] %s connected to %s\n", wswifi.robot_ip, wswifi.sta_ssid);
-    }
-    if (type == WStype_TEXT)
-    {
-        JsonDocument status_json = mushibot.get_status();
+    // Figure out the type of WebSocket event
+    switch (type) {
+        ...
+        // New client has connected
+        case WStype_CONNECTED:    
+            {
+                IPAddress ip = wswifi.websocket.remoteIP(num);
+                Serial.printf("\n[EVENT] WebSocket Client '%u' is connected from ", num);
+                Serial.println(ip.toString());
+            }
+            break;
 
-        String status_string;
-        serializeJson(doc, status_string);
-        doc.clear();
+        // Echo text message back to client
+        case WStype_TEXT:
+            Serial.printf("\n[EVENT] WS-WebSocket Client: '%u', Payload: '%s'\n", num, payload);
 
-        wswifi.websocket.broadcastTXT(status_str);
+            // For testing purpose. 
+            // wswifi.websocket.sendTXT(num, payload);  
+
+            {
+                JsonDocument status_json = mushibot.get_status();
+                String status_str;
+                serializeJson(status_json, status_str);
+                status_json.clear();
+                Serial.printf("\n[DEBUG] handle_WebsocketEvents() status_str: '%s'\n", status_str.c_str());
+                wswifi.websocket.broadcastTXT(status_str.c_str());
+            }
+            break;
+
+        // For everything else: do nothing
+        ...
+        default:
+        break;
     }
 }
 ~~~
 
-`mushibot.get_status()` cannot be accessed in [`wswifi.cpp`](./S06E06_src/src/Mushibot20250107/src/wswifi.cpp).
-
-Therefore, we implemented `webSocketEventCallback()` in [`main.cpp`](./S06E06_src/src/Mushibot20250107/src/main.cpp#L47).
+Since `mushibot.get_status()` cannot be accessed in [`wswifi.cpp`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp), 
+we implemented `handle_WebsocketEvents()` in [`main.cpp`](./S06E07_src/src/Mushibot20250114/src/main.cpp).
 
 &nbsp;
 ## 6. Future work
