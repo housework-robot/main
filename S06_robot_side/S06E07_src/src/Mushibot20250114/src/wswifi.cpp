@@ -195,7 +195,7 @@ String WsWifi::https_get(String https_url, String cert_filename) {
                     website_content = https_client.getString();
                     Serial.printf("\n[DEBUG] The following is the content retrieved from '%s'\n", https_url.c_str());
                     Serial.println(website_content.c_str());
-                    Serial.printf("\n[DEBUG] The following is the content retrieved from '%s'\n", https_url.c_str());
+                    Serial.printf("\n[DEBUG] The above content is retrieved from '%s'\n", https_url.c_str());
                 }
             }
             else {
