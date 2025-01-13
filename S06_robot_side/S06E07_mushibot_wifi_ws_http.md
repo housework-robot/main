@@ -339,7 +339,7 @@ manually click the secure icon on the Chrome browser.
      <img alt="Click the secure icon to access the certificate" src="./S06E07_src/img/2_howsmyssl_secure_icon.png" width="48%">
    </p>
 
-3. The screenshot below on the left side is the manu button linking to the certificate. 
+3. The screenshot below on the left side is the menu button linking to the certificate.
 
 4. The screenshot below on the right side includes the summary of the certificate, and the button to download the certificate. 
 
@@ -353,6 +353,8 @@ manually click the secure icon on the Chrome browser.
    </p>   
 
 5. The screenshot below on the left side is the button to download the certificate which is located at the "detail tab".
+
+   Be careful, must download the root certificate, as the red arrow points to. 
 
 6. We can use a wordpad to displays the content of the certificate.
   
