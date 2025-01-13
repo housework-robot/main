@@ -364,7 +364,28 @@ manually click the secure icon on the Chrome browser.
      <img alt="Click the button to download  the certificate" src="./S06E07_src/img/5_howsmyssl_cert_download.png" width="48%">
      &nbsp;  
      <img alt="The content of the certificate" src="./S06E07_src/img/6_howsmyssl_cert_content.png" width="48%">
-   </p>      
+   </p>    
+
+7. As mentioned in the previous blog, ["Anatomy of Mushibot's Embedded File System"](./S06E06_mushibot_spiffs.md#2-build-filesystem-image),
+   we must create a `/data` directory, and copy and paste all the certificate files into `/data` directory. 
+
+   To be more reliable, we create a `/cert_store` subdirectory inside `/data` directory,
+   as shown in the screenshot below on the left side.
+
+   Hence, the full name of a certificate file is like `/cert_store/kimi.moonshot.cn`,
+   in which `/cert_store` is the directory, and `kimi.moonshot.cn` is the certificate's file name. 
+
+8. The screenshot below on the right side the log when building and uploading the file system to ESP32.
+    
+   if our program uses LittleFS file system, then the file system image must be `littlefs.bin`.
+   If we use SPIFFS, then the file system image must be `spiffs.bin`.
+   Otherwise, the file system is not built correctly. 
+
+   <p align="center">
+     <img alt="Click the button to download  the certificate" src="./S06E07_src/img/7_cert_filesystem.png" width="48%">
+     &nbsp;  
+     <img alt="The content of the certificate" src="./S06E07_src/img/8_build_upload_cert_image.png" width="48%">
+   </p>   
 
 &nbsp;
 ### 4.3 Https client
