@@ -473,7 +473,7 @@ Notice that,
    ~~~
 
 2. `embedded_fs.read_file(cert_filename)` is to read the certificate file and return a `String` which is an Arduino datatype.
-   `read_file(cert_filename)` is implemented in [`embedded_fs.cpp`](/S06E07_src/src/Mushibot20250114/src/embedded_fs.cpp#L176)
+   `read_file(cert_filename)` is implemented in [`embedded_fs.cpp`](./S06E07_src/src/Mushibot20250114/src/embedded_fs.cpp#L176)
 
    ~~~
     String EmbeddedFS::read_file(String file_dirname) {
