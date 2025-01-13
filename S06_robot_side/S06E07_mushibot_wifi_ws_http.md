@@ -369,8 +369,123 @@ manually click the secure icon on the Chrome browser.
 &nbsp;
 ### 4.3 Https client
 
+Following the official arduino-esp32 example code 
+[`BasicHttpsClient.ino`](https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/examples/BasicHttpsClient/BasicHttpsClient.ino), 
+we implemented `String WsWifi::https_get(String https_url, String cert_filename)` in [`wswifi.cpp`](./S06E07_src/src/Mushibot20250114/src/wswifi.cpp#L171) as following,
 
+~~~
+String WsWifi::https_get(String https_url, String cert_filename) {  
+    String website_content;
+    String certificate_content; 
 
+    // Get the certificate
+    certificate_content = embedded_fs.read_file(cert_filename);
+
+    // To carry https certificate
+    NetworkClientSecure *secure_client = new NetworkClientSecure;
+
+    if (secure_client) {
+        secure_client->setCACert(certificate_content.c_str());
+
+        // Connect the https website
+        if (https_client.begin(*secure_client, https_url)) { 
+            int httpCode = https_client.GET();        
+
+            if (httpCode > 0) {
+                // HTTP header has been send and Server response header has been handled
+                Serial.printf("\n[DEBUG] GET returns code: %d\n", httpCode);
+        
+                // file found at server
+                if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
+                    // print server response payload
+                    website_content = https_client.getString();
+                    Serial.printf("\n[DEBUG] The following is the content retrieved from '%s'\n", https_url.c_str());
+                    Serial.println(website_content.c_str());
+                    Serial.printf("\n[DEBUG] The above content is retrieved from '%s'\n", https_url.c_str());
+                }
+            }
+            else {
+                Serial.printf("[WARN] GET '%s' failed, error: %s\n", 
+                    https_url.c_str(),
+                    https_client.errorToString(httpCode).c_str()
+                );
+            }
+
+            https_client.end();
+        }
+
+        delete secure_client;
+    }
+    else {
+        Serial.printf("\n[WARN] Unable to create NetworkClientSecure instance.\n");
+    }
+
+    return website_content;
+}
+~~~
+
+Notice that, 
+
+1. There are 2 input parameters for `https_get(String https_url, String cert_filename)` function,
+   `cert_filename` is the name of the certificate file stored in the embedded LittleFS file system in ESP32,
+   include the directory name and the file name, the usage examples are in `loop_wswifi()` function. 
+
+   ~~~
+    void WsWifi::loop_wswifi() {
+        websocket.loop();
+    
+        // https get test.
+        String website_url_kimi = "https://kimi.moonshot.cn/"; 
+        String certificate_filename_kimi = "/cert_store/kimi.moonshot.cn";    
+        String website_url_howsmyssl = "https://www.howsmyssl.com/a/check"; 
+        String certificate_filename_howsmyssl = "/cert_store/howsmyssl.com";  
+    
+        // jiasaw is expected to fail, because it is blocked by GFW.
+        String website_url_jiasaw = "https://jigsaw.w3.org/HTTP/connection.html"; 
+        String certificate_filename_jiasaw = "/cert_store/jigsaw.w3.org";    
+    
+        String https_content = https_get(website_url_kimi, certificate_filename_kimi);  
+    }
+   ~~~
+
+2. `embedded_fs.read_file(cert_filename)` is to read the certificate file and return a `String` which is an Arduino datatype.
+   `read_file(cert_filename)` is implemented in [`embedded_fs.cpp`](/S06E07_src/src/Mushibot20250114/src/embedded_fs.cpp#L176)
+
+   ~~~
+    String EmbeddedFS::read_file(String file_dirname) {
+        const char *_file_dirname = file_dirname.c_str();
+        String file_content;
+    
+        File file = LittleFS.open(_file_dirname);
+        if (!file || file.isDirectory()) {
+            Serial.printf("\n[WARN] Failed to open file '%s' for reading.\n", _file_dirname);
+            return "";
+        }
+    
+        if (file.available()) {
+            file_content = file.readString();
+        }
+        file.close();
+    
+        return file_content;
+    }
+   ~~~
+
+3. In case the following warning is displayed in the Serial Monitor, simply ignore it.
+
+   ~~~
+    [E][WiFiClient.cpp:329] setSocketOption(): fail on 0, errno: 9, "Bad file number"
+   ~~~
+   
+   Referring to ["'Bad file number' error when server closes the connection"](https://github.com/espressif/arduino-esp32/issues/9230),
+   the following is the root cause, but not yet fixed.
+
+   > There's no actual code here, but that seems like kind of expected behavior.
+   > If the other end has closed a connection, any further operation on that socket has to fail, either loudly or quietly.
+   
+   > It should see `setSocketOption` failing, act on the failure (probably by cleaning up whatever resources were allocated, including a call to close(),
+   > and going back to an unconnected state) and carryng on or restarting or exiting or whatever it should do upon connection loss.
+   > It certainly can't continue as there's no one left to it to talk to.
 
 
 &nbsp;
