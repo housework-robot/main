@@ -217,6 +217,12 @@ Here is a set of repositories, containing 3 kinds of contents,
    [![SPIFFS filesystem for Mushibot](https://img.youtube.com/vi/3S8g0Q6BFB4/hqdefault.jpg)](https://www.youtube.com/watch?v=3S8g0Q6BFB4)
 
 &nbsp;
+
+### 7. S06E07. [Anatomy of Mushibot's Wifi, Http/s, and WebSocket](./S06_robot_side/S06E07_mushibot_wifi_ws_http.md)
+
+   [![HTTPS communication from a robot to a website](https://img.youtube.com/vi/ZgnlNSQU3cQ/hqdefault.jpg)](https://www.youtube.com/watch?v=ZgnlNSQU3cQ)
+
+&nbsp;
 &nbsp;
 
 ### To be continued ...
