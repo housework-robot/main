@@ -620,14 +620,38 @@ we implemented `handle_WebsocketEvents()` in [`main.cpp`](./S06E07_src/src/Mushi
 &nbsp;
 ## 6. Future work
 
-Secure Websockets
+1. Teleoperation
 
-Referring to [the arduinoWebSocket github repo](https://github.com/Links2004/arduinoWebSockets/?tab=readme-ov-file#wss--ssl),  
->  `arduinoWebSockets wss/SSL` library supports:
->   * wss/SSL for ESP32 in client mode
->   * wss/SSL is not natively supported in WebSocketsServer,
->     however it is possible to achieve secure websockets by running the device behind an SSL proxy.
+    We will implement an end-to-end system, that a human user can remotely control the robot from a website. 
+   
+2. Secure Websockets
 
-We will implement a secure websocket communication between the Mushibots and the web server.
+    Referring to [the arduinoWebSocket github repo](https://github.com/Links2004/arduinoWebSockets/?tab=readme-ov-file#wss--ssl),  
+    >  `arduinoWebSockets wss/SSL` library supports:
+    >   * wss/SSL for ESP32 in client mode
+    >   * wss/SSL is not natively supported in WebSocketsServer,
+    >     however it is possible to achieve secure websockets by running the device behind an SSL proxy.
+    
+    We will implement a secure websocket communication between the Mushibots and the web server.
 
+
+&nbsp;
+## 7. Demo video
+
+Click the following image to view the video showing the entire process that empowers a robot to use HTTPS to communicate with a website, 
+including the following steps, 
+
+1. Manually download the root certificate from a https website,
+
+2. Build and upload an embedded file system to the robot, contains the website's certificate,
+
+3. Write the programs in C++, and upload them to the robot,
+
+4. The program connects the robot to a wifi network, and get IP address for the robot,
+
+5. The program uses the certificate in its embedded file system, to set up a https connection to the website,
+
+6. Repeat to get the html page from the website to test the robot's https throughput. 
+
+   [![HTTPS communication from a robot to a website](https://img.youtube.com/vi/ZgnlNSQU3cQ/hqdefault.jpg)](https://www.youtube.com/watch?v=ZgnlNSQU3cQ)
 
