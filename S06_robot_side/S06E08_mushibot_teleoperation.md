@@ -153,7 +153,7 @@ Here is a fragment of [the embedded-js webpage](./S06E08_src/src/Mushibot2025011
 
    The javascript can use the `robot_ip` parameter by `<%= robot_ip %>`.
 
-   By the way, [the title of the webpage](/S06E08_src/src/Mushibot20250117/test/teleop_website/views/index.ejs#L265)
+   By the way, [the title of the webpage](./S06E08_src/src/Mushibot20250117/test/teleop_website/views/index.ejs#L265)
    also use `robot_ip` parameter.
 
    ~~~
@@ -172,16 +172,89 @@ Here is a fragment of [the embedded-js webpage](./S06E08_src/src/Mushibot2025011
 
    The mushibot sends the `robot_ip` by http POST to the express-js web server.
 
-
-&nbsp;
-### 2.3 Send the mushibot IP to the user
-
-
-
-
      
 &nbsp;
 ## 3. Http client in Aruduino C++
+
+In [the previous blog](./S06E07_mushibot_wifi_ws_http.md#4-https-client), 
+we explained how we implemented [https client](./S06E08_src/src/Mushibot20250117/src/wswifi.cpp#L299) for GET. 
+
+This time, we implemented https client for both GET and POST.
+
+The following source code fragment implements http client for POST, with payload in json. 
+
+~~~
+String WsWifi::http_post(String http_url, JsonDocument payload_json) {
+    HTTPClient http_client;
+    int http_res_code;
+    String http_res_str;
+
+    if (WiFi.status() == WL_CONNECTED) {
+        http_client.begin(http_url + "/post_json");
+        http_client.addHeader("Content-Type", "application/json");
+
+        String payload_str; 
+        payload_json["datatype"] = "json";
+        serializeJson(payload_json, payload_str);
+
+        http_res_code = http_client.POST(payload_str);
+
+        if (http_res_code == HTTP_CODE_OK) {            
+            http_res_str = http_client.getString();
+        }
+        else {
+            Serial.printf("\n[WARN] Cannot access '%s' for http POST, http code is: '%d'.\n", 
+                http_url.c_str(), http_res_code);
+        }
+
+        http_client.end();
+    }
+
+    return http_res_str;
+}
+~~~
+
+1. `if (WiFi.status() == WL_CONNECTED)`
+
+   Here we assumed that the mushibot has already connected to the wifi.
+
+   [`String WsWifi::connect_wifi(String ssid, String password)`](./S06E08_src/src/Mushibot20250117/src/wswifi.cpp#L132)
+    handles the connection to the wifi. 
+
+2. `http_client.begin(http_url + "/post_json")`
+
+   The http client connects to our teleoperation website whose URL is `http_url`.
+
+   Referring to the express-js web server's source code,
+   [the route "/post_json"](./S06E08_src/src/Mushibot20250117/test/teleop_website/app.js#L55)
+   is dedicated for http POST requests.
+
+3. `http_client.addHeader("Content-Type", "application/json")`
+
+   We must specify in the http request header, that the `Content-Type` is `application/json`.
+
+   In this way, we trigger the express-js web server to ask
+   [the "bodyParser" to process](./S06E08_src/src/Mushibot20250117/test/teleop_website/app.js#L13)
+   the http POST request's body as a json payload.
+
+4. `serializeJson(payload_json, payload_str)`
+
+   Serialize the json payload `payload_json`, into a String `payload_str`.
+
+5. `http_client.POST(payload_str)`
+
+   Our `http_client` is an instance of
+   [`arduino-esp32 HTTPClient`](https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h).
+
+   Referring to its source code
+   of ["sendRequest"](https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.cpp#L562),
+   both GET and POST, the request payload must be a string.
+
+6. `String http_res_str = http_client.getString()`
+
+   When [our express-js web server](./S06E08_src/src/Mushibot20250117/test/teleop_website/app.js#L58)
+   receives and handles the http POST request from the mushibot, it sends back response in string. 
+
 
 
 &nbsp;
