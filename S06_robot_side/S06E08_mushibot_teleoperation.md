@@ -55,7 +55,7 @@ and [embedded-js templates](https://github.com/mde/ejs)
 to construct an experimental website. 
 
 Here is a fragment of the source code of 
-[the express-js web server](/S06E08_src/src/Mushibot20250117/test/teleop_website/app.js). 
+[the express-js web server](./S06E08_src/src/Mushibot20250117/test/teleop_website/app.js). 
 
 ~~~
 const express = require("express");
@@ -116,6 +116,64 @@ app.listen(port, () => {
 &nbsp;
 ### 2.2 EmbeddedJS webpage
 
+As mentioned in the previous section, the express-js web server passes a parameter object to the embedded-js webpage, 
+one parameter is `robot_ip`, 
+and the embedded-js webpage can use it by `<%= robot_ip %>`. 
+
+Here is a fragment of [the embedded-js webpage](./S06E08_src/src/Mushibot20250117/test/teleop_website/views/index.ejs#L310). 
+
+~~~
+<script>
+   window.INITIAL_STATE = {ROBOT_IP: "<%= robot_ip %>"};
+
+   // socket_init is automatically executed when the webpage is loaded.
+   function socket_init() {
+       console.log("Connecting to mushibot, IP = " + window.INITIAL_STATE.ROBOT_IP);
+
+       // Initialize websocket client
+       socket = new WebSocket('ws://' + window.INITIAL_STATE.ROBOT_IP + ':81/'); 
+   }
+
+...
+</script> 
+~~~
+
+1. `window.INITIAL_STATE`
+  
+   We assigned a variable `INITIAL_STATE` to the global variable `window`,
+   to make it convenient for the javascript to use the variable.
+
+2. `window.INITIAL_STATE = {ROBOT_IP: ...}`
+  
+   We asked `INITIAL_STATE` to contain a object, and in the object there is a key-value pair called `ROBOT_IP`.
+
+3. `window.INITIAL_STATE = {ROBOT_IP: "<%= robot_ip %>"}`
+  
+   As mentioned above, the express-js web server passes a parameter `robot_ip` to the embedded-js webpage.
+
+   The javascript can use the `robot_ip` parameter by `<%= robot_ip %>`.
+
+   By the way, [the title of the webpage](/S06E08_src/src/Mushibot20250117/test/teleop_website/views/index.ejs#L265)
+   also use `robot_ip` parameter.
+
+   ~~~
+   <h3> 已经与机器人 ( IP = <%= robot_ip %> ) 连线了 </h3>
+   ~~~
+
+4. `new WebSocket('ws://' + window.INITIAL_STATE.ROBOT_IP + ':81/')`
+
+   Javascript used `window.INITIAL_STATE.ROBOT_IP` to initialize a websocket client.
+
+   `window.INITIAL_STATE.ROBOT_IP`'s value is from `<%= robot_ip %>`.
+
+   `<%= robot_ip %>` parameter is passed to the embedded-js webpage by the express-js web server.
+
+   The value of the `<%= robot_ip %>` parameter is received by the the express-js web server from the mushibot.
+
+   The mushibot sends the `robot_ip` by http POST to the express-js web server.
+
+
+&nbsp;
 ### 2.3 Send the mushibot IP to the user
 
 
