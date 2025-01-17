@@ -174,7 +174,7 @@ Here is a fragment of [the embedded-js webpage](./S06E08_src/src/Mushibot2025011
 
      
 &nbsp;
-## 3. Http client in Aruduino C++
+## 3. Http client in Arduino C++
 
 In [the previous blog](./S06E07_mushibot_wifi_ws_http.md#4-https-client), 
 we explained how we implemented [https client](./S06E08_src/src/Mushibot20250117/src/wswifi.cpp#L299) for GET. 
